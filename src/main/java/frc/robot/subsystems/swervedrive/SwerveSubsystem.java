@@ -22,6 +22,9 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
+
+import com.ctre.phoenix6.controls.CoastOut;
+
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
@@ -44,7 +47,7 @@ public class SwerveSubsystem extends SubsystemBase
    *
    * @param directory Directory of swerve drive config files.
    */
-   public SwerveSubsystem(File directory)
+   public SwerveSubsystem(File modules)
   { 
     boolean blueAlliance = false;
     Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
@@ -57,8 +60,8 @@ public class SwerveSubsystem extends SubsystemBase
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
     {
-      swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.MAX_SPEED, startingPose);
-      // Alternative method if you don't want to supply the conversion factor via JSON files.
+      swerveDrive = new SwerveParser(modules).createSwerveDrive(Constants.MAX_SPEED, startingPose);
+      // Alternative method if we don't want to supply the conversion factor via JSON files.
       // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
     } catch (Exception e)
     {
@@ -71,7 +74,6 @@ public class SwerveSubsystem extends SubsystemBase
                                                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
     swerveDrive.setModuleEncoderAutoSynchronize(false,
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
-    // swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
   }
 
   /**
@@ -362,6 +364,7 @@ public class SwerveSubsystem extends SubsystemBase
   public void setMotorBrake(boolean brake)
   {
     swerveDrive.setMotorIdleMode(brake);
+    //swerveDrive.setMotorIdleMode(false); //for coast
   }
 
   /**
