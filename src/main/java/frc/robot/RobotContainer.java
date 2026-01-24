@@ -43,9 +43,9 @@ public class RobotContainer {
 
   
   // Replace with CommandPS4Controller or CommandJoystick if needed
- XboxController driveController = new XboxController(OperatorConstants.kDriverControllerPort);
- CommandGenericHID ButtonBoard1 = new CommandGenericHID(OperatorConstants.kOperatorControllerPort1);
- CommandGenericHID ButtonBoard2 = new CommandGenericHID(OperatorConstants.kOperatorControllerPort2);
+ XboxController driveController = new XboxController(0);
+ //CommandGenericHID ButtonBoard1 = new CommandGenericHID(OperatorConstants.kOperatorControllerPort1);
+ //CommandGenericHID ButtonBoard2 = new CommandGenericHID(OperatorConstants.kOperatorControllerPort2);
 
  //Gets controller imputs and gives valiues to drive system
  SwerveInputStream driveDirectAngle = SwerveInputStream.of(drivebase.getSwerveDrive(),
