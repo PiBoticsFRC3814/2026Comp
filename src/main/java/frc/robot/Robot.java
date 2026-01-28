@@ -73,7 +73,6 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-        LimelightHelpers.setPipelineIndex("limelight", 0);
   }
 
   /** This function is called periodically during operator control. */

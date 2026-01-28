@@ -5,10 +5,15 @@
 package frc.robot.subsystems.swervedrive;
 
 import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.DegreesPerSecond;
+import static edu.wpi.first.units.Units.Inches;
+
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -18,8 +23,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import limelight.Limelight;
+import limelight.networktables.LimelightPoseEstimator.EstimationMode;
+import limelight.networktables.LimelightSettings.LEDMode;
+
 import java.io.File;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
@@ -28,6 +38,7 @@ import com.ctre.phoenix6.controls.CoastOut;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
+import swervelib.imu.SwerveIMU;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
@@ -35,12 +46,31 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
+import limelight.Limelight;
+import limelight.networktables.AngularVelocity3d;
+import limelight.networktables.LimelightPoseEstimator;
+import limelight.networktables.LimelightResults;
+import limelight.networktables.LimelightSettings.LEDMode;
+import limelight.networktables.Orientation3d;
+import limelight.networktables.PoseEstimate;
+import limelight.networktables.LimelightPoseEstimator.EstimationMode;
+import limelight.networktables.target.pipeline.NeuralClassifier;
+
 public class SwerveSubsystem extends SubsystemBase
 {
   /**
    * Swerve drive object.
    */
   private final SwerveDrive swerveDrive;
+
+    Pose3d cameraOffset  = new Pose3d(Inches.of(5).in(Meter), //where limelight is in comparison to the center of the robot
+                                      Inches.of(5).in(Meter),
+                                      Inches.of(5).in(Meter),
+                                      Rotation3d.kZero);
+
+   Limelight                      limelight;
+  LimelightPoseEstimator         poseEstimator;
+  
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -89,6 +119,36 @@ public class SwerveSubsystem extends SubsystemBase
                                   Constants.MAX_SPEED,
                                   new Pose2d(new Translation2d(Meter.of(2), Meter.of(0)),
                                              Rotation2d.fromDegrees(0)));
+
+   limelight = new Limelight("limelight");
+    limelight.getSettings()
+             .withLimelightLEDMode(LEDMode.PipelineControl)
+             .withCameraOffset(cameraOffset)
+             .save();
+    poseEstimator = limelight.createPoseEstimator(EstimationMode.MEGATAG2);                                       
+
+  }
+  public void updateVisonOdometry()
+  {
+
+ Optional<PoseEstimate> visionEstimate = poseEstimator.getPoseEstimate(); // BotPose.BLUE_MEGATAG2.get(limelight);
+    visionEstimate.ifPresent((PoseEstimate poseEstimate) -> {
+      // If the average tag distance is less than 4 meters,
+      // there are more than 0 tags in view,
+      // and the average ambiguity between tags is less than 30% then we update the pose estimation.
+      // and the robots rotation is less than 360 degrees per second
+      if (
+        poseEstimate.avgTagDist < 4 
+        && poseEstimate.tagCount > 0 
+        && poseEstimate.getMinTagAmbiguity() < 0.3 
+        && Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) < 360
+        && Math.sqrt(Math.pow(swerveDrive.getRobotVelocity().vxMetersPerSecond),(2.0) + Math.pow(swerveDrive.getRobotVelocity().vyMetersPerSecond),(2) < 2
+      ))    
+      {
+        swerveDrive.addVisionMeasurement(poseEstimate.pose.toPose2d(),
+                                                            poseEstimate.timestampSeconds);
+      }
+      });
   }
 
   @Override
@@ -486,4 +546,6 @@ public class SwerveSubsystem extends SubsystemBase
   {
     return swerveDrive;
   }
+
+  
 }
