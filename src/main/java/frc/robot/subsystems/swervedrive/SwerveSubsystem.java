@@ -142,8 +142,8 @@ public class SwerveSubsystem extends SubsystemBase
         && poseEstimate.tagCount > 0 
         && poseEstimate.getMinTagAmbiguity() < 0.3 
         && Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) < 360
-        && Math.sqrt(Math.pow(swerveDrive.getRobotVelocity().vxMetersPerSecond),(2.0) + Math.pow(swerveDrive.getRobotVelocity().vyMetersPerSecond),(2) < 2
-      ))    
+        && Math.sqrt(Math.pow(swerveDrive.getRobotVelocity().vxMetersPerSecond,2.0) + Math.pow(swerveDrive.getRobotVelocity().vyMetersPerSecond,2)) < 2
+      )   
       {
         swerveDrive.addVisionMeasurement(poseEstimate.pose.toPose2d(),
                                                             poseEstimate.timestampSeconds);
