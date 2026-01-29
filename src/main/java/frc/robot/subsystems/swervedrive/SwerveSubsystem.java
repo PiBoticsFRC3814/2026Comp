@@ -5,6 +5,7 @@
 package frc.robot.subsystems.swervedrive;
 
 import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.Degree;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Inches;
 
@@ -71,6 +72,7 @@ public class SwerveSubsystem extends SubsystemBase
    Limelight                      limelight;
   LimelightPoseEstimator         poseEstimator;
   
+  
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -128,21 +130,40 @@ public class SwerveSubsystem extends SubsystemBase
     poseEstimator = limelight.createPoseEstimator(EstimationMode.MEGATAG2);                                       
 
   }
+
+@Override
+public void periodic()
+{
+  swerveDrive.updateOdometry();
+
+    limelight.getSettings()
+           .withRobotOrientation(new Orientation3d(swerveDrive.getGyroRotation3d(),
+                                                   new AngularVelocity3d(DegreesPerSecond.of(0),//x
+                                                                         DegreesPerSecond.of(0),//y
+                                                                         DegreesPerSecond.of(0))))//z
+           .save();
+
+
+}
+
   public void updateVisonOdometry()
   {
-
  Optional<PoseEstimate> visionEstimate = poseEstimator.getPoseEstimate(); // BotPose.BLUE_MEGATAG2.get(limelight);
     visionEstimate.ifPresent((PoseEstimate poseEstimate) -> {
       // If the average tag distance is less than 4 meters,
-      // there are more than 0 tags in view,
-      // and the average ambiguity between tags is less than 30% then we update the pose estimation.
-      // and the robots rotation is less than 360 degrees per second
+      // and there are more than 0 tags in view,
+      // and the average ambiguity between tags is less than 30%,
+      // and the robots rotation is less than 360 degrees per second,
+      // and if the robot is travelling less than 2 m/s,
+      // if all is true, then we update the pose estimation
       if (
         poseEstimate.avgTagDist < 4 
         && poseEstimate.tagCount > 0 
         && poseEstimate.getMinTagAmbiguity() < 0.3 
         && Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) < 360
-        && Math.sqrt(Math.pow(swerveDrive.getRobotVelocity().vxMetersPerSecond,2.0) + Math.pow(swerveDrive.getRobotVelocity().vyMetersPerSecond,2)) < 2
+        &&    Math.sqrt(Math.pow(swerveDrive.getRobotVelocity().vxMetersPerSecond,2.0) +
+              Math.pow(swerveDrive.getRobotVelocity().vyMetersPerSecond,2)) < 2
+
       )   
       {
         swerveDrive.addVisionMeasurement(poseEstimate.pose.toPose2d(),
@@ -151,11 +172,7 @@ public class SwerveSubsystem extends SubsystemBase
       });
   }
 
-  @Override
-  public void periodic()
-  {
-  }
-
+ 
   @Override
   public void simulationPeriodic()
   {
