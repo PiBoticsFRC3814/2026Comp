@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import edu.wpi.first.math.VecBuilder;
 import frc.robot.Constants;
 import limelight.Limelight;
 import limelight.networktables.LimelightPoseEstimator.EstimationMode;
@@ -136,14 +137,13 @@ public void periodic()
 {
   swerveDrive.updateOdometry();
 
-    limelight.getSettings()
-           .withRobotOrientation(new Orientation3d(swerveDrive.getGyroRotation3d(),
-                                                   new AngularVelocity3d(DegreesPerSecond.of(0),//x
-                                                                         DegreesPerSecond.of(0),//y
-                                                                         DegreesPerSecond.of(0))))//z
-           .save();
-
-
+   // Required for megatag2 in periodic() function before fetching pose.
+limelight.getSettings()
+		 .withRobotOrientation(new Orientation3d(swerveDrive.getGyroRotation3d(),
+												 new AngularVelocity3d(DegreesPerSecond.of(0.0),
+																	   DegreesPerSecond.of(0.0),
+																	  DegreesPerSecond.of(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)))))
+		 .save();
 }
 
   public void updateVisonOdometry()
@@ -157,17 +157,18 @@ public void periodic()
       // and if the robot is travelling less than 2 m/s,
       // if all is true, then we update the pose estimation
       if (
-        poseEstimate.avgTagDist < 4 
-        && poseEstimate.tagCount > 0 
-        && poseEstimate.getMinTagAmbiguity() < 0.3 
+        //poseEstimate.avgTagDist < 4 
+       poseEstimate.tagCount > 0 
+        // && poseEstimate.getMinTagAmbiguity() < 0.3 
         && Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) < 360
-        &&    Math.sqrt(Math.pow(swerveDrive.getRobotVelocity().vxMetersPerSecond,2.0) +
-              Math.pow(swerveDrive.getRobotVelocity().vyMetersPerSecond,2)) < 2
+       // &&    Math.sqrt(Math.pow(swerveDrive.getRobotVelocity().vxMetersPerSecond,2.0) +
+         //     Math.pow(swerveDrive.getRobotVelocity().vyMetersPerSecond,2)) < 2
 
       )   
       {
         swerveDrive.addVisionMeasurement(poseEstimate.pose.toPose2d(),
-                                                            poseEstimate.timestampSeconds);
+                                        poseEstimate.timestampSeconds,
+                                        VecBuilder.fill(0.5,0.5,9999));
       }
       });
   }
