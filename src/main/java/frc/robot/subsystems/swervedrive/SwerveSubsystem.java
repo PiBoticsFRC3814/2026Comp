@@ -65,12 +65,12 @@ public class SwerveSubsystem extends SubsystemBase
    */
   private final SwerveDrive swerveDrive;
 
-    Pose3d cameraOffset  = new Pose3d(Inches.of(5).in(Meter), //where limelight is in comparison to the center of the robot
+  Pose3d cameraOffset  = new Pose3d(Inches.of(5).in(Meter), //where limelight is in comparison to the center of the robot
                                       Inches.of(5).in(Meter),
                                       Inches.of(5).in(Meter),
                                       Rotation3d.kZero);
 
-   Limelight                      limelight;
+  Limelight                      limelight;
   LimelightPoseEstimator         poseEstimator;
   
   
@@ -107,6 +107,14 @@ public class SwerveSubsystem extends SubsystemBase
                                                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
     swerveDrive.setModuleEncoderAutoSynchronize(false,
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
+  
+    limelight = new Limelight("limelight");
+    limelight.getSettings()
+             .withLimelightLEDMode(LEDMode.PipelineControl)
+             .withCameraOffset(cameraOffset)
+             .save();
+    poseEstimator = limelight.createPoseEstimator(EstimationMode.MEGATAG2); 
+  
   }
 
   /**
@@ -120,10 +128,11 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive = new SwerveDrive(driveCfg,
                                   controllerCfg,
                                   Constants.MAX_SPEED,
-                                  new Pose2d(new Translation2d(Meter.of(2), Meter.of(0)),
-                                             Rotation2d.fromDegrees(0)));
+                                  new Pose2d(new Translation2d(Meter.of(2), 
+                                                               Meter.of(0)),
+                                                               Rotation2d.fromDegrees(0)));
 
-   limelight = new Limelight("limelight");
+    limelight = new Limelight("limelight");
     limelight.getSettings()
              .withLimelightLEDMode(LEDMode.PipelineControl)
              .withCameraOffset(cameraOffset)
@@ -136,19 +145,23 @@ public class SwerveSubsystem extends SubsystemBase
 public void periodic()
 {
   swerveDrive.updateOdometry();
+  //swerveDrive.getGyro().getRotation3d();
+  //swerveDrive.getGyroRotation3d();
+  //poseEstimator.getAlliancePoseEstimate();
+  //poseEstimator.getPoseEstimate();
 
-   // Required for megatag2 in periodic() function before fetching pose.
-limelight.getSettings()
+  // Required for megatag2 in periodic() function before fetching pose.
+  limelight.getSettings()
 		 .withRobotOrientation(new Orientation3d(swerveDrive.getGyroRotation3d(),
-												 new AngularVelocity3d(DegreesPerSecond.of(0.0),
-																	   DegreesPerSecond.of(0.0),
-																	  DegreesPerSecond.of(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)))))
+												   new AngularVelocity3d(DegreesPerSecond.of(0.0),
+													                       DegreesPerSecond.of(0.0),
+													                       DegreesPerSecond.of(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)))))
 		 .save();
 }
 
-  public void updateVisonOdometry()
-  {
- Optional<PoseEstimate> visionEstimate = poseEstimator.getPoseEstimate(); // BotPose.BLUE_MEGATAG2.get(limelight);
+public void updateVisonOdometry()
+{  
+  Optional<PoseEstimate> visionEstimate = poseEstimator.getPoseEstimate(); // BotPose.BLUE_MEGATAG2.get(limelight);
     visionEstimate.ifPresent((PoseEstimate poseEstimate) -> {
       // If the average tag distance is less than 4 meters,
       // and there are more than 0 tags in view,

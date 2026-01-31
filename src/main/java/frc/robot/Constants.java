@@ -20,11 +20,19 @@ import swervelib.math.Matter;
 public final class Constants {
 
   // Controller Constants
-   public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // 32lbs * kg per pound
+
+  //Robot Constants (weight, size)
+  public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // mass in kilograms
   public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
-  public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
-  public static final double MAX_SPEED  = Units.feetToMeters(14.5);
+  public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag.  this is used to slowdown non-important can calls i think
+  public static final double MAX_SPEED  = Units.feetToMeters(14.5); // this is max theoretical speed not the speed we want to limit drivers to.
   // Maximum speed of the robot in meters per second, used to limit acceleration.
+
+  //standard deviation camera constants
+  public static final double CAM_X_STD = 0.45;
+  public static final double CAM_Y_STD = 0.45;
+  public static final double CAM_THETA_STD = Math.toRadians(12.0);
+
 
 //  public static final class AutonConstants
 //  {
