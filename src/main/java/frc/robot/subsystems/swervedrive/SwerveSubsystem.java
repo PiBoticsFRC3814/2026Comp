@@ -18,11 +18,15 @@ import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
+import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import frc.robot.Constants;
 import limelight.Limelight;
@@ -66,9 +70,9 @@ public class SwerveSubsystem extends SubsystemBase
   private final SwerveDrive swerveDrive;
 
   Pose3d cameraOffset  = new Pose3d(Inches.of(5).in(Meter), //where limelight is in comparison to the center of the robot
-                                      Inches.of(5).in(Meter),
-                                      Inches.of(5).in(Meter),
-                                      Rotation3d.kZero);
+                                    Inches.of(5).in(Meter),
+                                    Inches.of(5).in(Meter),
+                                    Rotation3d.kZero);
 
   Limelight                      limelight;
   LimelightPoseEstimator         poseEstimator;
@@ -145,10 +149,6 @@ public class SwerveSubsystem extends SubsystemBase
 public void periodic()
 {
   swerveDrive.updateOdometry();
-  //swerveDrive.getGyro().getRotation3d();
-  //swerveDrive.getGyroRotation3d();
-  //poseEstimator.getAlliancePoseEstimate();
-  //poseEstimator.getPoseEstimate();
 
   // Required for megatag2 in periodic() function before fetching pose.
   limelight.getSettings()
@@ -157,33 +157,68 @@ public void periodic()
 													                       DegreesPerSecond.of(0.0),
 													                       DegreesPerSecond.of(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)))))
 		 .save();
+
+  updateVisonOdometry();
 }
 
 public void updateVisonOdometry()
 {  
-  Optional<PoseEstimate> visionEstimate = poseEstimator.getPoseEstimate(); // BotPose.BLUE_MEGATAG2.get(limelight);
+  //Check if limelight sees anything.  if not return and dont update vision estimators.  may not be needed since the optional pose estimate thingy should do this? 
+  if (!limelight.getData().targetData.getTargetStatus()){
+      return;
+    }
+    //check if we have a pose estimate data.  if not return and dont update vision estimators.  may not be needed since the optional pose etimate thingy should do this?
+    if (!poseEstimator.getPoseEstimate().get().hasData) {
+      return;
+    }
+    //get the pose estimate if it exists -- note that getAlliancePoseEstimate looks for aliance color to get pose estimate "right"
+    //not sure if we need this or should not look for alliance 
+    //need to test aliance stuffs to make sure there is not already a separate check that makes this un-fix things
+    Optional<PoseEstimate> visionEstimate = poseEstimator.getAlliancePoseEstimate(); // BotPose.BLUE_MEGATAG2.get(limelight);
     visionEstimate.ifPresent((PoseEstimate poseEstimate) -> {
-      // If the average tag distance is less than 4 meters,
-      // and there are more than 0 tags in view,
-      // and the average ambiguity between tags is less than 30%,
-      // and the robots rotation is less than 360 degrees per second,
-      // and if the robot is travelling less than 2 m/s,
-      // if all is true, then we update the pose estimation
-      if (
-        //poseEstimate.avgTagDist < 4 
-       poseEstimate.tagCount > 0 
-        // && poseEstimate.getMinTagAmbiguity() < 0.3 
-        && Math.abs(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)) < 360
-       // &&    Math.sqrt(Math.pow(swerveDrive.getRobotVelocity().vxMetersPerSecond,2.0) +
-         //     Math.pow(swerveDrive.getRobotVelocity().vyMetersPerSecond,2)) < 2
 
-      )   
-      {
-        swerveDrive.addVisionMeasurement(poseEstimate.pose.toPose2d(),
-                                        poseEstimate.timestampSeconds,
-                                        VecBuilder.fill(0.5,0.5,9999));
+      double timeStamp = Timer.getFPGATimestamp() - (limelight.getData().pipelineData.getProcessingLatency()/1000.0);
+      //collect quality indicators
+      int tagCount = poseEstimate.tagCount;
+      double avgTagDistance = poseEstimate.avgTagDist;
+      double rotationRate = Math.abs(getYawRate());
+
+      //decide confidance scaling higer number = less confidant
+      double scale = 1.0;
+      
+      //check if only 1 tag
+      if (tagCount == 2){
+        scale *= 2.5;
       }
-      });
+
+      //far tag is less confidant -- if tage is greater than 2 meters away increase confidance scaler linearly as distance increases
+      scale *= Math.max(1.0, avgTagDistance/2.0);
+
+      //fast spin is less confidant -- if rodot is spinning faster then 120 degrees per second increase confidance scaler
+      if (rotationRate > 120){
+        scale *= 2.0;
+      }
+
+      //if spinning way to fast totally ignore the vision
+      if (rotationRate > 200){
+        return;
+      }
+
+      //build stadard deviation matrix
+      Matrix<N3, N1> visionStdDevs = 
+        VecBuilder.fill(
+          Constants.CAM_X_STD * scale,
+          Constants.CAM_Y_STD * scale,
+          Constants.CAM_THETA_STD * scale
+        );
+        
+      //add vision estimate to the pose estimator
+      swerveDrive.addVisionMeasurement(
+        poseEstimate.pose.toPose2d(),
+        timeStamp,
+        visionStdDevs
+      );      
+    });
   }
 
  
@@ -416,6 +451,11 @@ public void updateVisonOdometry()
   public void zeroGyro()
   {
     swerveDrive.zeroGyro();
+  }
+
+  public double getYawRate()
+  {
+    return swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond);
   }
 
   /**
