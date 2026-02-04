@@ -29,9 +29,9 @@ public final class Constants {
   // Maximum speed of the robot in meters per second, used to limit acceleration.
 
   //standard deviation camera constants
-  public static final double CAM_X_STD = 0.45;
-  public static final double CAM_Y_STD = 0.45;
-  public static final double CAM_THETA_STD = Math.toRadians(12.0);
+  public static final double CAM_X_STD = 0.1;
+  public static final double CAM_Y_STD = 0.1;
+  public static final double CAM_THETA_STD = Math.toRadians(0.1);
 
 
 //  public static final class AutonConstants

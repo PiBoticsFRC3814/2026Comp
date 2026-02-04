@@ -148,8 +148,6 @@ public class SwerveSubsystem extends SubsystemBase
 @Override
 public void periodic()
 {
-  swerveDrive.updateOdometry();
-
   // Required for megatag2 in periodic() function before fetching pose.
   limelight.getSettings()
 		 .withRobotOrientation(new Orientation3d(swerveDrive.getGyroRotation3d(),
@@ -159,6 +157,9 @@ public void periodic()
 		 .save();
 
   updateVisonOdometry();
+
+  swerveDrive.updateOdometry();
+  
 }
 
 public void updateVisonOdometry()
