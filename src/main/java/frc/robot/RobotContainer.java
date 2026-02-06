@@ -57,8 +57,8 @@ public class RobotContainer {
                                                         .deadband(OperatorConstants.DEADBAND)
                                                         .scaleTranslation(0.8)
                                                         .allianceRelativeControl(true)
-                                                        .withControllerHeadingAxis(driveController::getRightX,
-                                                                                             driveController::getRightY)
+                                                        .withControllerHeadingAxis(()->driveController.getRightX()*1,
+                                                                                   ()->driveController.getRightY()*1)
                                                            .headingWhile(true);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
