@@ -5,12 +5,14 @@
 package frc.robot.subsystems.swervedrive;
 
 import static edu.wpi.first.units.Units.Meter;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.Degree;
 import static edu.wpi.first.units.Units.DegreesPerSecond;
 import static edu.wpi.first.units.Units.Inches;
 
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -21,8 +23,10 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
@@ -76,6 +80,8 @@ public class SwerveSubsystem extends SubsystemBase
 
   Limelight                      limelight;
   LimelightPoseEstimator         poseEstimator;
+  SlewRateLimiter                velocityLimiter;
+  SlewRateLimiter                angularLimiter;
   
   
 
@@ -86,7 +92,7 @@ public class SwerveSubsystem extends SubsystemBase
    */
    public SwerveSubsystem(File modules)
   { 
-    boolean blueAlliance = false;
+    boolean blueAlliance = !isRedAlliance();
     Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
                                                                       Meter.of(4)),
                                                     Rotation2d.fromDegrees(0))
@@ -97,7 +103,7 @@ public class SwerveSubsystem extends SubsystemBase
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
     {
-      swerveDrive = new SwerveParser(modules).createSwerveDrive(Constants.MAX_SPEED, startingPose);
+      swerveDrive = new SwerveParser(modules).createSwerveDrive(Constants.MAX_HYP_SPEED, startingPose);
       // Alternative method if we don't want to supply the conversion factor via JSON files.
       // swerveDrive = new SwerveParser(directory).createSwerveDrive(maximumSpeed, angleConversionFactor, driveConversionFactor);
     } catch (Exception e)
@@ -118,7 +124,14 @@ public class SwerveSubsystem extends SubsystemBase
              .withCameraOffset(cameraOffset)
              .save();
     poseEstimator = limelight.createPoseEstimator(EstimationMode.MEGATAG2); 
-  
+
+    //set speed limits
+    swerveDrive.setMaximumAllowableSpeeds(Constants.MAX_VELOCITY,Constants.MAX_ANGLE_VELOCITY);
+    velocityLimiter = new SlewRateLimiter(Constants.DRIVE_ACCEL_LIMIT,-Constants.DRIVE_ACCEL_LIMIT,0.0);
+    angularLimiter = new SlewRateLimiter(Constants.ANGLE_ACCEL_LIMIT,-Constants.ANGLE_ACCEL_LIMIT,0.0);
+    //add slew rate limiter -- need help here it is not doing anythign need example code for how to do this.
+    swerveDrive.getSwerveController().addSlewRateLimiters(velocityLimiter, velocityLimiter, angularLimiter);
+
   }
 
   /**
@@ -131,7 +144,7 @@ public class SwerveSubsystem extends SubsystemBase
   {
     swerveDrive = new SwerveDrive(driveCfg,
                                   controllerCfg,
-                                  Constants.MAX_SPEED,
+                                  Constants.MAX_HYP_SPEED,
                                   new Pose2d(new Translation2d(Meter.of(2), 
                                                                Meter.of(0)),
                                                                Rotation2d.fromDegrees(0)));
@@ -141,7 +154,10 @@ public class SwerveSubsystem extends SubsystemBase
              .withLimelightLEDMode(LEDMode.PipelineControl)
              .withCameraOffset(cameraOffset)
              .save();
-    poseEstimator = limelight.createPoseEstimator(EstimationMode.MEGATAG2);                                       
+    poseEstimator = limelight.createPoseEstimator(EstimationMode.MEGATAG2);   
+    
+    //set speed limits
+    swerveDrive.setMaximumAllowableSpeeds(Constants.MAX_VELOCITY,Constants.MAX_ANGLE_VELOCITY);
 
   }
 
@@ -159,6 +175,10 @@ public void periodic()
   updateVisonOdometry();
 
   swerveDrive.updateOdometry();
+
+  SmartDashboard.putNumber("X Measure",swerveDrive.getPose().getMeasureX().in(Meter));
+  SmartDashboard.putNumber("Y Measure",swerveDrive.getPose().getMeasureY().in(Meter));
+  SmartDashboard.putNumber("Angle Measure",swerveDrive.getPose().getRotation().getDegrees());
   
 }
 
@@ -330,7 +350,8 @@ public void updateVisonOdometry()
 
       Translation2d scaledInputs = SwerveMath.scaleTranslation(new Translation2d(translationX.getAsDouble(),
                                                                                  translationY.getAsDouble()), 0.8);
-
+      //add slew rate limiter??
+      //swerveDrive.swerveController.addSlewRateLimiters(velocityLimiter, velocityLimiter, angularLimiter);
       // Make the robot move
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(scaledInputs.getX(), scaledInputs.getY(),
                                                                       headingX.getAsDouble(),
@@ -470,6 +491,15 @@ public void updateVisonOdometry()
     return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;
   }
 
+  public double headingFlipper()
+  {
+      if (isRedAlliance()){
+        return 1.0;
+      } else{
+        return -1.0;
+      }
+  }
+
   /**
    * This will zero (calibrate) the robot to assume the current position is facing forward
    * <p>
@@ -528,7 +558,7 @@ public void updateVisonOdometry()
                                                         headingX,
                                                         headingY,
                                                         getHeading().getRadians(),
-                                                        Constants.MAX_SPEED);
+                                                        Constants.MAX_HYP_SPEED);
   }
 
   /**
@@ -548,7 +578,7 @@ public void updateVisonOdometry()
                                                         scaledInputs.getY(),
                                                         angle.getRadians(),
                                                         getHeading().getRadians(),
-                                                        Constants.MAX_SPEED);
+                                                        Constants.MAX_HYP_SPEED);
   }
 
   /**

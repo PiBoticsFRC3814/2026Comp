@@ -25,8 +25,16 @@ public final class Constants {
   public static final double ROBOT_MASS = (148 - 20.3) * 0.453592; // mass in kilograms
   public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
   public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag.  this is used to slowdown non-important can calls i think
-  public static final double MAX_SPEED  = Units.feetToMeters(14.5); // this is max theoretical speed not the speed we want to limit drivers to.
+  public static final double MAX_HYP_SPEED  = Units.feetToMeters(14.5); // this is max theoretical speed not the speed we want to limit drivers to.
   // Maximum speed of the robot in meters per second, used to limit acceleration.
+
+  //Robot Speed limits
+  public static final double MAX_VELOCITY = Units.feetToMeters(5);
+  public static final double MAX_ANGLE_VELOCITY = Units.degreesToRadians(90);
+  public static final double DRIVE_ACCEL_LIMIT = Units.feetToMeters(0.0);
+  public static final double ANGLE_ACCEL_LIMIT = Units.degreesToRadians(0.0);
+
+
 
   //standard deviation camera constants
   public static final double CAM_X_STD = 0.0;
@@ -59,7 +67,7 @@ public final class Constants {
 
     // Joystick Deadband
     public static final double DEADBAND        = 0.1;
-    public static final double LEFT_Y_DEADBAND = 0.1;
+    public static final double LEFT_Y_DEADBAND = 0.5;
     public static final double RIGHT_X_DEADBAND = 0.1;
     public static final double TURN_CONSTANT    = 6;
   }

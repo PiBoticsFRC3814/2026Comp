@@ -10,11 +10,14 @@ import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveInputStream;
 //import swervelib.simulation.ironmaple.simulation.drivesims.GyroSimulation;
 
+import static edu.wpi.first.units.Units.Meters;
+
 import java.io.File;
 
 import com.ctre.phoenix6.SignalLogger;
 //import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -46,6 +49,7 @@ public class RobotContainer {
   
   // Replace with CommandPS4Controller or CommandJoystick if needed
  XboxController driveController = new XboxController(0);
+ SlewRateLimiter driveSlewRateLimit = new SlewRateLimiter(1.0);
  //CommandGenericHID ButtonBoard1 = new CommandGenericHID(OperatorConstants.kOperatorControllerPort1);
  //CommandGenericHID ButtonBoard2 = new CommandGenericHID(OperatorConstants.kOperatorControllerPort2);
 
@@ -53,13 +57,12 @@ public class RobotContainer {
  SwerveInputStream driveDirectAngle = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                             () -> driveController.getLeftY() * -1,
                                                             () -> driveController.getLeftX() * -1)
-                                                        .withControllerRotationAxis(driveController::getRightX)
                                                         .deadband(OperatorConstants.DEADBAND)
                                                         .scaleTranslation(0.8)
                                                         .allianceRelativeControl(true)
-                                                        .withControllerHeadingAxis(()->driveController.getRightX()*1,
-                                                                                   ()->driveController.getRightY()*1)
-                                                           .headingWhile(true);
+                                                        .withControllerHeadingAxis(()->driveController.getRightX()*drivebase.headingFlipper(),
+                                                                                   ()->driveController.getRightY()*drivebase.headingFlipper())
+                                                        .headingWhile(true);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -96,6 +99,12 @@ public class RobotContainer {
     Shuffleboard.getTab("test")
     .add("Pose", drivebase.getSwerveDrive().getPose())
     .withWidget(BuiltInWidgets.kField);
+    Shuffleboard.getTab("test")
+    .add("X Measure", drivebase.getSwerveDrive().getPose().getMeasureX().in(Meters));
+    Shuffleboard.getTab("test")
+    .add("Y Measure", drivebase.getSwerveDrive().getPose().getMeasureY().in(Meters));
+    Shuffleboard.getTab("test")
+    .add("Angle Measure", drivebase.getSwerveDrive().getPose().getRotation().getDegrees());
   }
 }
 
