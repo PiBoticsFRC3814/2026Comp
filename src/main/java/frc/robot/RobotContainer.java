@@ -53,7 +53,7 @@ public class RobotContainer {
  //CommandGenericHID ButtonBoard1 = new CommandGenericHID(OperatorConstants.kOperatorControllerPort1);
  //CommandGenericHID ButtonBoard2 = new CommandGenericHID(OperatorConstants.kOperatorControllerPort2);
 
- //Gets controller imputs and gives valiues to drive system
+ //Gets controller imputs and gives values to drive system
  SwerveInputStream driveDirectAngle = SwerveInputStream.of(drivebase.getSwerveDrive(),
                                                             () -> driveController.getLeftY() * -1,
                                                             () -> driveController.getLeftX() * -1)

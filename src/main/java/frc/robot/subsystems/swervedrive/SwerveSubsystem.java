@@ -117,6 +117,7 @@ public class SwerveSubsystem extends SubsystemBase
                                                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
     swerveDrive.setModuleEncoderAutoSynchronize(false,
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
+    
   
     limelight = new Limelight("limelight");
     limelight.getSettings()
@@ -127,10 +128,12 @@ public class SwerveSubsystem extends SubsystemBase
 
     //set speed limits
     swerveDrive.setMaximumAllowableSpeeds(Constants.MAX_VELOCITY,Constants.MAX_ANGLE_VELOCITY);
-    velocityLimiter = new SlewRateLimiter(Constants.DRIVE_ACCEL_LIMIT,-Constants.DRIVE_ACCEL_LIMIT,0.0);
-    angularLimiter = new SlewRateLimiter(Constants.ANGLE_ACCEL_LIMIT,-Constants.ANGLE_ACCEL_LIMIT,0.0);
-    //add slew rate limiter -- need help here it is not doing anythign need example code for how to do this.
-    swerveDrive.getSwerveController().addSlewRateLimiters(velocityLimiter, velocityLimiter, angularLimiter);
+    //velocityLimiter = new SlewRateLimiter(Constants.DRIVE_ACCEL_LIMIT,-Constants.DRIVE_ACCEL_LIMIT,0.0);
+    //angularLimiter = new SlewRateLimiter(Constants.ANGLE_ACCEL_LIMIT,-Constants.ANGLE_ACCEL_LIMIT,0.0);
+            //add slew rate limiter -- need help here it is not doing anythign need example code for how to do this. there is none :cry:
+    //swerveDrive.getSwerveController().addSlewRateLimiters(velocityLimiter, velocityLimiter, angularLimiter);
+            // in swervecontroller.java????
+            //I think YAGSL calls their own slew rate limited here ^^ and were calling something thats clashing it? 
 
   }
 
