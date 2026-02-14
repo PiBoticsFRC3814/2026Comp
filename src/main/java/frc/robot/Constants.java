@@ -34,6 +34,10 @@ public final class Constants {
   public static final double DRIVE_ACCEL_LIMIT = Units.feetToMeters(0.1);
   public static final double ANGLE_ACCEL_LIMIT = Units.degreesToRadians(0.1);
 
+  //Joystick Slew Rate Contsants
+  public static final double JOYSTICK_X_SLEW = 0.1;
+  public static final double JOYSTICK_Y_SLEW = 0.1;
+
 
 
   //standard deviation camera constants

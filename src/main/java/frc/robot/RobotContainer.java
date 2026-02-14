@@ -49,14 +49,15 @@ public class RobotContainer {
   
   // Replace with CommandPS4Controller or CommandJoystick if needed
  XboxController driveController = new XboxController(0);
- SlewRateLimiter driveSlewRateLimit = new SlewRateLimiter(1.0);
+ SlewRateLimiter driveXSlewRateLimit = new SlewRateLimiter(Constants.JOYSTICK_X_SLEW);
+ SlewRateLimiter driveYSlewRateLimit = new SlewRateLimiter(Constants.JOYSTICK_Y_SLEW);
  //CommandGenericHID ButtonBoard1 = new CommandGenericHID(OperatorConstants.kOperatorControllerPort1);
  //CommandGenericHID ButtonBoard2 = new CommandGenericHID(OperatorConstants.kOperatorControllerPort2);
 
  //Gets controller imputs and gives values to drive system
  SwerveInputStream driveDirectAngle = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                            () -> driveController.getLeftY() * -1,
-                                                            () -> driveController.getLeftX() * -1)
+                                                            () -> driveYSlewRateLimit.calculate(driveController.getLeftY()) * -1,
+                                                            () -> driveXSlewRateLimit.calculate(driveController.getLeftX()) * -1)
                                                         .deadband(OperatorConstants.DEADBAND)
                                                         .scaleTranslation(0.8)
                                                         .allianceRelativeControl(true)
