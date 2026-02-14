@@ -30,14 +30,18 @@ public final class Constants {
 
   //Robot Speed limits
   public static final double MAX_VELOCITY = Units.feetToMeters(5);
-  public static final double MAX_ANGLE_VELOCITY = Units.degreesToRadians(90);
-  public static final double DRIVE_ACCEL_LIMIT = Units.feetToMeters(0.1);
+  public static final double MAX_ANGLE_VELOCITY = Units.degreesToRadians(120); // note that the maximum rotation speed will change what is needed in PID of controller properties
+  public static final double DRIVE_ACCEL_LIMIT = Units.feetToMeters(0.1); //look into acceleration limits to limit acceleration and deceleration values on the motor side in adition to slew n the controller side.
   public static final double ANGLE_ACCEL_LIMIT = Units.degreesToRadians(0.1);
 
-  //Joystick Slew Rate Contsants
-  public static final double JOYSTICK_X_SLEW = 0.1;
-  public static final double JOYSTICK_Y_SLEW = 0.1;
-
+  //Joystick Slew Rate Contsants  Note consideration may be needed on alternate slew rates for different "max speeds"
+  //note that right now joystick slew effects the joystick inputs NOT the motor outputs.  this means that the slew deos not effect acceleration/deceleration directly
+  //it effects the stick values from -1 to +1 and limits how fast to gets to the real stick value the user has input.
+  //for more fine control we need to add acceleration limiters on the drive subsystem side of things.
+  public static final double JOYSTICK_X_SLEW_POS = 2.0;
+  public static final double JOYSTICK_Y_SLEW_POS = 2.0;
+  public static final double JOYSTICK_X_SLEW_NEG = -2.0;
+  public static final double JOYSTICK_Y_SLEW_NEG = -2.0;
 
 
   //standard deviation camera constants

@@ -44,6 +44,7 @@ import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.controls.CoastOut;
+import com.revrobotics.spark.config.FeedForwardConfig;
 
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -128,13 +129,9 @@ public class SwerveSubsystem extends SubsystemBase
 
     //set speed limits
     swerveDrive.setMaximumAllowableSpeeds(Constants.MAX_VELOCITY,Constants.MAX_ANGLE_VELOCITY);
-    //velocityLimiter = new SlewRateLimiter(Constants.DRIVE_ACCEL_LIMIT,-Constants.DRIVE_ACCEL_LIMIT,0.0);
-    //angularLimiter = new SlewRateLimiter(Constants.ANGLE_ACCEL_LIMIT,-Constants.ANGLE_ACCEL_LIMIT,0.0);
-            //add slew rate limiter -- need help here it is not doing anythign need example code for how to do this. there is none :cry:
-    //swerveDrive.getSwerveController().addSlewRateLimiters(velocityLimiter, velocityLimiter, angularLimiter);
-            // in swervecontroller.java????
-            //I think YAGSL calls their own slew rate limited here ^^ and were calling something thats clashing it? 
-
+    swerveDrive.setMotorIdleMode(true);
+    //slew rate was sucessfully added into the robot container where it is supposed to be.  slew is supposed to control the joystick input directly not the speed of the motors.
+    //ramp rate in the physical properties may be usable to adjust acceleration of the robot.  should look into this.
   }
 
   /**
@@ -161,6 +158,7 @@ public class SwerveSubsystem extends SubsystemBase
     
     //set speed limits
     swerveDrive.setMaximumAllowableSpeeds(Constants.MAX_VELOCITY,Constants.MAX_ANGLE_VELOCITY);
+    swerveDrive.setMotorIdleMode(true);
 
   }
 
@@ -336,7 +334,7 @@ public void updateVisonOdometry()
     });
   }
 
-  /**
+  /*
    * Command to drive the robot using translative values and heading as a setpoint.
    *
    * @param translationX Translation in the X direction. Cubed for smoother controls.
@@ -353,8 +351,6 @@ public void updateVisonOdometry()
 
       Translation2d scaledInputs = SwerveMath.scaleTranslation(new Translation2d(translationX.getAsDouble(),
                                                                                  translationY.getAsDouble()), 0.8);
-      //add slew rate limiter??
-      //swerveDrive.swerveController.addSlewRateLimiters(velocityLimiter, velocityLimiter, angularLimiter);
       // Make the robot move
       driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(scaledInputs.getX(), scaledInputs.getY(),
                                                                       headingX.getAsDouble(),
@@ -532,7 +528,7 @@ public void updateVisonOdometry()
     //swerveDrive.setMotorIdleMode(false); //for coast
   }
 
-  /**
+  /*
    * Gets the current yaw angle of the robot, as reported by the swerve pose estimator in the underlying drivebase.
    * Note, this is not the raw gyro reading, this may be corrected from calls to resetOdometry().
    *

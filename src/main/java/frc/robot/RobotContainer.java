@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -49,8 +50,16 @@ public class RobotContainer {
   
   // Replace with CommandPS4Controller or CommandJoystick if needed
  XboxController driveController = new XboxController(0);
- SlewRateLimiter driveXSlewRateLimit = new SlewRateLimiter(Constants.JOYSTICK_X_SLEW);
- SlewRateLimiter driveYSlewRateLimit = new SlewRateLimiter(Constants.JOYSTICK_Y_SLEW);
+
+ //slew rate MUST have slew rate limits for BOTH X and Y axises separate.  if you combine the X and Y into one limiter it makes the robot move diagonally.
+ //Note that the slew rate limiter is loooking at joystick values NOT motor speed values thus the positive and negative rates apply to joystick inputs not motor accelerations
+ //this means different rates dont work in an acceleration vs deceleration of mors but instead a positive vs negative stick direction.
+ SlewRateLimiter driveXSlewRateLimit = new SlewRateLimiter(Constants.JOYSTICK_X_SLEW_POS, Constants.JOYSTICK_X_SLEW_NEG, 0.0);
+ SlewRateLimiter driveYSlewRateLimit = new SlewRateLimiter(Constants.JOYSTICK_Y_SLEW_POS, Constants.JOYSTICK_Y_SLEW_NEG, 0.0);
+
+ //we cannot add a slew rate limit for the angle stick due to how that is implemented we must instead set speed limits for rotation rate and adjust PID for that speed limit
+
+ 
  //CommandGenericHID ButtonBoard1 = new CommandGenericHID(OperatorConstants.kOperatorControllerPort1);
  //CommandGenericHID ButtonBoard2 = new CommandGenericHID(OperatorConstants.kOperatorControllerPort2);
 
@@ -106,6 +115,9 @@ public class RobotContainer {
     .add("Y Measure", drivebase.getSwerveDrive().getPose().getMeasureY().in(Meters));
     Shuffleboard.getTab("test")
     .add("Angle Measure", drivebase.getSwerveDrive().getPose().getRotation().getDegrees());
+  }
+  public double stickAngle() {
+    return Math.toDegrees(Math.atan(driveController.getRightX()/driveController.getRightY()));
   }
 }
 
