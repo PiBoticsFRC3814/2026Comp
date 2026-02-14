@@ -31,8 +31,8 @@ public final class Constants {
   //Robot Speed limits
   public static final double MAX_VELOCITY = Units.feetToMeters(5);
   public static final double MAX_ANGLE_VELOCITY = Units.degreesToRadians(90);
-  public static final double DRIVE_ACCEL_LIMIT = Units.feetToMeters(1.0);
-  public static final double ANGLE_ACCEL_LIMIT = Units.degreesToRadians(5.0);
+  public static final double DRIVE_ACCEL_LIMIT = Units.feetToMeters(0.1);
+  public static final double ANGLE_ACCEL_LIMIT = Units.degreesToRadians(0.1);
 
 
 
@@ -46,7 +46,9 @@ public final class Constants {
   public static final double ODOM_Y_SYD = 0.0;
   public static final double ODOM_THETA_STD = Math.toRadians(12.0);
 
-
+  public static final double kS = 0.1;
+  public static final double kV = 0.1;
+  public static final double kA = 0.1;
 
 //  public static final class AutonConstants
 //  {
