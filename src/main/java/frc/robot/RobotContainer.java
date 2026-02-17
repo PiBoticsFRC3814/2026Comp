@@ -5,12 +5,19 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+// import frc.robot.commands.IntakeExtendCommand;
+// import frc.robot.commands.IntakeRetractCommand;
+import frc.robot.subsystems.Intake;
+// import frc.robot.subsystems.IntakeExtendSubsystem;
+import frc.robot.subsystems.Shooter;
 //`import frc.robot.subsystems.GyroSwerveDrive;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
-//import swervelib.simulation.ironmaple.simulation.drivesims.GyroSimulation;
 
 import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Degrees;
 
 import java.io.File;
 
@@ -23,14 +30,18 @@ import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.StadiaController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 //import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.math.util.Units;
 
 
 /**
@@ -41,15 +52,16 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  //public final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
+  // public final IntakeExtendSubsystem m_ExtendSubsystem = new IntakeExtendSubsystem();
+  public final Shooter m_shooter = new Shooter();
+  public final Intake m_intake = new Intake();
   
   //calls all the JSON files for swervesubsystem
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
-
-  
   // Replace with CommandPS4Controller or CommandJoystick if needed
  XboxController driveController = new XboxController(0);
+ XboxController OperatorController =new XboxController(1);
 
  //slew rate MUST have slew rate limits for BOTH X and Y axises separate.  if you combine the X and Y into one limiter it makes the robot move diagonally.
  //Note that the slew rate limiter is loooking at joystick values NOT motor speed values thus the positive and negative rates apply to joystick inputs not motor accelerations
@@ -84,6 +96,10 @@ public class RobotContainer {
     DataLogManager.start();
     SignalLogger.start(); */
 
+    // Set the default command to force the shooter rest.
+    m_shooter.setDefaultCommand(m_shooter.set(0));
+    m_intake.setDefaultCommand(m_intake.setAngle(Degrees.of(0)));
+
     configureBindings();// no buttons here they go later
   }
  
@@ -99,6 +115,18 @@ public class RobotContainer {
  private void configureBindings() { //button mappings go here
     Command driveFieldOrientedDirectAngle = drivebase.driveFieldOriented(driveDirectAngle);
     drivebase.setDefaultCommand(driveFieldOrientedDirectAngle);
+    
+// Shooter
+    new JoystickButton(OperatorController, Button.kY.value)
+        .whileTrue(m_shooter.setVelocity(RPM.of(5000)));
+    new JoystickButton(OperatorController, Button.kY.value)
+        .whileFalse(m_shooter.setVelocity(RPM.of(.0)));
+
+// Intake
+    new JoystickButton(OperatorController, Button.kA.value)
+        .whileTrue(m_intake.setAngle(Degrees.of(90)));
+    new JoystickButton(OperatorController, Button.kX.value)
+        .whileTrue(m_intake.setAngle(Degrees.of(0)));
 
 /*     new JoystickButton(driveController, XboxController.Button.kA.value)
         .whileTrue(drivebase.zeroGyroCommand()); EXAMPLE BUTTON MAPPING */ 

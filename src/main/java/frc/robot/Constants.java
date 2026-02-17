@@ -58,6 +58,10 @@ public final class Constants {
   public static final double kV = 0.1;
   public static final double kA = 0.1;
 
+  //Intake Constants
+  public static final double EXTENDED_ANGLE_DEGREES = 90.0;
+  public static final double RETRACTED_ANGLE_DEGREES = 0.0;
+
 //  public static final class AutonConstants
 //  {
 //
