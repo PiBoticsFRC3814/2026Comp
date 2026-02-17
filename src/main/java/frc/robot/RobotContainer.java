@@ -5,12 +5,8 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-// import frc.robot.commands.IntakeExtendCommand;
-// import frc.robot.commands.IntakeRetractCommand;
-import frc.robot.subsystems.Intake;
-// import frc.robot.subsystems.IntakeExtendSubsystem;
+import frc.robot.subsystems.IntakeMovement;
 import frc.robot.subsystems.Shooter;
-//`import frc.robot.subsystems.GyroSwerveDrive;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
@@ -54,7 +50,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   // public final IntakeExtendSubsystem m_ExtendSubsystem = new IntakeExtendSubsystem();
   public final Shooter m_shooter = new Shooter();
-  public final Intake m_intake = new Intake();
+  public final IntakeMovement m_intake = new IntakeMovement();
+  
   
   //calls all the JSON files for swervesubsystem
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
@@ -127,6 +124,7 @@ public class RobotContainer {
         .whileTrue(m_intake.setAngle(Degrees.of(90)));
     new JoystickButton(OperatorController, Button.kX.value)
         .whileTrue(m_intake.setAngle(Degrees.of(0)));
+
 
 /*     new JoystickButton(driveController, XboxController.Button.kA.value)
         .whileTrue(drivebase.zeroGyroCommand()); EXAMPLE BUTTON MAPPING */ 

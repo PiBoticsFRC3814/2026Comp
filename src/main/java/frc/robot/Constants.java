@@ -61,6 +61,10 @@ public final class Constants {
   //Intake Constants
   public static final double EXTENDED_ANGLE_DEGREES = 90.0;
   public static final double RETRACTED_ANGLE_DEGREES = 0.0;
+  public static final int IntakeRollerID = 0;
+public static final int INTAKE_MOTOR_CURRENT_LIMIT = 0;
+public static final double INTAKE_MAX_IN_SPEED = 0;
+public static final double INTAKE_MAX_OUT_SPEED = 0;
 
 //  public static final class AutonConstants
 //  {

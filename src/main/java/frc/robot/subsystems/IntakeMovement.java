@@ -32,7 +32,7 @@ import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
 import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.local.SparkWrapper;
 
-public class Intake extends SubsystemBase {
+public class IntakeMovement extends SubsystemBase {
 
   private SmartMotorControllerConfig smcConfig = new SmartMotorControllerConfig(this)
   .withControlMode(ControlMode.CLOSED_LOOP)
@@ -45,7 +45,6 @@ public class Intake extends SubsystemBase {
   // Telemetry name and verbosity level
   .withTelemetry("ArmMotor", TelemetryVerbosity.HIGH)
   // Gearing from the motor rotor to final shaft.
-  // In this example GearBox.fromReductionStages(3,4) is the same as GearBox.fromStages("3:1","4:1") which corresponds to the gearbox attached to your motor.
   .withGearing(12)
   // Motor properties to prevent over currenting.
   .withMotorInverted(false)
@@ -108,7 +107,7 @@ public class Intake extends SubsystemBase {
   public Command sysId() { return arm.sysId(Volts.of(7), Volts.of(2).per(Second), Seconds.of(4));}
 
   /** Creates a new ExampleSubsystem. */
-  public Intake() {}
+  public IntakeMovement() {}
 
   /**
    * Example command factory method.
