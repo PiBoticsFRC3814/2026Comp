@@ -5,8 +5,11 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.IntakeMovement;
+import frc.robot.subsystems.IntakeRollerSubsystem;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterIntakeSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
@@ -51,14 +54,17 @@ public class RobotContainer {
   // public final IntakeExtendSubsystem m_ExtendSubsystem = new IntakeExtendSubsystem();
   public final Shooter m_shooter = new Shooter();
   public final IntakeMovement m_intake = new IntakeMovement();
-  
+  public final IntakeRollerSubsystem m_rollerMotor = new IntakeRollerSubsystem();
+  public final Conveyor m_conveyor = new Conveyor();
+  public final ShooterIntakeSubsystem m_ShooterIntake = new ShooterIntakeSubsystem();
+   
   
   //calls all the JSON files for swervesubsystem
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
   // Replace with CommandPS4Controller or CommandJoystick if needed
  XboxController driveController = new XboxController(0);
- XboxController OperatorController =new XboxController(1);
+ XboxController OperatorController = new XboxController(1);
 
  //slew rate MUST have slew rate limits for BOTH X and Y axises separate.  if you combine the X and Y into one limiter it makes the robot move diagonally.
  //Note that the slew rate limiter is loooking at joystick values NOT motor speed values thus the positive and negative rates apply to joystick inputs not motor accelerations
@@ -96,6 +102,9 @@ public class RobotContainer {
     // Set the default command to force the shooter rest.
     m_shooter.setDefaultCommand(m_shooter.set(0));
     m_intake.setDefaultCommand(m_intake.setAngle(Degrees.of(0)));
+    m_rollerMotor.setDefaultCommand(m_rollerMotor.stop());
+    m_conveyor.setDefaultCommand(m_conveyor.stop());
+    m_ShooterIntake.setDefaultCommand(m_ShooterIntake.stop());
 
     configureBindings();// no buttons here they go later
   }
@@ -120,10 +129,39 @@ public class RobotContainer {
         .whileFalse(m_shooter.setVelocity(RPM.of(.0)));
 
 // Intake
+    new JoystickButton(driveController, Button.kA.value)
+        .whileTrue(m_intake.setAngleAndStop(Degrees.of(90)));
+    new JoystickButton(driveController, Button.kX.value)
+        .whileTrue(m_intake.setAngleAndStop(Degrees.of(0)));
+
+// Intake Rollers
+    new JoystickButton(OperatorController, Button.kRightBumper.value)
+        .whileTrue(m_rollerMotor.in(100));
+    new JoystickButton(OperatorController, Button.kRightBumper.value)
+        .whileFalse(m_rollerMotor.stop());
+    new JoystickButton(OperatorController, Button.kRightTrigger.value)
+        .whileTrue(m_rollerMotor.out(100));
+
+// Conveyor
+    new JoystickButton(OperatorController, Button.kLeftBumper.value)
+        .whileTrue(m_conveyor.in(100));
+    new JoystickButton(OperatorController, Button.kLeftBumper.value)
+        .whileFalse(m_conveyor.stop());
+    new JoystickButton(OperatorController, Button.kLeftTrigger.value)
+       .whileTrue(m_conveyor.out(100));
+
+//Shooter Intake
+    new JoystickButton(OperatorController, Button.kB.value)
+        .whileTrue(m_ShooterIntake.in(100));
+    new JoystickButton(OperatorController, Button.kB.value)
+        .whileFalse(m_ShooterIntake.stop());
     new JoystickButton(OperatorController, Button.kA.value)
-        .whileTrue(m_intake.setAngle(Degrees.of(90)));
-    new JoystickButton(OperatorController, Button.kX.value)
-        .whileTrue(m_intake.setAngle(Degrees.of(0)));
+        .whileTrue(m_ShooterIntake.out(100));
+    new JoystickButton(OperatorController, Button.kA.value)
+        .whileFalse(m_ShooterIntake.out(100));
+    
+
+
 
 
 /*     new JoystickButton(driveController, XboxController.Button.kA.value)

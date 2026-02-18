@@ -48,7 +48,7 @@ public class IntakeMovement extends SubsystemBase {
   .withGearing(12)
   // Motor properties to prevent over currenting.
   .withMotorInverted(false)
-  .withIdleMode(MotorMode.BRAKE)
+  .withIdleMode(MotorMode.COAST)
   .withStatorCurrentLimit(Amps.of(40))
   .withClosedLoopRampRate(Seconds.of(0.25))
   .withOpenLoopRampRate(Seconds.of(0.25));
