@@ -41,7 +41,7 @@ public class Shooter extends SubsystemBase {
   // Telemetry name and verbosity level
   .withTelemetry("ShooterMotor", TelemetryVerbosity.HIGH)
   // Gearing from the motor rotor to final shaft.
-  .withGearing(1)
+  .withGearing(0)
   // Motor properties to prevent over currenting.
   .withMotorInverted(false)
   .withIdleMode(MotorMode.COAST)

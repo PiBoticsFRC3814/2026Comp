@@ -2,11 +2,13 @@ package frc.robot.subsystems;
 
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.Current;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -53,9 +55,9 @@ public class IntakeRollerSubsystem extends SubsystemBase
     return setIntakeRoller(0);
   }
 
-  public Current getCurrent()
+  public Voltage getVoltage()
   {
-    return Amps.of(m_rollerMotor.getMotorOutputVoltage());
+    return Volts.of(m_rollerMotor.getMotorOutputPercent());
   }
 
   public boolean outtaking()

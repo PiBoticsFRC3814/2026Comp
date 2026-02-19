@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.IntakeMovement;
 import frc.robot.subsystems.IntakeRollerSubsystem;
@@ -13,6 +14,7 @@ import frc.robot.subsystems.ShooterIntakeSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
+import yams.mechanisms.positional.Elevator;
 
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.RPM;
@@ -38,7 +40,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-//import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.math.util.Units;
 
@@ -51,12 +52,12 @@ import edu.wpi.first.math.util.Units;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  // public final IntakeExtendSubsystem m_ExtendSubsystem = new IntakeExtendSubsystem();
   public final Shooter m_shooter = new Shooter();
   public final IntakeMovement m_intake = new IntakeMovement();
   public final IntakeRollerSubsystem m_rollerMotor = new IntakeRollerSubsystem();
   public final Conveyor m_conveyor = new Conveyor();
   public final ShooterIntakeSubsystem m_ShooterIntake = new ShooterIntakeSubsystem();
+  public final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
    
   
   //calls all the JSON files for swervesubsystem
@@ -65,6 +66,7 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
  XboxController driveController = new XboxController(0);
  XboxController OperatorController = new XboxController(1);
+ XboxController OutakeController = new XboxController(2);
 
  //slew rate MUST have slew rate limits for BOTH X and Y axises separate.  if you combine the X and Y into one limiter it makes the robot move diagonally.
  //Note that the slew rate limiter is loooking at joystick values NOT motor speed values thus the positive and negative rates apply to joystick inputs not motor accelerations
@@ -100,11 +102,12 @@ public class RobotContainer {
     SignalLogger.start(); */
 
     // Set the default command to force the shooter rest.
-    m_shooter.setDefaultCommand(m_shooter.set(0));
+    m_shooter.setDefaultCommand(m_shooter.setVelocity(RPM.of(0)));
     m_intake.setDefaultCommand(m_intake.setAngle(Degrees.of(0)));
     m_rollerMotor.setDefaultCommand(m_rollerMotor.stop());
     m_conveyor.setDefaultCommand(m_conveyor.stop());
     m_ShooterIntake.setDefaultCommand(m_ShooterIntake.stop());
+    m_ClimberSubsystem.setDefaultCommand(m_ClimberSubsystem.idle());
 
     configureBindings();// no buttons here they go later
   }
@@ -125,44 +128,37 @@ public class RobotContainer {
 // Shooter
     new JoystickButton(OperatorController, Button.kY.value)
         .whileTrue(m_shooter.setVelocity(RPM.of(5000)));
-    new JoystickButton(OperatorController, Button.kY.value)
-        .whileFalse(m_shooter.setVelocity(RPM.of(.0)));
-
+  
 // Intake
     new JoystickButton(driveController, Button.kA.value)
-        .whileTrue(m_intake.setAngleAndStop(Degrees.of(90)));
+        .onChange(m_intake.setAngleAndStop(Degrees.of(90)));
     new JoystickButton(driveController, Button.kX.value)
-        .whileTrue(m_intake.setAngleAndStop(Degrees.of(0)));
+        .onChange(m_intake.setAngleAndStop(Degrees.of(0)));
 
 // Intake Rollers
     new JoystickButton(OperatorController, Button.kRightBumper.value)
         .whileTrue(m_rollerMotor.in(100));
-    new JoystickButton(OperatorController, Button.kRightBumper.value)
-        .whileFalse(m_rollerMotor.stop());
-    new JoystickButton(OperatorController, Button.kRightTrigger.value)
+    new JoystickButton(OutakeController, Button.kRightTrigger.value)
         .whileTrue(m_rollerMotor.out(100));
 
 // Conveyor
     new JoystickButton(OperatorController, Button.kLeftBumper.value)
         .whileTrue(m_conveyor.in(100));
-    new JoystickButton(OperatorController, Button.kLeftBumper.value)
-        .whileFalse(m_conveyor.stop());
-    new JoystickButton(OperatorController, Button.kLeftTrigger.value)
+    new JoystickButton(OutakeController, Button.kLeftTrigger.value)
        .whileTrue(m_conveyor.out(100));
 
 //Shooter Intake
     new JoystickButton(OperatorController, Button.kB.value)
         .whileTrue(m_ShooterIntake.in(100));
-    new JoystickButton(OperatorController, Button.kB.value)
-        .whileFalse(m_ShooterIntake.stop());
     new JoystickButton(OperatorController, Button.kA.value)
         .whileTrue(m_ShooterIntake.out(100));
-    new JoystickButton(OperatorController, Button.kA.value)
-        .whileFalse(m_ShooterIntake.out(100));
-    
-
-
-
+      
+//Climber Subsystem
+      new JoystickButton(OperatorController, Button.kA.value)
+        .whileTrue(m_ClimberSubsystem.moveToHeightCommand(1));
+        new JoystickButton(OperatorController, Button.kB.value)
+        .whileTrue(m_ClimberSubsystem.moveToHeightCommand(0));
+   
 
 /*     new JoystickButton(driveController, XboxController.Button.kA.value)
         .whileTrue(drivebase.zeroGyroCommand()); EXAMPLE BUTTON MAPPING */ 
