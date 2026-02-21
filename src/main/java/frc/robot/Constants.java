@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.AngularVelocity;
 import swervelib.math.Matter;
 
 
@@ -55,6 +56,27 @@ public final class Constants {
   public static final double ODOM_X_STD = 0.0;
   public static final double ODOM_Y_SYD = 0.0;
   public static final double ODOM_THETA_STD = Math.toRadians(12.0);
+
+  // Intake Movement
+  public static final double INTAKE_RETRACT_SPEED = 0;
+  public static final double INTAKE_EXTEND_SPEED = 0;
+
+  // Conveyor
+  public static final double CONVEYOR_SPEED = 0;
+  public static final double CONVEYOR_OUTTAKE_SPEED = 0;
+
+
+  // Shooter Intake
+  public static final double SHOOTER_INTAKE_SPEED = 0;
+  public static final double SHOOTER_OUTTAKE_SPEED = 0;
+
+  // Intake Roller
+  public static final double INTAKE_ROLLER_SPEED = 0;
+  public static final double INTAKE_ROLLER_OUTTAKE_SPEED = 0;
+
+
+  // Shooter
+  public static final double SHOOTER_SPEED = 0;
 
   
 //  public static final class AutonConstants

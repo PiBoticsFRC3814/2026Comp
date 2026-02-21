@@ -13,10 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterIntakeSubsystem extends SubsystemBase
 {
-
-  public static final double speed = 0.0; //RPM?
-
-  private final TalonSRX m_rollerMotor = new TalonSRX(30);
+  private final TalonSRX m_rollerMotor = new TalonSRX(90);
 
   private final DCMotor m_rollerMotorGearbox = DCMotor.getVex775Pro(1);
 

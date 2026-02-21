@@ -33,8 +33,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ClimberSubsystem extends SubsystemBase {
 
   // Constants
-  private final DCMotor dcMotor = DCMotor.getNEO(2);
-  private final int canID = 1;
+  private final DCMotor dcMotor = DCMotor.getNEO(1);
+  private final int canID = 40;
   private final double gearRatio = 15;
   private final double kP = 1;
   private final double kI = 0;

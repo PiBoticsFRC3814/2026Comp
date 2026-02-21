@@ -67,6 +67,7 @@ public class RobotContainer {
  XboxController driveController = new XboxController(0);
  XboxController OperatorController = new XboxController(1);
  XboxController OutakeController = new XboxController(2);
+ XboxController TestJoystick = new XboxController(5);
 
  //slew rate MUST have slew rate limits for BOTH X and Y axises separate.  if you combine the X and Y into one limiter it makes the robot move diagonally.
  //Note that the slew rate limiter is loooking at joystick values NOT motor speed values thus the positive and negative rates apply to joystick inputs not motor accelerations
@@ -103,7 +104,7 @@ public class RobotContainer {
 
     // Set the default command to force the shooter rest.
     m_shooter.setDefaultCommand(m_shooter.setVelocity(RPM.of(0)));
-    m_intake.setDefaultCommand(m_intake.setAngle(Degrees.of(0)));
+    m_intake.setDefaultCommand(m_intake.stop());
     m_rollerMotor.setDefaultCommand(m_rollerMotor.stop());
     m_conveyor.setDefaultCommand(m_conveyor.stop());
     m_ShooterIntake.setDefaultCommand(m_ShooterIntake.stop());
@@ -131,27 +132,27 @@ public class RobotContainer {
   
 // Intake
     new JoystickButton(driveController, Button.kA.value)
-        .onChange(m_intake.setAngleAndStop(Degrees.of(90)));
+        .toggleOnTrue(m_intake.extend(Constants.INTAKE_EXTEND_SPEED));
     new JoystickButton(driveController, Button.kX.value)
-        .onChange(m_intake.setAngleAndStop(Degrees.of(0)));
+        .toggleOnTrue(m_intake.retract(Constants.INTAKE_RETRACT_SPEED));
 
 // Intake Rollers
     new JoystickButton(OperatorController, Button.kRightBumper.value)
-        .whileTrue(m_rollerMotor.in(100));
+        .whileTrue(m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
     new JoystickButton(OutakeController, Button.kRightTrigger.value)
-        .whileTrue(m_rollerMotor.out(100));
+        .whileTrue(m_rollerMotor.out(Constants.INTAKE_ROLLER_OUTTAKE_SPEED));
 
 // Conveyor
     new JoystickButton(OperatorController, Button.kLeftBumper.value)
-        .whileTrue(m_conveyor.in(100));
+        .whileTrue(m_conveyor.in(Constants.CONVEYOR_SPEED));
     new JoystickButton(OutakeController, Button.kLeftTrigger.value)
-       .whileTrue(m_conveyor.out(100));
+       .whileTrue(m_conveyor.out(Constants.CONVEYOR_OUTTAKE_SPEED));
 
 //Shooter Intake
     new JoystickButton(OperatorController, Button.kB.value)
-        .whileTrue(m_ShooterIntake.in(100));
-    new JoystickButton(OperatorController, Button.kA.value)
-        .whileTrue(m_ShooterIntake.out(100));
+        .whileTrue(m_ShooterIntake.in(Constants.SHOOTER_INTAKE_SPEED));
+    new JoystickButton(OperatorController, Button.kY.value)
+        .whileTrue(m_ShooterIntake.out(Constants.SHOOTER_OUTTAKE_SPEED));
       
 //Climber Subsystem
       new JoystickButton(OperatorController, Button.kA.value)
@@ -160,6 +161,9 @@ public class RobotContainer {
         .whileTrue(m_ClimberSubsystem.moveToHeightCommand(0));
    
 
+// Test Buttons
+      new JoystickButton(TestJoystick, Button.kA.value)
+        .whileTrue(m_shooter.setSmartDashboardRPM());
 /*     new JoystickButton(driveController, XboxController.Button.kA.value)
         .whileTrue(drivebase.zeroGyroCommand()); EXAMPLE BUTTON MAPPING */ 
 

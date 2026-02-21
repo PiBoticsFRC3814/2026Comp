@@ -74,13 +74,14 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+        SmartDashboard.putNumber("ManualShooterRPM",0.0);
   }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
     SmartDashboard.putNumber("stickAngle", m_robotContainer.stickAngle());
-  }
+   }
 
   @Override
   public void testInit() {

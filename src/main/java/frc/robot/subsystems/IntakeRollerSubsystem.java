@@ -15,12 +15,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IntakeRollerSubsystem extends SubsystemBase
 {
-
-  public static final double speed = 0.0; //RPM?
-
   public static final double kWristMomentOfInertia = 0.00032; // kg * m^2
 
-  private final TalonSRX m_rollerMotor = new TalonSRX(30);
+  private final TalonSRX m_rollerMotor = new TalonSRX(70);
 
   private final DCMotor m_rollerMotorGearbox = DCMotor.getVex775Pro(1);
 

@@ -15,6 +15,7 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import yams.mechanisms.config.FlyWheelConfig;
@@ -27,6 +28,9 @@ import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
 import yams.motorcontrollers.local.SparkWrapper;
 
 public class Shooter extends SubsystemBase {
+
+  private double Distance = 0.0;
+  private double ManualShooterRPM = SmartDashboard.getNumber("ManualShooterRPM", 0.0);
 
   private SmartMotorController motor;
 
@@ -48,7 +52,7 @@ public class Shooter extends SubsystemBase {
   .withStatorCurrentLimit(Amps.of(40));
 
   // Vendor motor controller object
-  private SparkMax spark = new SparkMax(5, MotorType.kBrushless);
+  private SparkMax spark = new SparkMax(80, MotorType.kBrushless);
 
   // Create our SmartMotorController from our Spark and config with the NEO.
   private SmartMotorController sparkSmartMotorController = new SparkWrapper(spark, DCMotor.getNEO(1), smcConfig);
@@ -88,6 +92,21 @@ public class Shooter extends SubsystemBase {
    */
   public void setVelocitySetpoint(AngularVelocity speed) {shooter.setMechanismVelocitySetpoint(speed);}
 
+   /**
+   * Set the shooter velocity setpoint.
+   *
+   * @param speed Speed to set
+   */
+  public void setDesiredVelocity() {
+    // limelight distance checks here
+    //this is where code passes limelight distance into local distance variable
+    shooter.run(RPM.of(Distance)); //math to do to distance to make rpm go
+  }
+
+  public Command setSmartDashboardRPM(){
+    ManualShooterRPM = SmartDashboard.getNumber("ShooterRPM", 0.0);
+    return shooter.run(RPM.of(ManualShooterRPM));
+  }
   
   /**
    * Set the dutycycle of the shooter.
