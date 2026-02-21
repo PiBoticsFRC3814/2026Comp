@@ -52,7 +52,7 @@ import edu.wpi.first.math.util.Units;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  public final Shooter m_shooter = new Shooter();
+  
   public final IntakeMovement m_intake = new IntakeMovement();
   public final IntakeRollerSubsystem m_rollerMotor = new IntakeRollerSubsystem();
   public final Conveyor m_conveyor = new Conveyor();
@@ -63,6 +63,10 @@ public class RobotContainer {
   //calls all the JSON files for swervesubsystem
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
+
+  //putting the shooter call here since it needs to be after drivebase to get the drivebase into the shooter for limelight/pose stuffs.
+  public final Shooter m_shooter = new Shooter(drivebase);
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
  XboxController driveController = new XboxController(0);
  XboxController OperatorController = new XboxController(1);

@@ -13,11 +13,14 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import yams.mechanisms.config.FlyWheelConfig;
 import yams.mechanisms.velocity.FlyWheel;
 import yams.motorcontrollers.SmartMotorController;
@@ -30,9 +33,10 @@ import yams.motorcontrollers.local.SparkWrapper;
 public class Shooter extends SubsystemBase {
 
   private double Distance = 0.0;
+  private double shootSpeed = 0.0;
   private double ManualShooterRPM = SmartDashboard.getNumber("ManualShooterRPM", 0.0);
 
-  private SmartMotorController motor;
+  private SmartMotorController motor; //this is not used so we probably should delete it.
 
   private SmartMotorControllerConfig smcConfig = new SmartMotorControllerConfig(this)
   .withControlMode(ControlMode.CLOSED_LOOP)
@@ -57,7 +61,7 @@ public class Shooter extends SubsystemBase {
   // Create our SmartMotorController from our Spark and config with the NEO.
   private SmartMotorController sparkSmartMotorController = new SparkWrapper(spark, DCMotor.getNEO(1), smcConfig);
   
-   private final FlyWheelConfig shooterConfig = new FlyWheelConfig(sparkSmartMotorController)
+  private final FlyWheelConfig shooterConfig = new FlyWheelConfig(sparkSmartMotorController)
   // Diameter of the flywheel.
   .withDiameter(Inches.of(4))
   // Mass of the flywheel.
@@ -69,6 +73,8 @@ public class Shooter extends SubsystemBase {
 
   // Shooter Mechanism
   private FlyWheel shooter = new FlyWheel(shooterConfig);
+
+  private SwerveSubsystem drive;
 
     /**
    * Gets the current velocity of the shooter.
@@ -99,8 +105,26 @@ public class Shooter extends SubsystemBase {
    */
   public void setDesiredVelocity() {
     // limelight distance checks here
-    //this is where code passes limelight distance into local distance variable
-    shooter.run(RPM.of(Distance)); //math to do to distance to make rpm go
+    Distance = drive.shareTargetDistance;  
+    // may want to change how this is currently done right now i am allways getting the distance to target in the periodic of the swerve system even if we dont need it
+    // it might be less intrusive on the code times to instead call the getTargetDistance() here instead of allwyas sicne we may only need it when trying to shoot.
+    //not sure what option is better since it may be better to allways gettarget distances since we want the driverstationto contiuosly update the humans with "in range" information.
+    
+    //smart dashbord stuff for troublwshooting remove when we see this number is getting here
+    SmartDashboard.putNumber("shooter Distance", Distance);
+
+    //add math stuff for distance to rpm needs.
+    shootSpeed = Distance*1; //math is fun  Distance would be the "X" in the f(x) function that we come up with through testing.
+
+    shooter.run(RPM.of(shootSpeed)); //math to do to distance to make rpm go
+  }
+
+  public double getDesiredVelocity(){
+    return shootSpeed;
+  }
+
+  public double getActualVelocity(){
+    return shooter.getSpeed().in(RPM);
   }
 
   public Command setSmartDashboardRPM(){
@@ -117,7 +141,9 @@ public class Shooter extends SubsystemBase {
   public Command set(double dutyCycle) {return shooter.set(dutyCycle);}
 
   /** Creates a new ExampleSubsystem. */
-  public Shooter() {}
+  public Shooter(SwerveSubsystem swerveDrive) {
+    drive = swerveDrive;
+  }
 
   /**
    * Example command factory method.
