@@ -83,6 +83,9 @@ public class SwerveSubsystem extends SubsystemBase
   LimelightPoseEstimator         poseEstimator;
   SlewRateLimiter                velocityLimiter;
   SlewRateLimiter                angularLimiter;
+  Pose2d                         targetData;
+  double                         targetDistance = 0.0;
+  public double                  shareTargetDistance = 0.0;
   
   
 
@@ -174,12 +177,16 @@ public void periodic()
 		 .save();
 
   updateVisonOdometry();
-
+  
   swerveDrive.updateOdometry();
+
+  shareTargetDistance = getTargetDistance();
 
   SmartDashboard.putNumber("X Measure",swerveDrive.getPose().getMeasureX().in(Meter));
   SmartDashboard.putNumber("Y Measure",swerveDrive.getPose().getMeasureY().in(Meter));
   SmartDashboard.putNumber("Angle Measure",swerveDrive.getPose().getRotation().getDegrees());
+  SmartDashboard.putNumber("Target Distance", shareTargetDistance);
+  
   
 }
 
@@ -241,6 +248,25 @@ public void updateVisonOdometry()
         visionStdDevs
       );      
     });
+  }
+
+  public double getTargetDistance(){
+    if (!limelight.getData().targetData.getTargetStatus()){
+      return 0.0;
+    }
+    if (limelight.getData().targetData.getAprilTagID() != 8.0 ||
+        limelight.getData().targetData.getAprilTagID() != 9.0 ||
+        limelight.getData().targetData.getAprilTagID() != 10.0 ||
+        limelight.getData().targetData.getAprilTagID() != 11.0 ||
+        limelight.getData().targetData.getAprilTagID() != 24.0 ||
+        limelight.getData().targetData.getAprilTagID() != 25.0 ||
+        limelight.getData().targetData.getAprilTagID() != 26.0 ||
+        limelight.getData().targetData.getAprilTagID() != 27.0 ){
+      return 0.0;
+    }
+    targetData = limelight.getData().targetData.getRobotToTarget().toPose2d();
+    targetDistance = Math.sqrt(Math.pow(targetData.getMeasureX().in(Meter),2) + Math.pow(targetData.getMeasureY().in(Meter),2));
+    return targetDistance;
   }
 
  
