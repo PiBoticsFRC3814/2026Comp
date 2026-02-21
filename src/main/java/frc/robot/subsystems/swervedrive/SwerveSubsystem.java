@@ -186,8 +186,7 @@ public void periodic()
   SmartDashboard.putNumber("Y Measure",swerveDrive.getPose().getMeasureY().in(Meter));
   SmartDashboard.putNumber("Angle Measure",swerveDrive.getPose().getRotation().getDegrees());
   SmartDashboard.putNumber("Target Distance", shareTargetDistance);
-  
-  
+   
 }
 
 public void updateVisonOdometry()
