@@ -46,6 +46,14 @@ public final class Constants {
   public static final double JOYSTICK_X_SLEW_NEG = -2.0;
   public static final double JOYSTICK_Y_SLEW_NEG = -2.0;
 
+  //Camera Offset Constants in inches from the center of the robot.
+  public static final double CAMERA_X_OFFSET = 5.0; //in inches
+  public static final double CAMERA_Y_OFFSET = 5.0; //in inches
+  public static final double CAMERA_Z_OFFSET = 5.0; //in inches
+  public static final double CAMERA_ROLL = 0.0; // in degrees
+  public static final double CAMERA_PITCH = 0.0; // in degrees the pitch is probabbly going to be the only angle we need unlessmounting is done weirdly
+  public static final double CAMERA_YAW = 0.0; // in degrees
+
 
   //standard deviation camera constants
   public static final double CAM_X_STD = 0.0;
@@ -58,25 +66,25 @@ public final class Constants {
   public static final double ODOM_THETA_STD = Math.toRadians(12.0);
 
   // Intake Movement
-  public static final double INTAKE_RETRACT_SPEED = 0;
-  public static final double INTAKE_EXTEND_SPEED = 0;
+  public static final double INTAKE_RETRACT_SPEED = 0.1;
+  public static final double INTAKE_EXTEND_SPEED = -0.1;
 
   // Conveyor
-  public static final double CONVEYOR_SPEED = 0;
-  public static final double CONVEYOR_OUTTAKE_SPEED = 0;
+  public static final double CONVEYOR_SPEED = 0.1;
+  public static final double CONVEYOR_OUTTAKE_SPEED = -0.1;
 
 
   // Shooter Intake
-  public static final double SHOOTER_INTAKE_SPEED = 0;
-  public static final double SHOOTER_OUTTAKE_SPEED = 0;
+  public static final double SHOOTER_INTAKE_SPEED = 0.1;
+  public static final double SHOOTER_OUTTAKE_SPEED = -0.1;
 
   // Intake Roller
-  public static final double INTAKE_ROLLER_SPEED = 0;
-  public static final double INTAKE_ROLLER_OUTTAKE_SPEED = 0;
+  public static final double INTAKE_ROLLER_SPEED = 0.1;
+  public static final double INTAKE_ROLLER_OUTTAKE_SPEED = -0.1;
 
 
   // Shooter
-  public static final double SHOOTER_SPEED = 0;
+  public static final double SHOOTER_SPEED = 0.1;
 
   
 //  public static final class AutonConstants
