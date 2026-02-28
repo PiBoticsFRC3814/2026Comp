@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.TurnOnFlywheel;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.IntakeMovement;
@@ -171,6 +172,8 @@ public class RobotContainer {
 /*     new JoystickButton(driveController, XboxController.Button.kA.value)
         .whileTrue(drivebase.zeroGyroCommand()); EXAMPLE BUTTON MAPPING */ 
 
+      new JoystickButton(TestJoystick, Button.kB.value)
+        .toggleOnTrue(new TurnOnFlywheel(m_shooter, drivebase));
   }
 
   public void setupShuffleboard() {

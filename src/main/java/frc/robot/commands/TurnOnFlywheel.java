@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TurnOnFlywheel extends Command {
@@ -13,10 +14,11 @@ public class TurnOnFlywheel extends Command {
   Shooter m_shooter;
 
   /** Creates a new TurnOnFlywheel. */
-  public TurnOnFlywheel(Shooter shooter) {
+  public TurnOnFlywheel(Shooter shooter, SwerveSubsystem drive) {
     m_shooter = shooter;
+    //not sure if i need to actually build the drive here or not?  adding to requirements to try to make it so the drive default commands interrupted while this command runs?
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooter);
+    addRequirements(shooter, drive);
   }
 
   // Called when the command is initially scheduled.
@@ -30,6 +32,7 @@ public class TurnOnFlywheel extends Command {
   @Override
   public void execute() {
     m_shooter.setDesiredVelocity();
+    m_shooter.driveInhibit();
   }
 
   // Called once the command ends or is interrupted.

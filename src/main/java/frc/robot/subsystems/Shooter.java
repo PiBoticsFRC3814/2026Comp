@@ -13,6 +13,7 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry3d;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -35,6 +36,7 @@ public class Shooter extends SubsystemBase {
   private double Distance = 0.0;
   private double shootSpeed = 0.0;
   private double ManualShooterRPM = SmartDashboard.getNumber("ManualShooterRPM", 0.0);
+  private ChassisSpeeds driveInhib = new ChassisSpeeds(0,0,0);
 
   private SmartMotorController motor; //this is not used so we probably should delete it.
 
@@ -132,6 +134,11 @@ public class Shooter extends SubsystemBase {
     return shooter.run(RPM.of(ManualShooterRPM));
   }
   
+  public void driveInhibit(){
+    drive.drive(driveInhib);
+  }
+
+
   /**
    * Set the dutycycle of the shooter.
    *
@@ -144,6 +151,8 @@ public class Shooter extends SubsystemBase {
   public Shooter(SwerveSubsystem swerveDrive) {
     drive = swerveDrive;
   }
+
+  
 
   /**
    * Example command factory method.
