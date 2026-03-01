@@ -58,7 +58,7 @@ public class RobotContainer {
   public final IntakeRollerSubsystem m_rollerMotor = new IntakeRollerSubsystem();
   public final Conveyor m_conveyor = new Conveyor();
   public final ShooterIntakeSubsystem m_ShooterIntake = new ShooterIntakeSubsystem();
-  public final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+  //public final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
    
   
   //calls all the JSON files for swervesubsystem
@@ -108,12 +108,12 @@ public class RobotContainer {
     SignalLogger.start(); */
 
     // Set the default command to force the shooter rest.
-    m_shooter.setDefaultCommand(m_shooter.setVelocity(RPM.of(0)));
-    m_intake.setDefaultCommand(m_intake.stop());
-    m_rollerMotor.setDefaultCommand(m_rollerMotor.stop());
-    m_conveyor.setDefaultCommand(m_conveyor.stop());
-    m_ShooterIntake.setDefaultCommand(m_ShooterIntake.stop());
-    m_ClimberSubsystem.setDefaultCommand(m_ClimberSubsystem.idle());
+    //m_shooter.setDefaultCommand(m_shooter.setVelocity(RPM.of(0)));
+    //m_intake.setDefaultCommand(m_intake.stop());
+    //m_rollerMotor.setDefaultCommand(m_rollerMotor.stop());
+    //m_conveyor.setDefaultCommand(m_conveyor.stop());
+    //m_ShooterIntake.setDefaultCommand(m_ShooterIntake.stop());
+    //m_ClimberSubsystem.setDefaultCommand(m_ClimberSubsystem.idle());
 
     configureBindings();// no buttons here they go later
   }
@@ -132,8 +132,8 @@ public class RobotContainer {
     drivebase.setDefaultCommand(driveFieldOrientedDirectAngle);
     
 // Shooter
-    new JoystickButton(OperatorController, Button.kY.value)
-        .whileTrue(m_shooter.setVelocity(RPM.of(5000)));
+    //new JoystickButton(OperatorController, Button.kY.value)
+    //    .whileTrue(m_shooter.setVelocity(RPM.of(5000)));
   
 // Intake
     new JoystickButton(driveController, Button.kA.value)
@@ -144,13 +144,13 @@ public class RobotContainer {
 // Intake Rollers
     new JoystickButton(OperatorController, Button.kRightBumper.value)
         .whileTrue(m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
-    new JoystickButton(OutakeController, Button.kRightTrigger.value)
+    new JoystickButton(OperatorController, Button.kRightTrigger.value)
         .whileTrue(m_rollerMotor.out(Constants.INTAKE_ROLLER_OUTTAKE_SPEED));
 
 // Conveyor
     new JoystickButton(OperatorController, Button.kLeftBumper.value)
         .whileTrue(m_conveyor.in(Constants.CONVEYOR_SPEED));
-    new JoystickButton(OutakeController, Button.kLeftTrigger.value)
+    new JoystickButton(OperatorController, Button.kLeftTrigger.value)
        .whileTrue(m_conveyor.out(Constants.CONVEYOR_OUTTAKE_SPEED));
 
 //Shooter Intake
@@ -160,10 +160,10 @@ public class RobotContainer {
         .whileTrue(m_ShooterIntake.out(Constants.SHOOTER_OUTTAKE_SPEED));
       
 //Climber Subsystem
-      new JoystickButton(OperatorController, Button.kA.value)
-        .whileTrue(m_ClimberSubsystem.moveToHeightCommand(1));
-        new JoystickButton(OperatorController, Button.kB.value)
-        .whileTrue(m_ClimberSubsystem.moveToHeightCommand(0));
+      //new JoystickButton(OperatorController, Button.kA.value)
+      //  .whileTrue(m_ClimberSubsystem.moveToHeightCommand(1));
+      //  new JoystickButton(OperatorController, Button.kB.value)
+      //  .whileTrue(m_ClimberSubsystem.moveToHeightCommand(0));
    
 
 // Test Buttons
@@ -172,8 +172,8 @@ public class RobotContainer {
 /*     new JoystickButton(driveController, XboxController.Button.kA.value)
         .whileTrue(drivebase.zeroGyroCommand()); EXAMPLE BUTTON MAPPING */ 
 
-      new JoystickButton(TestJoystick, Button.kB.value)
-        .toggleOnTrue(new TurnOnFlywheel(m_shooter, drivebase));
+      //new JoystickButton(TestJoystick, Button.kB.value)
+      //  .toggleOnTrue(new TurnOnFlywheel(m_shooter, drivebase));
   }
 
   public void setupShuffleboard() {

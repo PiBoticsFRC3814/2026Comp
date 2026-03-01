@@ -70,8 +70,8 @@ public final class Constants {
   public static final double INTAKE_EXTEND_SPEED = -0.1;
 
   // Conveyor
-  public static final double CONVEYOR_SPEED = 0.1;
-  public static final double CONVEYOR_OUTTAKE_SPEED = -0.1;
+  public static final double CONVEYOR_SPEED = 1.0;
+  public static final double CONVEYOR_OUTTAKE_SPEED = -1.0;
 
 
   // Shooter Intake
@@ -79,8 +79,8 @@ public final class Constants {
   public static final double SHOOTER_OUTTAKE_SPEED = -0.1;
 
   // Intake Roller
-  public static final double INTAKE_ROLLER_SPEED = 0.1;
-  public static final double INTAKE_ROLLER_OUTTAKE_SPEED = -0.1;
+  public static final double INTAKE_ROLLER_SPEED = 0.5;
+  public static final double INTAKE_ROLLER_OUTTAKE_SPEED = -0.5;
 
 
   // Shooter

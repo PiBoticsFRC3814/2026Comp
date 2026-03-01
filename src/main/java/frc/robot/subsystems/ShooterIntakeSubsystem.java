@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterIntakeSubsystem extends SubsystemBase
 {
-  private final TalonSRX m_rollerMotor = new TalonSRX(90);
+  private final TalonSRX m_rollerMotor = new TalonSRX(46);
 
   private final DCMotor m_rollerMotorGearbox = DCMotor.getVex775Pro(1);
 

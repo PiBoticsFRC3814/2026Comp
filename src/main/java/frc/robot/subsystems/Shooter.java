@@ -46,19 +46,19 @@ public class Shooter extends SubsystemBase {
   .withClosedLoopController(1, 0, 0)
   .withSimClosedLoopController(1, 0, 0) // sim
   // Feedforward Constants
-  .withFeedforward(new SimpleMotorFeedforward(0, 0, 0))
-  .withSimFeedforward(new SimpleMotorFeedforward(0, 0, 0)) // sim
+  .withFeedforward(new SimpleMotorFeedforward(0.125, 0, 0))
+  .withSimFeedforward(new SimpleMotorFeedforward(1.0, 0, 0)) // sim
   // Telemetry name and verbosity level
   .withTelemetry("ShooterMotor", TelemetryVerbosity.HIGH)
   // Gearing from the motor rotor to final shaft.
-  .withGearing(0)
+  .withGearing(0.5)
   // Motor properties to prevent over currenting.
   .withMotorInverted(false)
   .withIdleMode(MotorMode.COAST)
   .withStatorCurrentLimit(Amps.of(40));
 
   // Vendor motor controller object
-  private SparkMax spark = new SparkMax(80, MotorType.kBrushless);
+  private SparkMax spark = new SparkMax(44, MotorType.kBrushless);
 
   // Create our SmartMotorController from our Spark and config with the NEO.
   private SmartMotorController sparkSmartMotorController = new SparkWrapper(spark, DCMotor.getNEO(1), smcConfig);

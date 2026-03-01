@@ -21,7 +21,7 @@ public class IntakeMovement extends SubsystemBase
 
   public static final double kWristMomentOfInertia = 0.00032; // kg * m^2
 
-  private final SparkMax m_IntakeMovement = new SparkMax(60, MotorType.kBrushless);
+  private final SparkMax m_IntakeMovement = new SparkMax(41, MotorType.kBrushless);
 
   private final DCMotor m_rollerMotorGearbox = DCMotor.getNEO(1);
 

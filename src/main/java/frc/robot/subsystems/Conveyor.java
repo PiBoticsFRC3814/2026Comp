@@ -21,7 +21,7 @@ public class Conveyor extends SubsystemBase
 
   public static final double kWristMomentOfInertia = 0.00032; // kg * m^2
 
-  private final SparkMax m_conveyor = new SparkMax(50, MotorType.kBrushless);
+  private final SparkMax m_conveyor = new SparkMax(42, MotorType.kBrushless);
 
   private final DCMotor m_rollerMotorGearbox = DCMotor.getNEO(1);
 

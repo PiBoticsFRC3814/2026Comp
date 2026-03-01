@@ -17,7 +17,7 @@ public class IntakeRollerSubsystem extends SubsystemBase
 {
   public static final double kWristMomentOfInertia = 0.00032; // kg * m^2
 
-  private final TalonSRX m_rollerMotor = new TalonSRX(70);
+  private final TalonSRX m_rollerMotor = new TalonSRX(40);
 
   private final DCMotor m_rollerMotorGearbox = DCMotor.getVex775Pro(1);
 
@@ -28,6 +28,8 @@ public class IntakeRollerSubsystem extends SubsystemBase
     m_rollerMotor.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
     m_rollerMotor.setInverted(false);
     m_rollerMotor.enableCurrentLimit(true);
+    m_rollerMotor.configContinuousCurrentLimit(30);
+    m_rollerMotor.configPeakCurrentLimit(30);
     // Optionally configure current limits or inversion here as needed.
   }
 

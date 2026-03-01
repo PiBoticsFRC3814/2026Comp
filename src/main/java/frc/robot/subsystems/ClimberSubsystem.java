@@ -34,7 +34,7 @@ public class ClimberSubsystem extends SubsystemBase {
 
   // Constants
   private final DCMotor dcMotor = DCMotor.getNEO(1);
-  private final int canID = 40;
+  private final int canID = 49;
   private final double gearRatio = 15;
   private final double kP = 1;
   private final double kI = 0;
