@@ -72,7 +72,7 @@ public class RobotContainer {
  XboxController driveController = new XboxController(0);
  XboxController OperatorController = new XboxController(1);
  XboxController OutakeController = new XboxController(2);
- XboxController TestJoystick = new XboxController(5);
+ CommandXboxController TestJoystick = new CommandXboxController(5);
 
  //slew rate MUST have slew rate limits for BOTH X and Y axises separate.  if you combine the X and Y into one limiter it makes the robot move diagonally.
  //Note that the slew rate limiter is loooking at joystick values NOT motor speed values thus the positive and negative rates apply to joystick inputs not motor accelerations
@@ -107,12 +107,12 @@ public class RobotContainer {
     DataLogManager.start();
     SignalLogger.start(); */
 
-    // Set the default command to force the shooter rest.
+    //Set the default command to force the stuff to stop. --- these appear to be preventing the button commands from running?
     //m_shooter.setDefaultCommand(m_shooter.setVelocity(RPM.of(0)));
-    //m_intake.setDefaultCommand(m_intake.stop());
-    //m_rollerMotor.setDefaultCommand(m_rollerMotor.stop());
-    //m_conveyor.setDefaultCommand(m_conveyor.stop());
-    //m_ShooterIntake.setDefaultCommand(m_ShooterIntake.stop());
+    m_intake.setDefaultCommand(m_intake.stop());
+    m_rollerMotor.setDefaultCommand(m_rollerMotor.stop());
+    m_conveyor.setDefaultCommand(m_conveyor.stop());
+    m_ShooterIntake.setDefaultCommand(m_ShooterIntake.stop());
     //m_ClimberSubsystem.setDefaultCommand(m_ClimberSubsystem.idle());
 
     configureBindings();// no buttons here they go later
@@ -167,8 +167,12 @@ public class RobotContainer {
    
 
 // Test Buttons
-      new JoystickButton(TestJoystick, Button.kA.value)
-        .whileTrue(m_shooter.setSmartDashboardRPM());
+    TestJoystick.button(Button.kA.value).whileTrue(m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
+    TestJoystick.button(Button.kB.value).whileTrue(m_rollerMotor.out(Constants.INTAKE_ROLLER_OUTTAKE_SPEED));  
+
+    TestJoystick.button(Button.kX.value).whileTrue(m_conveyor.in(Constants.CONVEYOR_SPEED));
+    TestJoystick.button(Button.kY.value).whileTrue(m_conveyor.out(Constants.CONVEYOR_OUTTAKE_SPEED));
+    
 /*     new JoystickButton(driveController, XboxController.Button.kA.value)
         .whileTrue(drivebase.zeroGyroCommand()); EXAMPLE BUTTON MAPPING */ 
 

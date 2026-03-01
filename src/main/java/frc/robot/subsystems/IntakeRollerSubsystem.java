@@ -19,7 +19,7 @@ public class IntakeRollerSubsystem extends SubsystemBase
 
   private final TalonSRX m_rollerMotor = new TalonSRX(40);
 
-  private final DCMotor m_rollerMotorGearbox = DCMotor.getVex775Pro(1);
+  //private final DCMotor m_rollerMotorGearbox = DCMotor.getVex775Pro(1);
 
   public IntakeRollerSubsystem()
   {
@@ -70,4 +70,5 @@ public class IntakeRollerSubsystem extends SubsystemBase
   {
     return m_rollerMotor.getMotorOutputPercent();
   }
+
 }

@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.Amps;
 import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
+import static edu.wpi.first.units.Units.Volt;
 
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -16,8 +17,11 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry3d;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.units.Units;
+import edu.wpi.first.units.VoltageUnit;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Velocity;
+import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -38,30 +42,30 @@ public class Shooter extends SubsystemBase {
   private double ManualShooterRPM = SmartDashboard.getNumber("ManualShooterRPM", 0.0);
   private ChassisSpeeds driveInhib = new ChassisSpeeds(0,0,0);
 
-  private SmartMotorController motor; //this is not used so we probably should delete it.
+  private SmartMotorController motor; //this should not be need the config we setup is placed into the sparkSmartMotorController we have below
 
   private SmartMotorControllerConfig smcConfig = new SmartMotorControllerConfig(this)
   .withControlMode(ControlMode.CLOSED_LOOP)
   // Feedback Constants (PID Constants)
-  .withClosedLoopController(1, 0, 0)
+  .withClosedLoopController(1.0e-4, 0.0, 2.0e-4) //used pid values from 2024.
   .withSimClosedLoopController(1, 0, 0) // sim
   // Feedforward Constants
-  .withFeedforward(new SimpleMotorFeedforward(0.125, 0, 0))
-  .withSimFeedforward(new SimpleMotorFeedforward(1.0, 0, 0)) // sim
+  .withFeedforward(new SimpleMotorFeedforward(0, 0.12, 0)) //not syure what these should be
+  .withSimFeedforward(new SimpleMotorFeedforward(0, 0, 0)) // sim
   // Telemetry name and verbosity level
-  .withTelemetry("ShooterMotor", TelemetryVerbosity.HIGH)
+  //.withTelemetry("ShooterMotor", TelemetryVerbosity.HIGH)
   // Gearing from the motor rotor to final shaft.
   .withGearing(0.5)
   // Motor properties to prevent over currenting.
   .withMotorInverted(false)
   .withIdleMode(MotorMode.COAST)
-  .withStatorCurrentLimit(Amps.of(40));
+  .withStatorCurrentLimit(Amps.of(40)); // need to figure out the current draw when pulling a ball through the flywheeel.  
 
   // Vendor motor controller object
   private SparkMax spark = new SparkMax(44, MotorType.kBrushless);
 
   // Create our SmartMotorController from our Spark and config with the NEO.
-  private SmartMotorController sparkSmartMotorController = new SparkWrapper(spark, DCMotor.getNEO(1), smcConfig);
+  private SmartMotorController sparkSmartMotorController = new SparkWrapper(spark, DCMotor.getNEO(1), smcConfig); //does the getNeo need to be 2?  does it matter?
   
   private final FlyWheelConfig shooterConfig = new FlyWheelConfig(sparkSmartMotorController)
   // Diameter of the flywheel.
@@ -69,7 +73,7 @@ public class Shooter extends SubsystemBase {
   // Mass of the flywheel.
   .withMass(Pounds.of(1))
   // Maximum speed of the shooter.
-  .withUpperSoftLimit(RPM.of(6000))
+  .withUpperSoftLimit(RPM.of(5000)) // i think the neo can go faster but limit to round number of 5000 -- it can hit 5676 not quite 6000.
   // Telemetry name and verbosity for the arm.
   .withTelemetry("ShooterMech", TelemetryVerbosity.HIGH);
 
@@ -132,6 +136,10 @@ public class Shooter extends SubsystemBase {
   public Command setSmartDashboardRPM(){
     ManualShooterRPM = SmartDashboard.getNumber("ShooterRPM", 0.0);
     return shooter.run(RPM.of(ManualShooterRPM));
+  }
+
+  public Command STOP(){
+    return shooter.setVoltage(Voltage.ofRelativeUnits(0.0, Units.Volt));
   }
   
   public void driveInhibit(){

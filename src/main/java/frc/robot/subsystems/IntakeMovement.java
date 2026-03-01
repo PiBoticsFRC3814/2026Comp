@@ -23,7 +23,7 @@ public class IntakeMovement extends SubsystemBase
 
   private final SparkMax m_IntakeMovement = new SparkMax(41, MotorType.kBrushless);
 
-  private final DCMotor m_rollerMotorGearbox = DCMotor.getNEO(1);
+  //private final DCMotor m_rollerMotorGearbox = DCMotor.getNEO(1);
 
   public IntakeMovement()
   {
