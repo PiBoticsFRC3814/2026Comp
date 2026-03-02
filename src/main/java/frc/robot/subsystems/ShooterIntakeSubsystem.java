@@ -29,7 +29,7 @@ public class ShooterIntakeSubsystem extends SubsystemBase
 
   public Command setShooterIntake (double speed)
   {
-    return runOnce(() -> {
+    return run(() -> {
       m_rollerMotor.set(ControlMode.PercentOutput, speed);
     });
   }

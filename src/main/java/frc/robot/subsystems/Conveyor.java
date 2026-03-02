@@ -36,14 +36,14 @@ public class Conveyor extends SubsystemBase
   }
   public Command setConveyor (double speed)
   {
-    return runOnce(() -> {
+    return run(() -> {
       m_conveyor.set(speed);
     });
   }
 
   public Command out(double speed)
   {
-    return setConveyor(speed * -1);
+    return setConveyor(-speed);
   }
 
   public Command in(double speed)

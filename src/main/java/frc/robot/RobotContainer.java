@@ -5,6 +5,9 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.DashboardShootRPM;
+import frc.robot.commands.FixedShootRPM;
+import frc.robot.commands.ShootStop;
 import frc.robot.commands.TurnOnFlywheel;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.Conveyor;
@@ -67,6 +70,8 @@ public class RobotContainer {
 
   //putting the shooter call here since it needs to be after drivebase to get the drivebase into the shooter for limelight/pose stuffs.
   public final Shooter m_shooter = new Shooter(drivebase);
+
+  //private final Command dashboardShoot = new DashboardShootRPM(m_shooter);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
  XboxController driveController = new XboxController(0);
@@ -172,6 +177,14 @@ public class RobotContainer {
 
     TestJoystick.button(Button.kX.value).whileTrue(m_conveyor.in(Constants.CONVEYOR_SPEED));
     TestJoystick.button(Button.kY.value).whileTrue(m_conveyor.out(Constants.CONVEYOR_OUTTAKE_SPEED));
+
+    TestJoystick.button(Button.kRightBumper.value).whileTrue(m_ShooterIntake.in(Constants.SHOOTER_INTAKE_SPEED));
+    TestJoystick.button(Button.kLeftBumper.value).whileTrue(m_ShooterIntake.out(Constants.SHOOTER_OUTTAKE_SPEED));
+
+    TestJoystick.axisGreaterThan(3, 0.5).whileTrue(new DashboardShootRPM(m_shooter));
+    TestJoystick.axisLessThan(3, 0.5).whileTrue(new ShootStop(m_shooter));
+    
+    //TestJoystick.button(Button.kRightStick.value).whileTrue(new FixedShootRPM(m_shooter));    //TestJoystick.axisLessThan(3,0.5).whileTrue(m_shooter.STOP());
     
 /*     new JoystickButton(driveController, XboxController.Button.kA.value)
         .whileTrue(drivebase.zeroGyroCommand()); EXAMPLE BUTTON MAPPING */ 

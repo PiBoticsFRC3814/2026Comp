@@ -10,6 +10,8 @@ import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volt;
 
+import java.io.PrintStream;
+
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
@@ -22,6 +24,8 @@ import edu.wpi.first.units.VoltageUnit;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Velocity;
 import edu.wpi.first.units.measure.Voltage;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -39,7 +43,7 @@ public class Shooter extends SubsystemBase {
 
   private double Distance = 0.0;
   private double shootSpeed = 0.0;
-  private double ManualShooterRPM = SmartDashboard.getNumber("ManualShooterRPM", 0.0);
+  private double ManualShooterRPM = SmartDashboard.getNumber("ManShooterRPM", 0.0);
   private ChassisSpeeds driveInhib = new ChassisSpeeds(0,0,0);
 
   private SmartMotorController motor; //this should not be need the config we setup is placed into the sparkSmartMotorController we have below
@@ -47,11 +51,11 @@ public class Shooter extends SubsystemBase {
   private SmartMotorControllerConfig smcConfig = new SmartMotorControllerConfig(this)
   .withControlMode(ControlMode.CLOSED_LOOP)
   // Feedback Constants (PID Constants)
-  .withClosedLoopController(1.0e-4, 0.0, 2.0e-4) //used pid values from 2024.
-  .withSimClosedLoopController(1, 0, 0) // sim
+  .withClosedLoopController(1e-4, 0.0, 2e-4) //used pid values from 2024.
+  //.withSimClosedLoopController(1, 0, 0) // sim
   // Feedforward Constants
-  .withFeedforward(new SimpleMotorFeedforward(0, 0.12, 0)) //not syure what these should be
-  .withSimFeedforward(new SimpleMotorFeedforward(0, 0, 0)) // sim
+  .withFeedforward(new SimpleMotorFeedforward(12, 0, 0)) //not sure what these should be
+  //.withSimFeedforward(new SimpleMotorFeedforward(0, 0, 0)) // sim
   // Telemetry name and verbosity level
   //.withTelemetry("ShooterMotor", TelemetryVerbosity.HIGH)
   // Gearing from the motor rotor to final shaft.
@@ -132,18 +136,17 @@ public class Shooter extends SubsystemBase {
   public double getActualVelocity(){
     return shooter.getSpeed().in(RPM);
   }
-
-  public Command setSmartDashboardRPM(){
-    ManualShooterRPM = SmartDashboard.getNumber("ShooterRPM", 0.0);
-    return shooter.run(RPM.of(ManualShooterRPM));
-  }
-
-  public Command STOP(){
-    return shooter.setVoltage(Voltage.ofRelativeUnits(0.0, Units.Volt));
-  }
   
   public void driveInhibit(){
     drive.drive(driveInhib);
+  }
+
+  public void shootSpeed(double speed){
+    sparkSmartMotorController.setVelocity(RPM.of(speed));
+  }
+
+  public void STOP(){
+    spark.stopMotor();
   }
 
 

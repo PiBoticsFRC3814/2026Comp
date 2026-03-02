@@ -35,7 +35,7 @@ public class IntakeRollerSubsystem extends SubsystemBase
 
   public Command setIntakeRoller(double speed)
   {
-    return runOnce(() -> {
+    return run(() -> {
       m_rollerMotor.set(ControlMode.PercentOutput, speed);
     });
   }
