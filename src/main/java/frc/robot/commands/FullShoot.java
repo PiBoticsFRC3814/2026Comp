@@ -58,17 +58,14 @@ public FullShoot(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shoo
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_conveyor.STOP();
-    m_shooterintake.STOP();
-    m_shooter.STOP();
+    //m_conveyor.STOP();
+    //m_shooterintake.STOP();
+    //_shooter.shootSpeed(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    m_conveyor.STOP();
-    m_shooterintake.STOP();
-    m_shooter.STOP();
     return false;
   }
 }

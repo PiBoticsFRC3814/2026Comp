@@ -25,18 +25,22 @@ public class IntakeMovement extends SubsystemBase
 
   //private final DCMotor m_rollerMotorGearbox = DCMotor.getNEO(1);
 
+  @SuppressWarnings("removal")
   public IntakeMovement()
   {
     SparkMaxConfig config = new SparkMaxConfig();
     config
         .inverted(false)
         .smartCurrentLimit(100)
-        .idleMode(IdleMode.kCoast);
+        .idleMode(IdleMode.kBrake);
+            m_IntakeMovement.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+      
     
   }
   public Command setIntakeMovement (double IntakeMovementSpeed)
   {
-    return runOnce(() -> {
+    return run(() -> {
       m_IntakeMovement.set(IntakeMovementSpeed);
     });
   }

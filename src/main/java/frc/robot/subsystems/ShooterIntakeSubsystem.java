@@ -24,6 +24,8 @@ public class ShooterIntakeSubsystem extends SubsystemBase
     m_shooterIntake.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
     m_shooterIntake.setInverted(false);
     m_shooterIntake.enableCurrentLimit(true);
+    m_shooterIntake.configPeakCurrentLimit(30);
+    m_shooterIntake.configContinuousCurrentLimit(30);
     // Optionally configure current limits or inversion here as needed.
   }
 

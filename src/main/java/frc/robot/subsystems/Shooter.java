@@ -65,6 +65,7 @@ public class Shooter extends SubsystemBase {
   .withIdleMode(MotorMode.COAST)
   .withStatorCurrentLimit(Amps.of(40)); // need to figure out the current draw when pulling a ball through the flywheeel.  
 
+
   // Vendor motor controller object
   private SparkMax spark = new SparkMax(44, MotorType.kBrushless);
 

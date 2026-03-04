@@ -75,8 +75,8 @@ public final class Constants {
 
 
   // Shooter Intake
-  public static final double SHOOTER_INTAKE_SPEED = -1.0;
-  public static final double SHOOTER_OUTTAKE_SPEED = -1.0;
+  public static final double SHOOTER_INTAKE_SPEED = -0.7;
+  public static final double SHOOTER_OUTTAKE_SPEED = -0.7;
 
   // Intake Roller
   public static final double INTAKE_ROLLER_SPEED = -1.0;
