@@ -107,8 +107,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     // Setup Data Logging
-   /* DriverStation.startDataLog(DataLogManager.getLog());
-    SignalLogger.setPath("/media/PiBotics_Logging/");
+   /*DriverStation.startDataLog(DataLogManager.getLog());
+    SignalLogger.setPath("/media/PiBotics/");
 
     DataLogManager.start();
     SignalLogger.start(); */
