@@ -13,24 +13,24 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ShooterIntakeSubsystem extends SubsystemBase
 {
-  private final TalonSRX m_rollerMotor = new TalonSRX(46);
+  private final TalonSRX m_shooterIntake = new TalonSRX(46);
 
   private final DCMotor m_rollerMotorGearbox = DCMotor.getVex775Pro(1);
 
   public ShooterIntakeSubsystem()
   {
     // Reset the Talon SRX to factory defaults and set neutral (idle) mode to Coast.
-    m_rollerMotor.configFactoryDefault();
-    m_rollerMotor.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
-    m_rollerMotor.setInverted(false);
-    m_rollerMotor.enableCurrentLimit(true);
+    m_shooterIntake.configFactoryDefault();
+    m_shooterIntake.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
+    m_shooterIntake.setInverted(false);
+    m_shooterIntake.enableCurrentLimit(true);
     // Optionally configure current limits or inversion here as needed.
   }
 
   public Command setShooterIntake (double speed)
   {
     return run(() -> {
-      m_rollerMotor.set(ControlMode.PercentOutput, speed);
+      m_shooterIntake.set(ControlMode.PercentOutput, speed);
     });
   }
 
@@ -50,7 +50,7 @@ public class ShooterIntakeSubsystem extends SubsystemBase
 
   public Current getCurrent()
   {
-    return Amps.of(m_rollerMotor.getMotorOutputVoltage());
+    return Amps.of(m_shooterIntake.getMotorOutputVoltage());
   }
 
   public boolean outtaking()
@@ -62,6 +62,14 @@ public class ShooterIntakeSubsystem extends SubsystemBase
 
   public double getDutycycle()
   {
-    return m_rollerMotor.getMotorOutputPercent();
+    return m_shooterIntake.getMotorOutputPercent();
+  }
+
+  public void intake(double speed){
+    m_shooterIntake.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void STOP(){
+    m_shooterIntake.set(ControlMode.PercentOutput, 0);
   }
 }

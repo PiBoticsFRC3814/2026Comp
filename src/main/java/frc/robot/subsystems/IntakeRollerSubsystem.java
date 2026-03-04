@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 
 import static edu.wpi.first.units.Units.Amps;
+import static edu.wpi.first.units.Units.Percent;
 import static edu.wpi.first.units.Units.Volts;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -71,4 +72,11 @@ public class IntakeRollerSubsystem extends SubsystemBase
     return m_rollerMotor.getMotorOutputPercent();
   }
 
+  public void intake(double speed){
+    m_rollerMotor.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void STOP(){
+    m_rollerMotor.set(ControlMode.PercentOutput, 0);
+  }
 }

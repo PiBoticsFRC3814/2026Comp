@@ -46,7 +46,6 @@ public class AutoShoot extends Command {
   @Override
   public void execute() {
     m_shooter.setDesiredVelocity();
-    shooterSpeed = m_shooter.getActualVelocity();
     desiredSpeed = m_shooter.getDesiredVelocity();
     if (shooterSpeed <= desiredSpeed-(desiredSpeed*0.1) || shooterSpeed >= desiredSpeed+(desiredSpeed*0.1)){
       m_shooterIntake.stop();

@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DashboardShootRPM;
 import frc.robot.commands.FixedShootRPM;
+import frc.robot.commands.FullShoot;
 import frc.robot.commands.ShootStop;
 import frc.robot.commands.TurnOnFlywheel;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -181,7 +182,7 @@ public class RobotContainer {
     TestJoystick.button(Button.kRightBumper.value).whileTrue(m_ShooterIntake.in(Constants.SHOOTER_INTAKE_SPEED));
     TestJoystick.button(Button.kLeftBumper.value).whileTrue(m_ShooterIntake.out(Constants.SHOOTER_OUTTAKE_SPEED));
 
-    TestJoystick.axisGreaterThan(3, 0.5).whileTrue(new DashboardShootRPM(m_shooter));
+    TestJoystick.axisGreaterThan(3, 0.5).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
     TestJoystick.axisLessThan(3, 0.5).whileTrue(new ShootStop(m_shooter));
     
     //TestJoystick.button(Button.kRightStick.value).whileTrue(new FixedShootRPM(m_shooter));    //TestJoystick.axisLessThan(3,0.5).whileTrue(m_shooter.STOP());

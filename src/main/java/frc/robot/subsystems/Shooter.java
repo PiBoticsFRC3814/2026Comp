@@ -86,28 +86,6 @@ public class Shooter extends SubsystemBase {
 
   private SwerveSubsystem drive;
 
-    /**
-   * Gets the current velocity of the shooter.
-   *
-   * @return Shooter velocity.
-   */
-  public AngularVelocity getVelocity() {return shooter.getSpeed();}
-
-  /**
-   * Set the shooter velocity.
-   *
-   * @param speed Speed to set.
-   * @return {@link edu.wpi.first.wpilibj2.command.RunCommand}
-   */
-  public Command setVelocity(AngularVelocity speed) {return shooter.run(speed);}
-  
-  /**
-   * Set the shooter velocity setpoint.
-   *
-   * @param speed Speed to set
-   */
-  public void setVelocitySetpoint(AngularVelocity speed) {shooter.setMechanismVelocitySetpoint(speed);}
-
    /**
    * Set the shooter velocity setpoint.
    *
@@ -126,15 +104,11 @@ public class Shooter extends SubsystemBase {
     //add math stuff for distance to rpm needs.
     shootSpeed = Distance*1; //math is fun  Distance would be the "X" in the f(x) function that we come up with through testing.
 
-    shooter.run(RPM.of(shootSpeed)); //math to do to distance to make rpm go
+    sparkSmartMotorController.setVelocity(RPM.of(shootSpeed)); //math to do to distance to make rpm go
   }
 
   public double getDesiredVelocity(){
     return shootSpeed;
-  }
-
-  public double getActualVelocity(){
-    return shooter.getSpeed().in(RPM);
   }
   
   public void driveInhibit(){
@@ -143,6 +117,10 @@ public class Shooter extends SubsystemBase {
 
   public void shootSpeed(double speed){
     sparkSmartMotorController.setVelocity(RPM.of(speed));
+  }
+
+  public double getShootSpeed(){
+    return sparkSmartMotorController.getRotorVelocity().in(RPM);
   }
 
   public void STOP(){

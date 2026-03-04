@@ -24,7 +24,6 @@ public class Conveyor extends SubsystemBase
   private final SparkMax m_conveyor = new SparkMax(42, MotorType.kBrushless);
 
   private final DCMotor m_rollerMotorGearbox = DCMotor.getNEO(1);
-
   public Conveyor()
   {
     SparkMaxConfig config = new SparkMaxConfig();
@@ -70,5 +69,13 @@ public class Conveyor extends SubsystemBase
   public double getDutycycle()
   {
     return m_conveyor.getAppliedOutput();
+  }
+
+  public void intake(double speed){
+    m_conveyor.set(speed);
+  }
+
+  public void STOP(){
+    m_conveyor.set(0);
   }
 }
