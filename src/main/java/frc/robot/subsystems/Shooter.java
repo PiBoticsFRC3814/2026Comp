@@ -171,5 +171,6 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     shooter.updateTelemetry();
+    SmartDashboard.putNumber("ShooterSpeed", getShootSpeed());
   }
 }
