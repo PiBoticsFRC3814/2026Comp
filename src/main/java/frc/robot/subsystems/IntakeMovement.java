@@ -33,7 +33,7 @@ public class IntakeMovement extends SubsystemBase
         .inverted(false)
         .smartCurrentLimit(100)
         .idleMode(IdleMode.kBrake);
-            m_IntakeMovement.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+            m_IntakeMovement.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters); // deprecated? just put @SupressWarnings... band-aid fix
 
       
     

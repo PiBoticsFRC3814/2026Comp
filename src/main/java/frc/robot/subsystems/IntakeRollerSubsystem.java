@@ -76,6 +76,10 @@ public class IntakeRollerSubsystem extends SubsystemBase
     m_rollerMotor.set(ControlMode.PercentOutput, speed);
   }
 
+  public void outake(double speed){
+    m_rollerMotor.set(ControlMode.PercentOutput, -speed);
+  }
+
   public void STOP(){
     m_rollerMotor.set(ControlMode.PercentOutput, 0);
   }

@@ -5,48 +5,31 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.DashboardShootRPM;
-import frc.robot.commands.FixedShootRPM;
 import frc.robot.commands.FullShoot;
 import frc.robot.commands.ShootStop;
-import frc.robot.commands.TurnOnFlywheel;
-import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.IntakeMovement;
 import frc.robot.subsystems.IntakeRollerSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterIntakeSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import swervelib.SwerveDrive;
 import swervelib.SwerveInputStream;
-import yams.mechanisms.positional.Elevator;
 
 import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.Degrees;
 
 import java.io.File;
 
-import com.ctre.phoenix6.SignalLogger;
-//import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
-import edu.wpi.first.wpilibj.ADIS16470_IMU;
-import edu.wpi.first.wpilibj.DataLogManager;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.StadiaController.Button;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.math.util.Units;
 
 
 /**
@@ -75,9 +58,8 @@ public class RobotContainer {
   //private final Command dashboardShoot = new DashboardShootRPM(m_shooter);
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
- XboxController driveController = new XboxController(0);
- XboxController OperatorController = new XboxController(1);
- XboxController OutakeController = new XboxController(2);
+ CommandXboxController driveController = new CommandXboxController(0);
+ CommandXboxController OperatorController = new CommandXboxController(1);
  CommandXboxController TestJoystick = new CommandXboxController(5);
 
  //slew rate MUST have slew rate limits for BOTH X and Y axises separate.  if you combine the X and Y into one limiter it makes the robot move diagonally.
@@ -138,32 +120,23 @@ public class RobotContainer {
     drivebase.setDefaultCommand(driveFieldOrientedDirectAngle);
     
 // Shooter
-    //new JoystickButton(OperatorController, Button.kY.value)
-    //    .whileTrue(m_shooter.setVelocity(RPM.of(5000)));
+    OperatorController.axisGreaterThan(3, 0.5, null).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
+    OperatorController.axisLessThan(3, 0.5).whileTrue(new ShootStop(m_shooter));
   
-// Intake
-    new JoystickButton(driveController, Button.kA.value)
-        .toggleOnTrue(m_intake.extend(Constants.INTAKE_EXTEND_SPEED));
-    new JoystickButton(driveController, Button.kX.value)
-        .toggleOnTrue(m_intake.retract(Constants.INTAKE_RETRACT_SPEED));
+// Intake Movement
+    OperatorController.button(Button.kA.value).whileTrue(m_intake.extend(Constants.INTAKE_EXTEND_SPEED));
+    OperatorController.button(Button.kB.value).whileTrue(m_intake.retract(Constants.INTAKE_RETRACT_SPEED));
 
 // Intake Rollers
-    new JoystickButton(OperatorController, Button.kRightBumper.value)
-        .whileTrue(m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
-    new JoystickButton(OperatorController, Button.kRightTrigger.value)
-        .whileTrue(m_rollerMotor.out(Constants.INTAKE_ROLLER_OUTTAKE_SPEED));
+    driveController.button(Button.kA.value).whileTrue(m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
+    driveController.button(Button.kB.value).whileTrue(m_rollerMotor.out(Constants.INTAKE_ROLLER_OUTTAKE_SPEED));  
 
 // Conveyor
-    new JoystickButton(OperatorController, Button.kLeftBumper.value)
-        .whileTrue(m_conveyor.in(Constants.CONVEYOR_SPEED));
-    new JoystickButton(OperatorController, Button.kLeftTrigger.value)
-       .whileTrue(m_conveyor.out(Constants.CONVEYOR_OUTTAKE_SPEED));
+    OperatorController.button(Button.kX.value).whileTrue(m_conveyor.in(Constants.CONVEYOR_SPEED));
 
 //Shooter Intake
-    new JoystickButton(OperatorController, Button.kB.value)
-        .whileTrue(m_ShooterIntake.in(Constants.SHOOTER_INTAKE_SPEED));
-    new JoystickButton(OperatorController, Button.kY.value)
-        .whileTrue(m_ShooterIntake.out(Constants.SHOOTER_OUTTAKE_SPEED));
+    OperatorController.button(Button.kRightBumper.value).whileTrue(m_ShooterIntake.in(Constants.SHOOTER_INTAKE_SPEED));
+    OperatorController.button(Button.kLeftBumper.value).whileTrue(m_ShooterIntake.out(Constants.SHOOTER_OUTTAKE_SPEED));
       
 //Climber Subsystem
       //new JoystickButton(OperatorController, Button.kA.value)
@@ -174,7 +147,7 @@ public class RobotContainer {
 
 // Test Buttons
     //TestJoystick.button(Button.kA.value).whileTrue(m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
-    //TestJoystick.button(Button.kB.value).whileTrue(m_rollerMotor.out(Constants.INTAKE_ROLLER_OUTTAKE_SPEED));  
+    //TestJoystick.button(Button.kB.value).whileTrue(m_rollerMotor.out(Constants.INTAKE_ROLLER_OUTTAKE_SPEED))butt;  
 
     TestJoystick.button(Button.kX.value).whileTrue(m_conveyor.in(Constants.CONVEYOR_SPEED));
     TestJoystick.button(Button.kY.value).whileTrue(m_conveyor.out(Constants.CONVEYOR_OUTTAKE_SPEED));

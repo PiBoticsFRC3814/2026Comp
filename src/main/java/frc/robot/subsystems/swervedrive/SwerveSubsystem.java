@@ -104,7 +104,7 @@ public class SwerveSubsystem extends SubsystemBase
                                                                       Meter.of(4)),
                                                     Rotation2d.fromDegrees(180));
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
-    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
+    SwerveDriveTelemetry.verbosity = TelemetryVerbosity.LOW;
     try
     {
       swerveDrive = new SwerveParser(modules).createSwerveDrive(Constants.MAX_HYP_SPEED, startingPose);
@@ -173,9 +173,7 @@ public void periodic()
 		 .withRobotOrientation(new Orientation3d(swerveDrive.getGyroRotation3d(),
 												   new AngularVelocity3d(DegreesPerSecond.of(0.0),
 													                       DegreesPerSecond.of(0.0),
-													                       DegreesPerSecond.of(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)))))
-		 .save();
-
+													                       DegreesPerSecond.of(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)))));
   updateVisonOdometry();
   
   swerveDrive.updateOdometry();

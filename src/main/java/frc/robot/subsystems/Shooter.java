@@ -80,7 +80,7 @@ public class Shooter extends SubsystemBase {
   // Maximum speed of the shooter.
   .withUpperSoftLimit(RPM.of(5000)) // i think the neo can go faster but limit to round number of 5000 -- it can hit 5676 not quite 6000.
   // Telemetry name and verbosity for the arm.
-  .withTelemetry("ShooterMech", TelemetryVerbosity.HIGH);
+  .withTelemetry("ShooterMech", TelemetryVerbosity.LOW);
 
   // Shooter Mechanism
   private FlyWheel shooter = new FlyWheel(shooterConfig);
@@ -140,32 +140,6 @@ public class Shooter extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public Shooter(SwerveSubsystem swerveDrive) {
     drive = swerveDrive;
-  }
-
-  
-
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  public Command exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
-  }
-
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
   }
 
   @Override

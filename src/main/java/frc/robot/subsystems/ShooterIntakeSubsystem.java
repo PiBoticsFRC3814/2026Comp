@@ -21,7 +21,7 @@ public class ShooterIntakeSubsystem extends SubsystemBase
   {
     // Reset the Talon SRX to factory defaults and set neutral (idle) mode to Coast.
     m_shooterIntake.configFactoryDefault();
-    m_shooterIntake.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
+    m_shooterIntake.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Brake);
     m_shooterIntake.setInverted(false);
     m_shooterIntake.enableCurrentLimit(true);
     m_shooterIntake.configPeakCurrentLimit(30);
@@ -52,7 +52,7 @@ public class ShooterIntakeSubsystem extends SubsystemBase
 
   public Current getCurrent()
   {
-    return Amps.of(m_shooterIntake.getMotorOutputVoltage());
+    return Amps.of(m_shooterIntake.getSupplyCurrent());
   }
 
   public boolean outtaking()
@@ -70,6 +70,7 @@ public class ShooterIntakeSubsystem extends SubsystemBase
   public void intake(double speed){
     m_shooterIntake.set(ControlMode.PercentOutput, speed);
   }
+
 
   public void STOP(){
     m_shooterIntake.set(ControlMode.PercentOutput, 0);

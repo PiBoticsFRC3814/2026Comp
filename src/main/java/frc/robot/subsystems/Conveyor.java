@@ -24,6 +24,7 @@ public class Conveyor extends SubsystemBase
   private final SparkMax m_conveyor = new SparkMax(42, MotorType.kBrushless);
 
   private final DCMotor m_rollerMotorGearbox = DCMotor.getNEO(1);
+
   @SuppressWarnings("removal")
   public Conveyor()
   {
@@ -32,7 +33,7 @@ public class Conveyor extends SubsystemBase
         .inverted(false)
         .smartCurrentLimit(100)
         .idleMode(IdleMode.kCoast);
-    m_conveyor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    m_conveyor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters); // deprecated? just put @SupressWarnings... band-aid fix
   }
   
 
