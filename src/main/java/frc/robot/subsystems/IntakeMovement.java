@@ -44,7 +44,7 @@ public class IntakeMovement extends SubsystemBase
 
   public Command extend(double IntakeMovementSpeed)
   {
-    return setIntakeMovement(IntakeMovementSpeed * -1);
+    return setIntakeMovement(-IntakeMovementSpeed);
   }
 
   public Command retract(double IntakeMovementSpeed)
