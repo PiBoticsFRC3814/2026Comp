@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.DashboardShootRPM;
 import frc.robot.commands.FullShoot;
 import frc.robot.commands.ShootStop;
 import frc.robot.subsystems.Conveyor;
@@ -120,7 +121,7 @@ public class RobotContainer {
     drivebase.setDefaultCommand(driveFieldOrientedDirectAngle);
     
 // Shooter
-    OperatorController.axisGreaterThan(3, 0.5, null).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
+    //OperatorController.axisGreaterThan(3, 0.5).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
     OperatorController.axisLessThan(3, 0.5).whileTrue(new ShootStop(m_shooter));
   
 // Intake Movement
@@ -146,8 +147,8 @@ public class RobotContainer {
    
 
 // Test Buttons
-    //TestJoystick.button(Button.kA.value).whileTrue(m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
-    //TestJoystick.button(Button.kB.value).whileTrue(m_rollerMotor.out(Constants.INTAKE_ROLLER_OUTTAKE_SPEED))butt;  
+    TestJoystick.button(Button.kA.value).whileTrue(m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
+    TestJoystick.button(Button.kB.value).whileTrue(m_rollerMotor.out(Constants.INTAKE_ROLLER_OUTTAKE_SPEED));  
 
     TestJoystick.button(Button.kX.value).whileTrue(m_conveyor.in(Constants.CONVEYOR_SPEED));
     TestJoystick.button(Button.kY.value).whileTrue(m_conveyor.out(Constants.CONVEYOR_OUTTAKE_SPEED));
@@ -155,11 +156,12 @@ public class RobotContainer {
     TestJoystick.button(Button.kRightBumper.value).whileTrue(m_ShooterIntake.in(Constants.SHOOTER_INTAKE_SPEED));
     TestJoystick.button(Button.kLeftBumper.value).whileTrue(m_ShooterIntake.out(Constants.SHOOTER_OUTTAKE_SPEED));
 
-    TestJoystick.axisGreaterThan(3, 0.5).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
+    //TestJoystick.axisGreaterThan(3, 0.5).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
+    TestJoystick.axisGreaterThan(3, 0.5).whileTrue(new DashboardShootRPM(m_shooter));
     TestJoystick.axisLessThan(3, 0.5).whileTrue(new ShootStop(m_shooter));
 
-    TestJoystick.button(Button.kA.value).whileTrue(m_intake.extend(Constants.INTAKE_EXTEND_SPEED));
-    TestJoystick.button(Button.kB.value).whileTrue(m_intake.retract(Constants.INTAKE_RETRACT_SPEED));
+    //TestJoystick.button(Button.kA.value).whileTrue(m_intake.extend(Constants.INTAKE_EXTEND_SPEED));
+    //TestJoystick.button(Button.kB.value).whileTrue(m_intake.retract(Constants.INTAKE_RETRACT_SPEED));
 
     
     //TestJoystick.button(Button.kRightStick.value).whileTrue(new FixedShootRPM(m_shooter));    //TestJoystick.axisLessThan(3,0.5).whileTrue(m_shooter.STOP());

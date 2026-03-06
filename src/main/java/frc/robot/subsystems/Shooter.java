@@ -9,11 +9,18 @@ import static edu.wpi.first.units.Units.Inches;
 import static edu.wpi.first.units.Units.Pounds;
 import static edu.wpi.first.units.Units.RPM;
 import static edu.wpi.first.units.Units.Volt;
+import static edu.wpi.first.units.Units.Volts;
 
 import java.io.PrintStream;
 
+import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.PersistMode;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -43,31 +50,28 @@ public class Shooter extends SubsystemBase {
 
   private double Distance = 0.0;
   private double shootSpeed = 0.0;
-  private double ManualShooterRPM = SmartDashboard.getNumber("ManShooterRPM", 0.0);
   private ChassisSpeeds driveInhib = new ChassisSpeeds(0,0,0);
-
-  private SmartMotorController motor; //this should not be need the config we setup is placed into the sparkSmartMotorController we have below
-
   private SmartMotorControllerConfig smcConfig = new SmartMotorControllerConfig(this)
   .withControlMode(ControlMode.CLOSED_LOOP)
+  .withVoltageCompensation(Volts.of(12))
   // Feedback Constants (PID Constants)
   .withClosedLoopController(1e-4, 0.0, 2e-4) //used pid values from 2024.
-  //.withSimClosedLoopController(1, 0, 0) // sim
   // Feedforward Constants
-  .withFeedforward(new SimpleMotorFeedforward(12, 0, 0)) //not sure what these should be
-  //.withSimFeedforward(new SimpleMotorFeedforward(0, 0, 0)) // sim
+  .withFeedforward(new SimpleMotorFeedforward(1, 0.19, 0)) //ks should be volts needed to barely make the flywheel spin.  kv should be voltes per RPM ideally 12/5000 ish would get you the v/RPM
   // Telemetry name and verbosity level
-  //.withTelemetry("ShooterMotor", TelemetryVerbosity.HIGH)
+  //.withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
   // Gearing from the motor rotor to final shaft.
-  .withGearing(0.5)
+  .withGearing(1)
   // Motor properties to prevent over currenting.
   .withMotorInverted(false)
   .withIdleMode(MotorMode.COAST)
-  .withStatorCurrentLimit(Amps.of(40)); // need to figure out the current draw when pulling a ball through the flywheeel.  
+  .withStatorCurrentLimit(Amps.of(40)); // need to figure out the current draw when pulling a ball through the flywheeel. 
 
 
   // Vendor motor controller object
   private SparkMax spark = new SparkMax(44, MotorType.kBrushless);
+  private SparkMaxConfig config = new SparkMaxConfig();
+  private RelativeEncoder shooterEncoder;
 
   // Create our SmartMotorController from our Spark and config with the NEO.
   private SmartMotorController sparkSmartMotorController = new SparkWrapper(spark, DCMotor.getNEO(1), smcConfig); //does the getNeo need to be 2?  does it matter?
@@ -121,7 +125,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getShootSpeed(){
-    return sparkSmartMotorController.getRotorVelocity().in(RPM);
+    //sparkSmartMotorController.getMechanismVelocity().in(RPM);
+    //sparkSmartMotorController.getMeasurementVelocity().in(RPM);
+    //sparkSmartMotorController.getRotorVelocity().in(RPM);
+    return shooterEncoder.getVelocity();
+
   }
 
   public void STOP(){
@@ -137,9 +145,9 @@ public class Shooter extends SubsystemBase {
    */
   public Command set(double dutyCycle) {return shooter.set(dutyCycle);}
 
-  /** Creates a new ExampleSubsystem. */
   public Shooter(SwerveSubsystem swerveDrive) {
     drive = swerveDrive;
+    shooterEncoder = spark.getEncoder();
   }
 
   @Override

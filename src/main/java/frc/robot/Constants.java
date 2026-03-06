@@ -56,9 +56,9 @@ public final class Constants {
 
 
   //standard deviation camera constants
-  public static final double CAM_X_STD = 0.0;
-  public static final double CAM_Y_STD = 0.0;
-  public static final double CAM_THETA_STD = Math.toRadians(0.0);
+  public static final double CAM_X_STD = 0.02013123117;
+  public static final double CAM_Y_STD = 0.06917364986;
+  public static final double CAM_THETA_STD = Math.toRadians(2.070498278);
 
   // standard deviation of swerve odometry
   public static final double ODOM_X_STD = 0.0;
@@ -70,8 +70,8 @@ public final class Constants {
   public static final double INTAKE_EXTEND_SPEED = 0.1;
 
   // Conveyor
-  public static final double CONVEYOR_SPEED = 1.0;
-  public static final double CONVEYOR_OUTTAKE_SPEED = 1.0;
+  public static final double CONVEYOR_SPEED = 0.5;
+  public static final double CONVEYOR_OUTTAKE_SPEED = 0.5;
 
 
   // Shooter Intake
