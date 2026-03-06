@@ -184,7 +184,7 @@ public void periodic()
   SmartDashboard.putNumber("Y Measure",swerveDrive.getPose().getMeasureY().in(Meter));
   SmartDashboard.putNumber("Angle Measure",swerveDrive.getPose().getRotation().getDegrees());
   SmartDashboard.putNumber("Target Distance", shareTargetDistance);
-  SmartDashboard.putBoolean("GOOD SHOT", getGoodShot());
+  SmartDashboard.putBoolean("Good Shot", getGoodShot());
    
 }
 
