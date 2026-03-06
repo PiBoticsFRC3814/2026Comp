@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Conveyor;
-import frc.robot.subsystems.IntakeRollerSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterIntakeSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
@@ -31,7 +30,7 @@ public FullShoot(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shoo
     m_shooterintake = shooterintake;
     m_SwerveSubsystem = swervesubsystem;
 
-     addRequirements(shooter,conveyor,shooterintake);
+     addRequirements(shooter, conveyor, shooterintake, swervesubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -45,6 +44,7 @@ public FullShoot(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shoo
   @Override
   public void execute() {
     m_shooter.shootSpeed(speed);
+    m_shooter.driveInhibit();
     if (m_shooter.getShootSpeed() >= speed){
       m_conveyor.intake(conveyorspeed);
       m_shooterintake.intake(intakespeed);
