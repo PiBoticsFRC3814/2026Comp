@@ -25,6 +25,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.StadiaController.Button;
+import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -143,8 +144,7 @@ public class RobotContainer {
       //new JoystickButton(OperatorController, Button.kA.value)
       //  .whileTrue(m_ClimberSubsystem.moveToHeightCommand(1));
       //  new JoystickButton(OperatorController, Button.kB.value)
-      //  .whileTrue(m_ClimberSubsystem.moveToHeightCommand(0));
-   
+      //  .whileTrue(m_ClimberSubsystem.moveToHeightCommand(0))
 
 // Test Buttons
     TestJoystick.button(Button.kA.value).whileTrue(m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
@@ -157,11 +157,11 @@ public class RobotContainer {
     TestJoystick.button(Button.kLeftBumper.value).whileTrue(m_ShooterIntake.out(Constants.SHOOTER_OUTTAKE_SPEED));
 
     //TestJoystick.axisGreaterThan(3, 0.5).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
-    TestJoystick.axisGreaterThan(3, 0.5).whileTrue(new DashboardShootRPM(m_shooter));
-    TestJoystick.axisLessThan(3, 0.5).whileTrue(new ShootStop(m_shooter));
+    TestJoystick.axisGreaterThan(Axis.kRightTrigger.value, 0.5).whileTrue(new DashboardShootRPM(m_shooter));
+    TestJoystick.axisLessThan(Axis.kRightTrigger.value, 0.5).whileTrue(new ShootStop(m_shooter));
 
-    //TestJoystick.button(Button.kA.value).whileTrue(m_intake.extend(Constants.INTAKE_EXTEND_SPEED));
-    //TestJoystick.button(Button.kB.value).whileTrue(m_intake.retract(Constants.INTAKE_RETRACT_SPEED));
+    TestJoystick.axisLessThan(Axis.kLeftY.value, -0.5).whileTrue(m_intake.extend(Constants.INTAKE_EXTEND_SPEED));
+    TestJoystick.axisGreaterThan(Axis.kLeftY.value, 0.5).whileTrue(m_intake.retract(Constants.INTAKE_RETRACT_SPEED));
 
     
     //TestJoystick.button(Button.kRightStick.value).whileTrue(new FixedShootRPM(m_shooter));    //TestJoystick.axisLessThan(3,0.5).whileTrue(m_shooter.STOP());
