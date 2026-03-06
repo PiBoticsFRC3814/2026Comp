@@ -3,14 +3,12 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Amps;
 
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.math.system.plant.LinearSystemId;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -25,7 +23,6 @@ public class IntakeMovement extends SubsystemBase
 
   //private final DCMotor m_rollerMotorGearbox = DCMotor.getNEO(1);
 
-  @SuppressWarnings("removal")
   public IntakeMovement()
   {
     SparkMaxConfig config = new SparkMaxConfig();
@@ -33,7 +30,7 @@ public class IntakeMovement extends SubsystemBase
         .inverted(false)
         .smartCurrentLimit(100)
         .idleMode(IdleMode.kCoast);
-            m_IntakeMovement.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters); // deprecated? just put @SupressWarnings... band-aid fix
+            m_IntakeMovement.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
       
     
