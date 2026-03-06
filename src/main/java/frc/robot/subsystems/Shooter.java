@@ -76,18 +76,7 @@ public class Shooter extends SubsystemBase {
   // Create our SmartMotorController from our Spark and config with the NEO.
   private SmartMotorController sparkSmartMotorController = new SparkWrapper(spark, DCMotor.getNEO(1), smcConfig); //does the getNeo need to be 2?  does it matter?
   
-  private final FlyWheelConfig shooterConfig = new FlyWheelConfig(sparkSmartMotorController)
-  // Diameter of the flywheel.
-  .withDiameter(Inches.of(4))
-  // Mass of the flywheel.
-  .withMass(Pounds.of(1))
-  // Maximum speed of the shooter.
-  .withUpperSoftLimit(RPM.of(5000)) // i think the neo can go faster but limit to round number of 5000 -- it can hit 5676 not quite 6000.
-  // Telemetry name and verbosity for the arm.
-  .withTelemetry("ShooterMech", TelemetryVerbosity.LOW);
-
   // Shooter Mechanism
-  private FlyWheel shooter = new FlyWheel(shooterConfig);
 
   private SwerveSubsystem drive;
 
@@ -136,24 +125,16 @@ public class Shooter extends SubsystemBase {
     spark.stopMotor();
   }
 
-
-  /**
-   * Set the dutycycle of the shooter.
-   *
-   * @param dutyCycle DutyCycle to set.
-   * @return {@link edu.wpi.first.wpilibj2.command.RunCommand}
-   */
-  public Command set(double dutyCycle) {return shooter.set(dutyCycle);}
-
   public Shooter(SwerveSubsystem swerveDrive) {
     drive = swerveDrive;
     shooterEncoder = spark.getEncoder();
+    
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    shooter.updateTelemetry();
     SmartDashboard.putNumber("ShooterSpeed", getShootSpeed());
   }
 }
