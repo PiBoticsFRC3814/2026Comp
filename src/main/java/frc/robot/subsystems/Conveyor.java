@@ -3,8 +3,8 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Amps;
 
-import com.revrobotics.spark.SparkBase.PersistMode;
-import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.PersistMode;
+import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
@@ -25,7 +25,6 @@ public class Conveyor extends SubsystemBase
 
   private final DCMotor m_rollerMotorGearbox = DCMotor.getNEO(1);
 
-  @SuppressWarnings("removal")
   public Conveyor()
   {
     SparkMaxConfig config = new SparkMaxConfig();
@@ -33,7 +32,8 @@ public class Conveyor extends SubsystemBase
         .inverted(false)
         .smartCurrentLimit(100)
         .idleMode(IdleMode.kCoast);
-    m_conveyor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters); // deprecated? just put @SupressWarnings... band-aid fix
+    m_conveyor.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters); //not deprecated.  for some reason spark put these config modes in a different folder (revrobotics.BLAmode instead of revrobotics.spark.config.BLAmode) for some reason both "files" still exist in the different folder and itellesence for some reason grabbed the deprecated imnport instead of the preferred import
+
   }
   
 

@@ -4,83 +4,60 @@
 
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Amps;
-import static edu.wpi.first.units.Units.Inches;
-import static edu.wpi.first.units.Units.Pounds;
-import static edu.wpi.first.units.Units.RPM;
-import static edu.wpi.first.units.Units.Volt;
-import static edu.wpi.first.units.Units.Volts;
-
-import java.io.PrintStream;
-
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.FeedbackSensor;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.EncoderConfig;
+import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry3d;
-import edu.wpi.first.math.system.plant.DCMotor;
-import edu.wpi.first.units.Units;
-import edu.wpi.first.units.VoltageUnit;
-import edu.wpi.first.units.measure.AngularVelocity;
-import edu.wpi.first.units.measure.Velocity;
-import edu.wpi.first.units.measure.Voltage;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import yams.mechanisms.config.FlyWheelConfig;
-import yams.mechanisms.velocity.FlyWheel;
-import yams.motorcontrollers.SmartMotorController;
-import yams.motorcontrollers.SmartMotorControllerConfig;
-import yams.motorcontrollers.SmartMotorControllerConfig.ControlMode;
-import yams.motorcontrollers.SmartMotorControllerConfig.MotorMode;
-import yams.motorcontrollers.SmartMotorControllerConfig.TelemetryVerbosity;
-import yams.motorcontrollers.local.SparkWrapper;
 
 public class Shooter extends SubsystemBase {
 
   private double Distance = 0.0;
   private double shootSpeed = 0.0;
   private ChassisSpeeds driveInhib = new ChassisSpeeds(0,0,0);
-  private SmartMotorControllerConfig smcConfig = new SmartMotorControllerConfig(this)
-  .withControlMode(ControlMode.CLOSED_LOOP)
-  .withVoltageCompensation(Volts.of(12))
-  // Feedback Constants (PID Constants)
-  .withClosedLoopController(1e-4, 0.0, 2e-4) //used pid values from 2024.
-  // Feedforward Constants
-  .withFeedforward(new SimpleMotorFeedforward(1, 0.19, 0)) //ks should be volts needed to barely make the flywheel spin.  kv should be voltes per RPM ideally 12/5000 ish would get you the v/RPM
-  // Telemetry name and verbosity level
-  //.withTelemetry("ShooterMotor", TelemetryVerbosity.LOW)
-  // Gearing from the motor rotor to final shaft.
-  .withGearing(1)
-  // Motor properties to prevent over currenting.
-  .withMotorInverted(false)
-  .withIdleMode(MotorMode.COAST)
-  .withStatorCurrentLimit(Amps.of(40)); // need to figure out the current draw when pulling a ball through the flywheeel. 
-
-
-  // Vendor motor controller object
+  
   private SparkMax spark = new SparkMax(44, MotorType.kBrushless);
   private SparkMaxConfig config = new SparkMaxConfig();
-  private RelativeEncoder shooterEncoder;
-
-  // Create our SmartMotorController from our Spark and config with the NEO.
-  private SmartMotorController sparkSmartMotorController = new SparkWrapper(spark, DCMotor.getNEO(1), smcConfig); //does the getNeo need to be 2?  does it matter?
+  private RelativeEncoder shooterEncoder = spark.getEncoder();
+  private SparkClosedLoopController motorController = spark.getClosedLoopController();
   
   // Shooter Mechanism
 
   private SwerveSubsystem drive;
 
-   /**
+  public Shooter(SwerveSubsystem swerveDrive) {
+    drive = swerveDrive;
+    config.smartCurrentLimit(40,40)
+          .idleMode(IdleMode.kCoast)
+          .inverted(false)
+          .voltageCompensation(12.0)
+          ;
+    config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                     .p(0)
+                     .i(0)
+                     .d(0)
+                     .iZone(0)
+                     .outputRange(500, 5600)
+                     .feedForward.kS(0)
+                                 .kV(0)
+                                 .kA(0)//velocity control does not use this acceleration term according to REV docs.  MAXMotion Velocity control does.  probably can just use normal velocity control since theis is not a complex mechanism
+                                 ;
+    config.encoder.velocityConversionFactor(1); //this will allow us to set the speed of the flywheel directly instead of the motor rpm (right now gear is 1:1 so really no difference)
+    
+    spark.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+  }
+
+  /**
    * Set the shooter velocity setpoint.
    *
    * @param speed Speed to set
@@ -98,7 +75,7 @@ public class Shooter extends SubsystemBase {
     //add math stuff for distance to rpm needs.
     shootSpeed = Distance*1; //math is fun  Distance would be the "X" in the f(x) function that we come up with through testing.
 
-    sparkSmartMotorController.setVelocity(RPM.of(shootSpeed)); //math to do to distance to make rpm go
+    motorController.setSetpoint(shootSpeed, ControlType.kVelocity); //math to do to distance to make rpm go
   }
 
   public double getDesiredVelocity(){
@@ -110,26 +87,15 @@ public class Shooter extends SubsystemBase {
   }
 
   public void shootSpeed(double speed){
-    sparkSmartMotorController.setVelocity(RPM.of(speed));
+    motorController.setSetpoint(speed, ControlType.kVelocity);
   }
 
   public double getShootSpeed(){
-    //sparkSmartMotorController.getMechanismVelocity().in(RPM);
-    //sparkSmartMotorController.getMeasurementVelocity().in(RPM);
-    //sparkSmartMotorController.getRotorVelocity().in(RPM);
     return shooterEncoder.getVelocity();
-
   }
 
   public void STOP(){
     spark.stopMotor();
-  }
-
-  public Shooter(SwerveSubsystem swerveDrive) {
-    drive = swerveDrive;
-    shooterEncoder = spark.getEncoder();
-    
-
   }
 
   @Override
