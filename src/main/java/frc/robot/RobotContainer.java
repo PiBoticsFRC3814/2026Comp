@@ -42,7 +42,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  
   public final IntakeMovement m_intake = new IntakeMovement();
   public final IntakeRollerSubsystem m_rollerMotor = new IntakeRollerSubsystem();
   public final Conveyor m_conveyor = new Conveyor();

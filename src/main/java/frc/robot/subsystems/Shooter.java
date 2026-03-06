@@ -43,13 +43,13 @@ public class Shooter extends SubsystemBase {
           .voltageCompensation(12.0)
           ;
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                     .p(0)
+                     .p(1e-4)
                      .i(0)
-                     .d(0)
+                     .d(2e-4)
                      .iZone(0)
                      .outputRange(500, 5600)
-                     .feedForward.kS(0)
-                                 .kV(0)
+                     .feedForward.kS(1)
+                                 .kV(0.16)
                                  .kA(0)//velocity control does not use this acceleration term according to REV docs.  MAXMotion Velocity control does.  probably can just use normal velocity control since theis is not a complex mechanism
                                  ;
     config.encoder.velocityConversionFactor(1); //this will allow us to set the speed of the flywheel directly instead of the motor rpm (right now gear is 1:1 so really no difference)
@@ -65,17 +65,14 @@ public class Shooter extends SubsystemBase {
   public void setDesiredVelocity() {
     // limelight distance checks here
     Distance = drive.shareTargetDistance;  
-    // may want to change how this is currently done right now i am allways getting the distance to target in the periodic of the swerve system even if we dont need it
-    // it might be less intrusive on the code times to instead call the getTargetDistance() here instead of allwyas sicne we may only need it when trying to shoot.
+    //may want to change how this is currently done right now i am allways getting the distance to target in the periodic of the swerve system even if we dont need it
+    //it might be less intrusive on the code times to instead call the getTargetDistance() here instead of allwyas sicne we may only need it when trying to shoot.
     //not sure what option is better since it may be better to allways gettarget distances since we want the driverstationto contiuosly update the humans with "in range" information.
-    
-    //smart dashbord stuff for troublwshooting remove when we see this number is getting here
-    SmartDashboard.putNumber("shooter Distance", Distance);
 
     //add math stuff for distance to rpm needs.
     shootSpeed = Distance*1; //math is fun  Distance would be the "X" in the f(x) function that we come up with through testing.
 
-    motorController.setSetpoint(shootSpeed, ControlType.kVelocity); //math to do to distance to make rpm go
+    motorController.setSetpoint(shootSpeed, ControlType.kVelocity); //make moter go the speed wee calculated it to go
   }
 
   public double getDesiredVelocity(){

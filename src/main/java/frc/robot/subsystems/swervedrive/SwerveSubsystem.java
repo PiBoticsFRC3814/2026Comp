@@ -94,7 +94,7 @@ public class SwerveSubsystem extends SubsystemBase
    *
    * @param directory Directory of swerve drive config files.
    */
-   public SwerveSubsystem(File modules)
+  public SwerveSubsystem(File modules)
   { 
     boolean blueAlliance = !isRedAlliance();
     Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
@@ -121,14 +121,13 @@ public class SwerveSubsystem extends SubsystemBase
                                                0.1); //Correct for skew that gets worse as angular velocity increases. Start with a coefficient of 0.1.
     swerveDrive.setModuleEncoderAutoSynchronize(false,
                                                 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
-    
-  
+                                            
     limelight = new Limelight("limelight");
     limelight.getSettings()
              .withLimelightLEDMode(LEDMode.PipelineControl)
              .withCameraOffset(cameraOffset)
              .save();
-    poseEstimator = limelight.createPoseEstimator(EstimationMode.MEGATAG2); 
+    poseEstimator = limelight.createPoseEstimator(EstimationMode.MEGATAG2);
 
     //set speed limits
     swerveDrive.setMaximumAllowableSpeeds(Constants.MAX_VELOCITY,Constants.MAX_ANGLE_VELOCITY);
@@ -174,6 +173,7 @@ public void periodic()
 												   new AngularVelocity3d(DegreesPerSecond.of(0.0),
 													                       DegreesPerSecond.of(0.0),
 													                       DegreesPerSecond.of(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)))));
+
   updateVisonOdometry();
   
   swerveDrive.updateOdometry();
@@ -184,7 +184,12 @@ public void periodic()
   SmartDashboard.putNumber("Y Measure",swerveDrive.getPose().getMeasureY().in(Meter));
   SmartDashboard.putNumber("Angle Measure",swerveDrive.getPose().getRotation().getDegrees());
   SmartDashboard.putNumber("Target Distance", shareTargetDistance);
+  SmartDashboard.putBoolean("GOOD SHOT", getGoodShot());
    
+}
+
+public void visionOdometry(PoseEstimate estimate){
+
 }
 
 public void updateVisonOdometry()
@@ -264,6 +269,14 @@ public void updateVisonOdometry()
     targetData = limelight.getData().targetData.getRobotToTarget().toPose2d();
     targetDistance = Math.sqrt(Math.pow(targetData.getMeasureX().in(Meter),2) + Math.pow(targetData.getMeasureY().in(Meter),2));
     return targetDistance;
+  }
+
+  public boolean getGoodShot(){
+    if (targetDistance >= Constants.TARGET_MINIMUM_DIST && targetDistance <= Constants.TARGET_MAXIMUM_DIST){
+      return true;
+    } else{
+      return false;
+    }
   }
 
  
@@ -500,6 +513,10 @@ public void updateVisonOdometry()
   public double getYawRate()
   {
     return swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond);
+  }
+  public Rotation3d getGyroRot3d()
+  {
+    return swerveDrive.getGyroRotation3d();
   }
 
   /**

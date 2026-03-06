@@ -54,6 +54,10 @@ public final class Constants {
   public static final double CAMERA_PITCH = 0.0; // in degrees the pitch is probabbly going to be the only angle we need unlessmounting is done weirdly
   public static final double CAMERA_YAW = 0.0; // in degrees
 
+  //LimeLight useful constants
+  public static final double TARGET_MINIMUM_DIST = Units.feetToMeters(2);
+  public static final double TARGET_MAXIMUM_DIST = Units.feetToMeters(10);
+
 
   //standard deviation camera constants
   public static final double CAM_X_STD = 0.02013123117;
@@ -83,10 +87,8 @@ public final class Constants {
   public static final double INTAKE_ROLLER_OUTTAKE_SPEED = -1.0;
 
 
-  // Shooter
-  public static final double SHOOTER_SPEED = 0.1;
-  public static final double[] SHOOTERPID = {4e-4,1e-6,1e-2,0,1e-6,0.1,1.0};
-  // kP   kI   kD  kIz  kFF  kMn  kMx
+  // Shooter need to move the shooter number into this constants file.
+  public static final double SHOOTER_P = 0.0;  
 
   
 //  public static final class AutonConstants
