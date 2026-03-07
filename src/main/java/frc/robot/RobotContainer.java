@@ -155,8 +155,8 @@ public class RobotContainer {
     TestJoystick.button(Button.kRightBumper.value).whileTrue(m_ShooterIntake.in(Constants.SHOOTER_INTAKE_SPEED));
     TestJoystick.button(Button.kLeftBumper.value).whileTrue(m_ShooterIntake.out(Constants.SHOOTER_OUTTAKE_SPEED));
 
-    //TestJoystick.axisGreaterThan(3, 0.5).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
-    TestJoystick.axisGreaterThan(Axis.kRightTrigger.value, 0.5).whileTrue(new DashboardShootRPM(m_shooter));
+    TestJoystick.axisGreaterThan(3, 0.5).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
+    //TestJoystick.axisGreaterThan(Axis.kRightTrigger.value, 0.5).whileTrue(new DashboardShootRPM(m_shooter));
     TestJoystick.axisLessThan(Axis.kRightTrigger.value, 0.5).whileTrue(new ShootStop(m_shooter));
 
     TestJoystick.axisLessThan(Axis.kLeftY.value, -0.5).whileTrue(m_intake.extend(Constants.INTAKE_EXTEND_SPEED));

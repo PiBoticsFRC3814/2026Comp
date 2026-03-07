@@ -20,6 +20,7 @@ public class FullShoot extends Command {
   SwerveSubsystem m_SwerveSubsystem;
 
   public double speed;
+  public double actualSpeed;
   public double conveyorspeed = Constants.CONVEYOR_SPEED;
   public double intakespeed = Constants.SHOOTER_INTAKE_SPEED;
 
@@ -36,7 +37,9 @@ public FullShoot(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shoo
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      speed = SmartDashboard.getNumber("setRPM", 0.0); 
+      speed = SmartDashboard.getNumber("setRPM", 0.0);
+      actualSpeed = 0.0; 
+
 
   }
 
@@ -45,7 +48,8 @@ public FullShoot(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shoo
   public void execute() {
     m_shooter.shootSpeed(speed);
     m_shooter.driveInhibit();
-    if (m_shooter.getShootSpeed() >= speed){
+    actualSpeed = m_shooter.getShootSpeed();
+    if (actualSpeed >= speed){
       m_conveyor.intake(conveyorspeed);
       m_shooterintake.intake(intakespeed);
     }
@@ -58,9 +62,9 @@ public FullShoot(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shoo
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    //m_conveyor.STOP();
-    //m_shooterintake.STOP();
-    //_shooter.shootSpeed(0);
+    m_conveyor.STOP();
+    m_shooterintake.STOP();
+    m_shooter.shootSpeed(0);
   }
 
   // Returns true when the command should end.

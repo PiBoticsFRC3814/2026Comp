@@ -43,7 +43,7 @@ public class Shooter extends SubsystemBase {
           .voltageCompensation(12.0)
           ;
     config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                     .p(1e-4)
+                     .p(1e-5)
                      .i(0)
                      .d(2e-4)
                      .iZone(0)
