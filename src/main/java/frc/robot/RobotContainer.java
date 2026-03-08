@@ -121,23 +121,16 @@ public class RobotContainer {
     drivebase.setDefaultCommand(driveFieldOrientedDirectAngle);
     
 // Shooter
-    //OperatorController.axisGreaterThan(3, 0.5).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
-    OperatorController.axisLessThan(3, 0.5).whileTrue(new ShootStop(m_shooter));
+    OperatorController.axisGreaterThan(3, 0.5).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
+    //OperatorController.axisLessThan(3, 0.5).whileTrue(new ShootStop(m_shooter));
   
 // Intake Movement
-    OperatorController.button(Button.kA.value).whileTrue(m_intake.extend(Constants.INTAKE_EXTEND_SPEED));
-    OperatorController.button(Button.kB.value).whileTrue(m_intake.retract(Constants.INTAKE_RETRACT_SPEED));
+    OperatorController.axisLessThan(Axis.kLeftY.value, -0.5).whileTrue(m_intake.extend(Constants.INTAKE_EXTEND_SPEED));
+    OperatorController.axisGreaterThan(Axis.kLeftY.value, 0.5).whileTrue(m_intake.retract(Constants.INTAKE_RETRACT_SPEED));
 
 // Intake Rollers
-    driveController.button(Button.kA.value).whileTrue(m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
-    driveController.button(Button.kB.value).whileTrue(m_rollerMotor.out(Constants.INTAKE_ROLLER_OUTTAKE_SPEED));  
+    OperatorController.axisGreaterThan(2, 0.5).whileTrue(m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
 
-// Conveyor
-    OperatorController.button(Button.kX.value).whileTrue(m_conveyor.in(Constants.CONVEYOR_SPEED));
-
-//Shooter Intake
-    OperatorController.button(Button.kRightBumper.value).whileTrue(m_ShooterIntake.in(Constants.SHOOTER_INTAKE_SPEED));
-    OperatorController.button(Button.kLeftBumper.value).whileTrue(m_ShooterIntake.out(Constants.SHOOTER_OUTTAKE_SPEED));
       
 //Climber Subsystem
       //new JoystickButton(OperatorController, Button.kA.value)
