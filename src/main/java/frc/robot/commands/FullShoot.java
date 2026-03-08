@@ -46,16 +46,18 @@ public FullShoot(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shoo
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    speed = SmartDashboard.getNumber("setRPM",0.0);
+    System.out.println(speed);
     m_shooter.shootSpeed(speed);
     m_shooter.driveInhibit();
     actualSpeed = m_shooter.getShootSpeed();
-    if (actualSpeed >= speed){
-      m_conveyor.intake(conveyorspeed);
-      m_shooterintake.intake(intakespeed);
-    }
-    else{
+    if (actualSpeed*0.95 >= speed || actualSpeed*1.05 <= speed){
       m_conveyor.STOP();
       m_shooterintake.STOP();
+    }
+    else{
+      m_conveyor.intake(conveyorspeed);
+      m_shooterintake.intake(intakespeed);
     }
   }
 

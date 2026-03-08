@@ -12,6 +12,7 @@ import com.revrobotics.spark.FeedbackSensor;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
@@ -37,19 +38,20 @@ public class Shooter extends SubsystemBase {
 
   public Shooter(SwerveSubsystem swerveDrive) {
     drive = swerveDrive;
+    
     config.smartCurrentLimit(40,40)
           .idleMode(IdleMode.kCoast)
           .inverted(false)
           .voltageCompensation(12.0)
           ;
-    config.closedLoop.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                     .p(1e-5)
-                     .i(0)
-                     .d(2e-4)
-                     .iZone(0)
-                     .outputRange(500, 5600)
-                     .feedForward.kS(1)
-                                 .kV(0.16)
+    config.closedLoop//.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+                     .p(4.5e-4)
+                     .i(0.0001)
+                     .d(1.5e-4)
+                     .iZone(0.1)
+                     .outputRange(0, 1)
+                     .feedForward.kS(1.0)
+                                 .kV(0.0021)
                                  .kA(0)//velocity control does not use this acceleration term according to REV docs.  MAXMotion Velocity control does.  probably can just use normal velocity control since theis is not a complex mechanism
                                  ;
     config.encoder.velocityConversionFactor(1); //this will allow us to set the speed of the flywheel directly instead of the motor rpm (right now gear is 1:1 so really no difference)
