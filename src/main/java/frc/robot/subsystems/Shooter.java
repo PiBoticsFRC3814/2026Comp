@@ -18,6 +18,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
@@ -92,14 +93,21 @@ public class Shooter extends SubsystemBase {
   public double getShootSpeed(){
     return shooterEncoder.getVelocity();
   }
-
-  public void STOP(){
-    spark.stopMotor();
+  
+  public Command STOP(){
+        return(null);
   }
+
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("ShooterSpeed", getShootSpeed());
   }
+
+public void setDefaultCommand(Object stop) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'setDefaultCommand'");
+}
+
 }

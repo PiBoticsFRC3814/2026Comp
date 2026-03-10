@@ -49,6 +49,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     SmartDashboard.putNumber("setRPM", 0.0);
+    SmartDashboard.putNumber("FixedRPM", 0.0);
+
   }
 
   @Override

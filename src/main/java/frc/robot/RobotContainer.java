@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DashboardShootRPM;
 import frc.robot.commands.FullShoot;
+import frc.robot.commands.ShootSetRPM;
 import frc.robot.commands.ShootStop;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.IntakeMovement;
@@ -20,9 +21,12 @@ import static edu.wpi.first.units.Units.Meters;
 
 import java.io.File;
 
+import com.ctre.phoenix6.SignalLogger;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.DataLogManager;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.StadiaController.Button;
 import edu.wpi.first.wpilibj.XboxController.Axis;
@@ -90,14 +94,14 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     // Setup Data Logging
-   /*DriverStation.startDataLog(DataLogManager.getLog());
+   DriverStation.startDataLog(DataLogManager.getLog());
     SignalLogger.setPath("/media/PiBotics/");
 
-    DataLogManager.start();
-    SignalLogger.start(); */
+    DataLogManager.start("/media/PiBotics/");
+    SignalLogger.start();
 
     //Set the default command to force the stuff to stop. --- these appear to be preventing the button commands from running?
-    //m_shooter.setDefaultCommand(m_shooter.setVelocity(RPM.of(0)));
+    //m_shooter.setDefaultCommand(m_shooter.STOP());
     m_intake.setDefaultCommand(m_intake.stop());
     m_rollerMotor.setDefaultCommand(m_rollerMotor.stop());
     m_conveyor.setDefaultCommand(m_conveyor.stop());
@@ -122,8 +126,9 @@ public class RobotContainer {
     
 // Shooter
     OperatorController.axisGreaterThan(3, 0.5).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
-    //OperatorController.axisLessThan(3, 0.5).whileTrue(new ShootStop(m_shooter));
-  
+    OperatorController.button(Button.kB.value).whileTrue(new ShootSetRPM(m_shooter,m_conveyor,m_ShooterIntake));
+
+
 // Intake Movement
     OperatorController.axisLessThan(Axis.kLeftY.value, -0.5).whileTrue(m_intake.extend(Constants.INTAKE_EXTEND_SPEED));
     OperatorController.axisGreaterThan(Axis.kLeftY.value, 0.5).whileTrue(m_intake.retract(Constants.INTAKE_RETRACT_SPEED));
