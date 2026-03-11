@@ -6,12 +6,13 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class FixedShootRPM extends Command {
   Shooter m_shooter;
-  private double speed;
+  private double speed = Constants.FIXED_SHOOT_SPEED;
   /** Creates a new DashboardShootRPM. */
   public FixedShootRPM(Shooter shooter) {
     m_shooter = shooter;
@@ -22,27 +23,24 @@ public class FixedShootRPM extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    speed = SmartDashboard.getNumber("setRPM", 0.0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    speed = SmartDashboard.getNumber("setRPM", 0.0);
     System.out.println(speed);
-    m_shooter.shootSpeed(2500);
+    m_shooter.shootSpeed(speed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.shootSpeed(0);
+    m_shooter.STOP();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    m_shooter.shootSpeed(0);
-    return true;
+    return false;
   }
 }

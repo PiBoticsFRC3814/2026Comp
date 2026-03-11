@@ -36,13 +36,12 @@ public class DashboardShootRPM extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.shootSpeed(0);
+    m_shooter.STOP();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    m_shooter.shootSpeed(0);
     return false;
   }
 }

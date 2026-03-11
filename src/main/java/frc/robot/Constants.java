@@ -88,7 +88,9 @@ public final class Constants {
 
 
   // Shooter need to move the shooter number into this constants file.
-  public static final double SHOOTER_P = 0.0;  
+  public static final double SHOOTER_P = 0.0;
+  public static final double FIXED_SHOOT_SPEED = 4600;  
+
 
   
 //  public static final class AutonConstants

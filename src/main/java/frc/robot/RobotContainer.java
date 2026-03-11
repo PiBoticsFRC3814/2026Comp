@@ -106,6 +106,7 @@ public class RobotContainer {
     m_rollerMotor.setDefaultCommand(m_rollerMotor.stop());
     m_conveyor.setDefaultCommand(m_conveyor.stop());
     m_ShooterIntake.setDefaultCommand(m_ShooterIntake.stop());
+    m_shooter.setDefaultCommand(new ShootStop(m_shooter));
     //m_ClimberSubsystem.setDefaultCommand(m_ClimberSubsystem.idle());
 
     configureBindings();// no buttons here they go later
@@ -127,6 +128,8 @@ public class RobotContainer {
 // Shooter
     OperatorController.axisGreaterThan(3, 0.5).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
     OperatorController.button(Button.kB.value).whileTrue(new ShootSetRPM(m_shooter,m_conveyor,m_ShooterIntake));
+    //OperatorController.axisLessThan(Axis.kRightTrigger.value, 0.5).whileTrue(new ShootStop(m_shooter));
+
 
 
 // Intake Movement

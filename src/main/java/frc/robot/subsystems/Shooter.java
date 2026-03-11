@@ -94,16 +94,17 @@ public class Shooter extends SubsystemBase {
     return shooterEncoder.getVelocity();
   }
   
-  public Command STOP(){
-        return(null);
-  }
-
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("ShooterSpeed", getShootSpeed());
   }
+
+  public void STOP(){
+    spark.set(0.0);
+  }
+
 
 public void setDefaultCommand(Object stop) {
     // TODO Auto-generated method stub
