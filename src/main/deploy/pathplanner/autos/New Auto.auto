@@ -5,9 +5,21 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "IntakeDownies"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "FullShoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "Example Path"
+            "pathName": "ShootCenter"
           }
         }
       ]

@@ -6,9 +6,13 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DashboardShootRPM;
+import frc.robot.commands.FixedShootRPM;
 import frc.robot.commands.FullShoot;
+import frc.robot.commands.FullShootAuton;
+import frc.robot.commands.IntakeExtend;
 import frc.robot.commands.ShootSetRPM;
 import frc.robot.commands.ShootStop;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.IntakeMovement;
 import frc.robot.subsystems.IntakeRollerSubsystem;
@@ -22,6 +26,9 @@ import static edu.wpi.first.units.Units.Meters;
 import java.io.File;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.fasterxml.jackson.databind.util.Named;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
@@ -32,10 +39,13 @@ import edu.wpi.first.wpilibj.StadiaController.Button;
 import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.FullShootAuton;
 
 
 /**
@@ -50,9 +60,10 @@ public class RobotContainer {
   public final IntakeRollerSubsystem m_rollerMotor = new IntakeRollerSubsystem();
   public final Conveyor m_conveyor = new Conveyor();
   public final ShooterIntakeSubsystem m_ShooterIntake = new ShooterIntakeSubsystem();
-  //public final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
-   
-  
+  public final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
+
+  public SendableChooser<String> chooserFirst = new SendableChooser<>();
+
   //calls all the JSON files for swervesubsystem
   private final SwerveSubsystem       drivebase  = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                                 "swerve/neo"));
@@ -60,12 +71,10 @@ public class RobotContainer {
   //putting the shooter call here since it needs to be after drivebase to get the drivebase into the shooter for limelight/pose stuffs.
   public final Shooter m_shooter = new Shooter(drivebase);
 
-  //private final Command dashboardShoot = new DashboardShootRPM(m_shooter);
-
+ 
   // Replace with CommandPS4Controller or CommandJoystick if needed
  CommandXboxController driveController = new CommandXboxController(0);
  CommandXboxController OperatorController = new CommandXboxController(1);
- CommandXboxController TestJoystick = new CommandXboxController(5);
 
  //slew rate MUST have slew rate limits for BOTH X and Y axises separate.  if you combine the X and Y into one limiter it makes the robot move diagonally.
  //Note that the slew rate limiter is loooking at joystick values NOT motor speed values thus the positive and negative rates apply to joystick inputs not motor accelerations
@@ -90,6 +99,7 @@ public class RobotContainer {
                                                                                    ()->driveController.getRightY()*drivebase.headingFlipper())
                                                         .headingWhile(true);
 
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -110,6 +120,13 @@ public class RobotContainer {
     //m_ClimberSubsystem.setDefaultCommand(m_ClimberSubsystem.idle());
 
     configureBindings();// no buttons here they go later
+
+    NamedCommands.registerCommand("IntakeDown",m_intake.extend(Constants.INTAKE_EXTEND_SPEED));
+    NamedCommands.registerCommand("FullShoot", new FullShootAuton(m_shooter, m_conveyor, m_ShooterIntake,drivebase));
+    NamedCommands.registerCommand("IntakeRun", m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
+    NamedCommands.registerCommand("IntakeDownies", new IntakeExtend(m_intake));
+
+    chooserFirst.setDefaultOption("Test", "New Auto");
   }
  
   
@@ -141,36 +158,9 @@ public class RobotContainer {
 
       
 //Climber Subsystem
-      //new JoystickButton(OperatorController, Button.kA.value)
-      //  .whileTrue(m_ClimberSubsystem.moveToHeightCommand(1));
-      //  new JoystickButton(OperatorController, Button.kB.value)
-      //  .whileTrue(m_ClimberSubsystem.moveToHeightCommand(0))
+      OperatorController.button(Button.kA.value).whileTrue(m_ClimberSubsystem.up(Constants.CLIMBER_SPEED));
+      OperatorController.button(Button.kB.value).whileTrue(m_ClimberSubsystem.down(Constants.CLIMBER_SPEED));
 
-// Test Buttons
-    TestJoystick.button(Button.kA.value).whileTrue(m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
-    TestJoystick.button(Button.kB.value).whileTrue(m_rollerMotor.out(Constants.INTAKE_ROLLER_OUTTAKE_SPEED));  
-
-    TestJoystick.button(Button.kX.value).whileTrue(m_conveyor.in(Constants.CONVEYOR_SPEED));
-    TestJoystick.button(Button.kY.value).whileTrue(m_conveyor.out(Constants.CONVEYOR_OUTTAKE_SPEED));
-
-    TestJoystick.button(Button.kRightBumper.value).whileTrue(m_ShooterIntake.in(Constants.SHOOTER_INTAKE_SPEED));
-    TestJoystick.button(Button.kLeftBumper.value).whileTrue(m_ShooterIntake.out(Constants.SHOOTER_OUTTAKE_SPEED));
-
-    TestJoystick.axisGreaterThan(3, 0.5).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
-    //TestJoystick.axisGreaterThan(Axis.kRightTrigger.value, 0.5).whileTrue(new DashboardShootRPM(m_shooter));
-    TestJoystick.axisLessThan(Axis.kRightTrigger.value, 0.5).whileTrue(new ShootStop(m_shooter));
-
-    TestJoystick.axisLessThan(Axis.kLeftY.value, -0.5).whileTrue(m_intake.extend(Constants.INTAKE_EXTEND_SPEED));
-    TestJoystick.axisGreaterThan(Axis.kLeftY.value, 0.5).whileTrue(m_intake.retract(Constants.INTAKE_RETRACT_SPEED));
-
-    
-    //TestJoystick.button(Button.kRightStick.value).whileTrue(new FixedShootRPM(m_shooter));    //TestJoystick.axisLessThan(3,0.5).whileTrue(m_shooter.STOP());
-    
-/*     new JoystickButton(driveController, XboxController.Button.kA.value)
-        .whileTrue(drivebase.zeroGyroCommand()); EXAMPLE BUTTON MAPPING */ 
-
-      //new JoystickButton(TestJoystick, Button.kB.value)
-      //  .toggleOnTrue(new TurnOnFlywheel(m_shooter, drivebase));
   }
 
   public void setupShuffleboard() {
@@ -183,9 +173,25 @@ public class RobotContainer {
     .add("Y Measure", drivebase.getSwerveDrive().getPose().getMeasureY().in(Meters));
     Shuffleboard.getTab("test")
     .add("Angle Measure", drivebase.getSwerveDrive().getPose().getRotation().getDegrees());
+
+    Shuffleboard.getTab("test")
+    .add("Auton", chooserFirst)
+    .withWidget(BuiltInWidgets.kSplitButtonChooser)
+    .withSize(3,1)
+    .withPosition(0,0);
+
   }
   public double stickAngle() {
-    return Math.toDegrees(Math.atan(driveController.getRightX()/driveController.getRightY()));
+      return Math.toDegrees(Math.atan(driveController.getRightX()/driveController.getRightY()));
+    }
+
+    public Command getAutonomousCommand() {
+    // An example command will be run in autonomous
+    return new PathPlannerAuto(chooserFirst.getSelected());
   }
+  
+   
 }
+
+
 

@@ -11,9 +11,10 @@ import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterIntakeSubsystem;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import edu.wpi.first.wpilibj.Timer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class FullShoot extends Command {
+public class FullShootAuton extends Command {
   Shooter m_shooter;
   Conveyor m_conveyor;
   ShooterIntakeSubsystem m_shooterintake;
@@ -23,9 +24,10 @@ public class FullShoot extends Command {
   public double actualSpeed;
   public double conveyorspeed = Constants.CONVEYOR_SPEED;
   public double intakespeed = Constants.SHOOTER_INTAKE_SPEED;
+  private Timer timeguy = new Timer();
 
   /** Creates a new FullShoot. */
-public FullShoot(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shooterintake, SwerveSubsystem swervesubsystem) {
+public FullShootAuton(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shooterintake, SwerveSubsystem swervesubsystem) {
     m_shooter = shooter;
     m_conveyor = conveyor;
     m_shooterintake = shooterintake;
@@ -39,6 +41,9 @@ public FullShoot(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shoo
   public void initialize() {
       speed = SmartDashboard.getNumber("setRPM", 0.0);
       actualSpeed = 0.0; 
+      timeguy.reset();
+      timeguy.start();
+      
 
 
   }
@@ -46,7 +51,7 @@ public FullShoot(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shoo
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    speed = SmartDashboard.getNumber("setRPM",0.0);
+    speed = Constants.FIXED_SHOOT_SPEED;
     System.out.println(speed);
     m_shooter.shootSpeed(speed);
     m_shooter.driveInhibit();
@@ -66,12 +71,20 @@ public FullShoot(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shoo
   public void end(boolean interrupted) {
     m_conveyor.STOP();
     m_shooterintake.STOP();
-    m_shooter.shootSpeed(0);
+    m_shooter.STOP();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (timeguy.get() > Constants.PEW_PEW_TIME) {
+      m_conveyor.STOP();
+      m_shooterintake.STOP();
+      m_shooter.STOP();
+      return true;
+    }
+    else{
+      return false;
+    }
   }
 }

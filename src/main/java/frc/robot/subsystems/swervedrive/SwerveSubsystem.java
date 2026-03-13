@@ -23,7 +23,6 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,29 +42,24 @@ import java.util.Optional;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 
-import com.ctre.phoenix6.controls.CoastOut;
-import com.revrobotics.spark.config.FeedForwardConfig;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
-import swervelib.imu.SwerveIMU;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
-
-import limelight.Limelight;
 import limelight.networktables.AngularVelocity3d;
 import limelight.networktables.LimelightPoseEstimator;
-import limelight.networktables.LimelightResults;
-import limelight.networktables.LimelightSettings.LEDMode;
 import limelight.networktables.Orientation3d;
 import limelight.networktables.PoseEstimate;
-import limelight.networktables.LimelightPoseEstimator.EstimationMode;
-import limelight.networktables.target.pipeline.NeuralClassifier;
 
 public class SwerveSubsystem extends SubsystemBase
 {
@@ -74,9 +68,9 @@ public class SwerveSubsystem extends SubsystemBase
    */
   private final SwerveDrive swerveDrive;
 
-  Pose3d cameraOffset  = new Pose3d(Inches.of(5).in(Meter), //where limelight is in comparison to the center of the robot
-                                    Inches.of(5).in(Meter),
-                                    Inches.of(5).in(Meter),
+  Pose3d cameraOffset  = new Pose3d(-Inches.of(12).in(Meter), //where limelight is in comparison to the center of the robot
+                                    Inches.of(11).in(Meter),
+                                    Inches.of(14).in(Meter),
                                     Rotation3d.kZero);
 
   Limelight                      limelight;
@@ -132,8 +126,43 @@ public class SwerveSubsystem extends SubsystemBase
     //set speed limits
     swerveDrive.setMaximumAllowableSpeeds(Constants.MAX_VELOCITY,Constants.MAX_ANGLE_VELOCITY);
     swerveDrive.setMotorIdleMode(true);
+
     //slew rate was sucessfully added into the robot container where it is supposed to be.  slew is supposed to control the joystick input directly not the speed of the motors.
     //ramp rate in the physical properties may be usable to adjust acceleration of the robot.  should look into this.
+
+    RobotConfig config;
+    try{
+      config = RobotConfig.fromGUISettings(); // was having issues with the robot config part. just put entire autobuilder into the try statement
+
+       AutoBuilder.configure(
+            this::getPose, // Robot pose supplier
+            this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speeds, feedforwards) -> drive(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+            new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+            ),
+            config, // The robot configuration 
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+    ); 
+      
+    } catch (Exception e) {
+      // Handle exception as needed
+      e.printStackTrace();
+    }                                   
+
   }
 
   /**
@@ -162,6 +191,38 @@ public class SwerveSubsystem extends SubsystemBase
     swerveDrive.setMaximumAllowableSpeeds(Constants.MAX_VELOCITY,Constants.MAX_ANGLE_VELOCITY);
     swerveDrive.setMotorIdleMode(true);
 
+    RobotConfig config;
+    try{
+      config = RobotConfig.fromGUISettings(); // was having issues with the robot config part. just put entire autobuilder into the try statement
+
+       AutoBuilder.configure(
+            this::getPose, // Robot pose supplier
+            this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getRobotVelocity, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            (speeds, feedforwards) -> drive(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
+            new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+            ),
+            config, // The robot configuration 
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+    ); 
+      
+    } catch (Exception e) {
+      // Handle exception as needed
+      e.printStackTrace();
+    }                                                                
   }
 
 @Override
@@ -392,7 +453,7 @@ public void updateVisonOdometry()
                                                                       headingX.getAsDouble(),
                                                                       headingY.getAsDouble(),
                                                                       swerveDrive.getOdometryHeading().getRadians(),
-                                                                      swerveDrive.getMaximumChassisVelocity()));
+                                                                      swerveDrive.getMaximumChassisVelocity()));                                                                
     });
   }
 

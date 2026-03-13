@@ -4,32 +4,53 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterIntakeSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class FixedShootRPM extends Command {
   Shooter m_shooter;
+  Conveyor m_conveyor;
+  ShooterIntakeSubsystem m_ShooterIntake;
+
   private double speed = Constants.FIXED_SHOOT_SPEED;
+  public double actualSpeed;
+
+
   /** Creates a new DashboardShootRPM. */
-  public FixedShootRPM(Shooter shooter) {
+  public FixedShootRPM(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shooterIntake) {
     m_shooter = shooter;
-     addRequirements(shooter);
+    m_conveyor = conveyor;
+    m_ShooterIntake = shooterIntake;
+     addRequirements(shooter, conveyor, shooterIntake);
     // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+  actualSpeed = 0.0; 
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println(speed);
+   System.out.println(speed);
     m_shooter.shootSpeed(speed);
+    m_shooter.driveInhibit();
+    actualSpeed = m_shooter.getShootSpeed();
+    if (actualSpeed*0.95 >= speed || actualSpeed*1.05 <= speed){
+      m_conveyor.STOP();
+      m_ShooterIntake.STOP();
+    }
+    else{
+      m_conveyor.intake(Constants.CONVEYOR_SPEED);
+      m_ShooterIntake.intake(Constants.SHOOTER_INTAKE_SPEED);
+    }
   }
 
   // Called once the command ends or is interrupted.

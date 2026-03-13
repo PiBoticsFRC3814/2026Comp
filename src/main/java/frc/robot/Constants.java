@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.AngularVelocity;
+import edu.wpi.first.wpilibj.Timer;
 import swervelib.math.Matter;
 
 
@@ -86,10 +87,16 @@ public final class Constants {
   public static final double INTAKE_ROLLER_SPEED = -1.0;
   public static final double INTAKE_ROLLER_OUTTAKE_SPEED = -1.0;
 
+  //Climber
+    public static final double CLIMBER_SPEED = 1.0;  
+
+
 
   // Shooter need to move the shooter number into this constants file.
   public static final double SHOOTER_P = 0.0;
-  public static final double FIXED_SHOOT_SPEED = 4600;  
+  public static final double FIXED_SHOOT_SPEED = 4600;
+  public static final double PEW_PEW_TIME = 2.0;
+  public static final double INTAKE_DOWNIES_TIME = 0.5;
 
 
   

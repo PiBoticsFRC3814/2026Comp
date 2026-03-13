@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Amps;
 
+import java.lang.constant.Constable;
+
 import com.revrobotics.PersistMode;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -12,6 +14,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 
 public class IntakeMovement extends SubsystemBase
@@ -72,4 +75,17 @@ public class IntakeMovement extends SubsystemBase
   {
     return m_IntakeMovement.getAppliedOutput();
   }
+
+  public void uppies(){
+  m_IntakeMovement.set(Constants.INTAKE_RETRACT_SPEED);
+  }
+
+  public void downies(){
+  m_IntakeMovement.set(Constants.INTAKE_EXTEND_SPEED);
+  }
+
+  public void STOP(){
+    m_IntakeMovement.set(0.0);
+  }
+
 }
