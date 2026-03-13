@@ -31,7 +31,7 @@ public final class Constants {
   // Maximum speed of the robot in meters per second, used to limit acceleration.
 
   //Robot Speed limits
-  public static final double MAX_VELOCITY = Units.feetToMeters(5);
+  public static final double MAX_VELOCITY = Units.feetToMeters(10);
   public static final double MAX_ANGLE_VELOCITY = Units.degreesToRadians(120); // note that the maximum rotation speed will change what is needed in PID of controller properties
   public static final double DRIVE_ACCEL_LIMIT = Units.feetToMeters(0.1); //look into acceleration limits to limit acceleration and deceleration values on the motor side in adition to slew n the controller side.
   public static final double ANGLE_ACCEL_LIMIT = Units.degreesToRadians(0.1);
@@ -42,10 +42,10 @@ public final class Constants {
   it effects the stick values from -1 to +1 and limits how fast to gets to the real stick value the user has input.
   for more fine control we need to add acceleration limiters on the drive subsystem side of things.*/
 
-  public static final double JOYSTICK_X_SLEW_POS = 2.0;
-  public static final double JOYSTICK_Y_SLEW_POS = 2.0;
-  public static final double JOYSTICK_X_SLEW_NEG = -2.0;
-  public static final double JOYSTICK_Y_SLEW_NEG = -2.0;
+  public static final double JOYSTICK_X_SLEW_POS = 4.0;
+  public static final double JOYSTICK_Y_SLEW_POS = 4.0;
+  public static final double JOYSTICK_X_SLEW_NEG = -4.0;  
+  public static final double JOYSTICK_Y_SLEW_NEG = -4.0;
 
   //Camera Offset Constants in inches from the center of the robot.
   public static final double CAMERA_X_OFFSET = 5.0; //in inches
@@ -84,7 +84,7 @@ public final class Constants {
   public static final double SHOOTER_OUTTAKE_SPEED = -0.7;
 
   // Intake Roller
-  public static final double INTAKE_ROLLER_SPEED = -1.0;
+  public static final double INTAKE_ROLLER_SPEED = -1.5;
   public static final double INTAKE_ROLLER_OUTTAKE_SPEED = -1.0;
 
   //Climber
@@ -94,7 +94,7 @@ public final class Constants {
 
   // Shooter need to move the shooter number into this constants file.
   public static final double SHOOTER_P = 0.0;
-  public static final double FIXED_SHOOT_SPEED = 4600;
+  public static final double FIXED_SHOOT_SPEED = 3200;
   public static final double PEW_PEW_TIME = 2.0;
   public static final double INTAKE_DOWNIES_TIME = 0.5;
 

@@ -117,7 +117,7 @@ public class RobotContainer {
     m_conveyor.setDefaultCommand(m_conveyor.stop());
     m_ShooterIntake.setDefaultCommand(m_ShooterIntake.stop());
     m_shooter.setDefaultCommand(new ShootStop(m_shooter));
-    //m_ClimberSubsystem.setDefaultCommand(m_ClimberSubsystem.idle());
+    m_ClimberSubsystem.setDefaultCommand(m_ClimberSubsystem.stop());
 
     configureBindings();// no buttons here they go later
 
@@ -159,7 +159,7 @@ public class RobotContainer {
       
 //Climber Subsystem
       OperatorController.button(Button.kA.value).whileTrue(m_ClimberSubsystem.up(Constants.CLIMBER_SPEED));
-      OperatorController.button(Button.kB.value).whileTrue(m_ClimberSubsystem.down(Constants.CLIMBER_SPEED));
+      OperatorController.button(Button.kY.value).whileTrue(m_ClimberSubsystem.down(Constants.CLIMBER_SPEED));
 
   }
 
