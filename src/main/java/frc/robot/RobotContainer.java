@@ -155,8 +155,9 @@ public class RobotContainer {
 
 // Intake Rollers
     OperatorController.axisGreaterThan(2, 0.5).whileTrue(m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
+    OperatorController.button(Button.kLeftBumper.value).whileTrue(m_rollerMotor.out(Constants.INTAKE_ROLLER_OUTTAKE_SPEED));
 
-      
+  
 //Climber Subsystem
       OperatorController.button(Button.kA.value).whileTrue(m_ClimberSubsystem.up(Constants.CLIMBER_SPEED));
       OperatorController.button(Button.kY.value).whileTrue(m_ClimberSubsystem.down(Constants.CLIMBER_SPEED));
@@ -185,7 +186,7 @@ public class RobotContainer {
       return Math.toDegrees(Math.atan(driveController.getRightX()/driveController.getRightY()));
     }
 
-    public Command getAutonomousCommand() {
+  public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     return new PathPlannerAuto(chooserFirst.getSelected());
   }
