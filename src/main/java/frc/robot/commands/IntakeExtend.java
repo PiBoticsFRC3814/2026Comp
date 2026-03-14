@@ -49,7 +49,7 @@ public class IntakeExtend extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (timeguy.get() > Constants.INTAKE_DOWNIES_TIME) {
+    if (timeguy.get() > Constants.INTAKE_DOWN_TIME) {
       m_IntakeMovement.STOP();
       return true;
     } else{

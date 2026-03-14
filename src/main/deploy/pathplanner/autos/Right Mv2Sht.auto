@@ -7,19 +7,19 @@
         {
           "type": "named",
           "data": {
-            "name": "IntakeDownies"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "FullShoot"
+            "name": "IntakeDown"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ShootCenter"
+            "pathName": "Right Mv2Sht"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DumbShoot"
           }
         }
       ]

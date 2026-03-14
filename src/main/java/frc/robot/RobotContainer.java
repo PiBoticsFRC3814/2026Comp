@@ -8,7 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DashboardShootRPM;
 import frc.robot.commands.FixedShootRPM;
 import frc.robot.commands.FullShoot;
-import frc.robot.commands.FullShootAuton;
+import frc.robot.commands.DumbShootAuton;
 import frc.robot.commands.IntakeExtend;
 import frc.robot.commands.ShootSetRPM;
 import frc.robot.commands.ShootStop;
@@ -24,6 +24,7 @@ import swervelib.SwerveInputStream;
 import static edu.wpi.first.units.Units.Meters;
 
 import java.io.File;
+import java.text.ChoiceFormat;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.fasterxml.jackson.databind.util.Named;
@@ -45,7 +46,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.FullShootAuton;
+import frc.robot.commands.DumbShootAuton;
 
 
 /**
@@ -122,11 +123,14 @@ public class RobotContainer {
     configureBindings();// no buttons here they go later
 
     NamedCommands.registerCommand("IntakeDown",m_intake.extend(Constants.INTAKE_EXTEND_SPEED));
-    NamedCommands.registerCommand("FullShoot", new FullShootAuton(m_shooter, m_conveyor, m_ShooterIntake,drivebase));
+    NamedCommands.registerCommand("DumbShoot", new DumbShootAuton(m_shooter, m_conveyor, m_ShooterIntake));
     NamedCommands.registerCommand("IntakeRun", m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
-    NamedCommands.registerCommand("IntakeDownies", new IntakeExtend(m_intake));
+    NamedCommands.registerCommand("IntakeDown", new IntakeExtend(m_intake));
 
-    chooserFirst.setDefaultOption("Test", "New Auto");
+    chooserFirst.setDefaultOption("CenterShoot", "Center Bck2Sht");
+    chooserFirst.addOption("LeftShoot", "Left Mv2Sht");
+    chooserFirst.addOption("RightShoot","Right Mv2Sht");
+
   }
  
   

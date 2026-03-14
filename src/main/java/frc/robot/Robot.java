@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
     SmartDashboard.putData("Auton", m_robotContainer.chooserFirst);
     DriverStation.silenceJoystickConnectionWarning(true);
-    CameraServer.startAutomaticCapture();
+   // CameraServer.startAutomaticCapture();
   }
 
   /**

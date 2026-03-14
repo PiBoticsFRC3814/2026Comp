@@ -80,7 +80,7 @@ public class SwerveSubsystem extends SubsystemBase
   Pose2d                         targetData;
   double                         targetDistance = 0.0;
   public double                  shareTargetDistance = 0.0;
-  
+  Pose2d startingPose;
   
 
   /**
@@ -91,7 +91,7 @@ public class SwerveSubsystem extends SubsystemBase
   public SwerveSubsystem(File modules)
   { 
     boolean blueAlliance = !isRedAlliance();
-    Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
+    startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
                                                                       Meter.of(4)),
                                                     Rotation2d.fromDegrees(0))
                                        : new Pose2d(new Translation2d(Meter.of(16),
@@ -313,6 +313,13 @@ public void updateVisonOdometry()
         visionStdDevs
       );      
     });
+  }
+
+  public void setStartingPosition(double[] posArray){
+    startingPose = new Pose2d(new Translation2d(Meter.of(posArray[0]),
+                                                Meter.of(posArray[1])),
+                                                Rotation2d.fromDegrees(posArray[2]));
+    swerveDrive.resetOdometry(startingPose);
   }
 
   public double getTargetDistance(){
