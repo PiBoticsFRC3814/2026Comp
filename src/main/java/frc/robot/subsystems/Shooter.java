@@ -67,7 +67,7 @@ public class Shooter extends SubsystemBase {
    */
   public void setDesiredVelocity() {
     // limelight distance checks here
-    Distance = drive.shareTargetDistance;  
+    Distance = SmartDashboard.getNumber("Target Distance", 0.0);  
     //may want to change how this is currently done right now i am allways getting the distance to target in the periodic of the swerve system even if we dont need it
     //it might be less intrusive on the code times to instead call the getTargetDistance() here instead of allwyas sicne we may only need it when trying to shoot.
     //not sure what option is better since it may be better to allways gettarget distances since we want the driverstationto contiuosly update the humans with "in range" information.

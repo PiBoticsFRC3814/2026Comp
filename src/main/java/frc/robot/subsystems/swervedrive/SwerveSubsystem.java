@@ -79,7 +79,7 @@ public class SwerveSubsystem extends SubsystemBase
   SlewRateLimiter                angularLimiter;
   Pose2d                         targetData;
   double                         targetDistance = 0.0;
-  public double                  shareTargetDistance = 0.0;
+  double                         shareTargetDistance = 0.0;
   Pose2d startingPose;
   
 
@@ -243,9 +243,9 @@ public void periodic()
 
   shareTargetDistance = getTargetDistance();
 
-  SmartDashboard.putNumber("X Measure",swerveDrive.getPose().getMeasureX().in(Meter));
-  SmartDashboard.putNumber("Y Measure",swerveDrive.getPose().getMeasureY().in(Meter));
-  SmartDashboard.putNumber("Angle Measure",swerveDrive.getPose().getRotation().getDegrees());
+  //SmartDashboard.putNumber("X Measure",swerveDrive.getPose().getMeasureX().in(Meter));
+  //SmartDashboard.putNumber("Y Measure",swerveDrive.getPose().getMeasureY().in(Meter));
+  //SmartDashboard.putNumber("Angle Measure",swerveDrive.getPose().getRotation().getDegrees());
   SmartDashboard.putNumber("Target Distance", shareTargetDistance);
   SmartDashboard.putBoolean("Good Shot", getGoodShot());
    
