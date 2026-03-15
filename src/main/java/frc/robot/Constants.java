@@ -103,10 +103,11 @@ public final class Constants {
 
 
   // Shooter need to move the shooter number into this constants file.
-  public static final double SHOOTER_P = 0.0;
   public static final double FIXED_SHOOT_SPEED = 3200;
-  public static final double PEW_PEW_TIME = 4.0;
-  public static final double INTAKE_DOWN_TIME = 2.0;
+  public static final double PEW_PEW_TIME = 4.0; //auto time to shoot
+  public static final double INTAKE_DOWN_TIME = 2.0; //auto timee to lower intake
+  public static final double STALE_TARGET_DISTANCE_COUNTER = 100;
+  public static final double DISTANCE_PERCENT_DIFFERENCE_TOLERANCE = 25;
 
 
   
@@ -119,14 +120,12 @@ public final class Constants {
 
   public static final class DrivebaseConstants
   {
-
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
   }
 
   public static class OperatorConstants
   {
-
     // Joystick Deadband
     public static final double DEADBAND        = 0.1;
     public static final double LEFT_Y_DEADBAND = 0.5;
