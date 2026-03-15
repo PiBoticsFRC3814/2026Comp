@@ -5,21 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "IntakeDownies"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "FullShoot"
+            "pathName": "CenterBck2Sht"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "ShootCenter"
+            "pathName": "Center Intake Depot"
           }
         }
       ]

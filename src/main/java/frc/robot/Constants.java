@@ -36,6 +36,16 @@ public final class Constants {
   public static final double DRIVE_ACCEL_LIMIT = Units.feetToMeters(0.1); //look into acceleration limits to limit acceleration and deceleration values on the motor side in adition to slew n the controller side.
   public static final double ANGLE_ACCEL_LIMIT = Units.degreesToRadians(0.1);
 
+  //Robot Starting Positions
+  public static final double[] ROBOT_BLUE_LEFT_START = {1,4,0};
+  public static final double[] ROBOT_BLUE_RIGHT_START = {1,4,0};
+  public static final double[] ROBOT_BLUE_CENTER_START = {3.527,4.024,0};
+
+  public static final double[] ROBOT_RED_LEFT_START = {16,4,180};
+  public static final double[] ROBOT_RED_RIGHT_START = {16,4,180};
+  public static final double[] ROBOT_RED_CENTER_START = {16,4,180};
+
+
   /*Joystick Slew Rate Contsants  
   Note consideration may be needed on alternate slew rates for different "max speeds"
   Note that right now joystick slew effects the joystick inputs NOT the motor outputs.  this means that the slew deos not effect acceleration/deceleration directly
@@ -84,7 +94,7 @@ public final class Constants {
   public static final double SHOOTER_OUTTAKE_SPEED = -0.7;
 
   // Intake Roller
-  public static final double INTAKE_ROLLER_SPEED = -1.5;
+  public static final double INTAKE_ROLLER_SPEED = -1.0;
   public static final double INTAKE_ROLLER_OUTTAKE_SPEED = -1.0;
 
   //Climber
@@ -95,8 +105,8 @@ public final class Constants {
   // Shooter need to move the shooter number into this constants file.
   public static final double SHOOTER_P = 0.0;
   public static final double FIXED_SHOOT_SPEED = 3200;
-  public static final double PEW_PEW_TIME = 2.0;
-  public static final double INTAKE_DOWNIES_TIME = 0.5;
+  public static final double PEW_PEW_TIME = 4.0;
+  public static final double INTAKE_DOWN_TIME = 2.0;
 
 
   

@@ -79,8 +79,8 @@ public class SwerveSubsystem extends SubsystemBase
   SlewRateLimiter                angularLimiter;
   Pose2d                         targetData;
   double                         targetDistance = 0.0;
-  public double                  shareTargetDistance = 0.0;
-  
+  double                         shareTargetDistance = 0.0;
+  Pose2d startingPose;
   
 
   /**
@@ -91,13 +91,15 @@ public class SwerveSubsystem extends SubsystemBase
   public SwerveSubsystem(File modules)
   { 
     boolean blueAlliance = !isRedAlliance();
-    Pose2d startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
+    startingPose = blueAlliance ? new Pose2d(new Translation2d(Meter.of(1),
                                                                       Meter.of(4)),
                                                     Rotation2d.fromDegrees(0))
                                        : new Pose2d(new Translation2d(Meter.of(16),
                                                                       Meter.of(4)),
                                                     Rotation2d.fromDegrees(180));
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
+  
+
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH;
     try
     {
@@ -235,15 +237,15 @@ public void periodic()
 													                       DegreesPerSecond.of(0.0),
 													                       DegreesPerSecond.of(swerveDrive.getGyro().getYawAngularVelocity().in(DegreesPerSecond)))));
 
-  updateVisonOdometry();
+  //updateVisonOdometry();
   
   swerveDrive.updateOdometry();
 
   shareTargetDistance = getTargetDistance();
 
-  SmartDashboard.putNumber("X Measure",swerveDrive.getPose().getMeasureX().in(Meter));
-  SmartDashboard.putNumber("Y Measure",swerveDrive.getPose().getMeasureY().in(Meter));
-  SmartDashboard.putNumber("Angle Measure",swerveDrive.getPose().getRotation().getDegrees());
+  //SmartDashboard.putNumber("X Measure",swerveDrive.getPose().getMeasureX().in(Meter));
+  //SmartDashboard.putNumber("Y Measure",swerveDrive.getPose().getMeasureY().in(Meter));
+  //SmartDashboard.putNumber("Angle Measure",swerveDrive.getPose().getRotation().getDegrees());
   SmartDashboard.putNumber("Target Distance", shareTargetDistance);
   SmartDashboard.putBoolean("Good Shot", getGoodShot());
    
@@ -313,6 +315,13 @@ public void updateVisonOdometry()
       System.out.println("AddVisionMesurement");
 
     });
+  }
+
+  public void setStartingPosition(double[] posArray){
+    startingPose = new Pose2d(new Translation2d(Meter.of(posArray[0]),
+                                                Meter.of(posArray[1])),
+                                                Rotation2d.fromDegrees(posArray[2]));
+    swerveDrive.resetOdometry(startingPose);
   }
 
   public double getTargetDistance(){

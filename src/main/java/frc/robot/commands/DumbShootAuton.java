@@ -10,15 +10,13 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterIntakeSubsystem;
-import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import edu.wpi.first.wpilibj.Timer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class FullShootAuton extends Command {
+public class DumbShootAuton extends Command {
   Shooter m_shooter;
   Conveyor m_conveyor;
   ShooterIntakeSubsystem m_shooterintake;
-  SwerveSubsystem m_SwerveSubsystem;
 
   public double speed;
   public double actualSpeed;
@@ -27,19 +25,18 @@ public class FullShootAuton extends Command {
   private Timer timeguy = new Timer();
 
   /** Creates a new FullShoot. */
-public FullShootAuton(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shooterintake, SwerveSubsystem swervesubsystem) {
+public DumbShootAuton(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shooterintake) {
     m_shooter = shooter;
     m_conveyor = conveyor;
     m_shooterintake = shooterintake;
-    m_SwerveSubsystem = swervesubsystem;
 
-     addRequirements(shooter, conveyor, shooterintake, swervesubsystem);
+     addRequirements(shooter, conveyor, shooterintake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      speed = SmartDashboard.getNumber("setRPM", 0.0);
+      speed = Constants.FIXED_SHOOT_SPEED;
       actualSpeed = 0.0; 
       timeguy.reset();
       timeguy.start();
@@ -56,7 +53,7 @@ public FullShootAuton(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem
     m_shooter.shootSpeed(speed);
     m_shooter.driveInhibit();
     actualSpeed = m_shooter.getShootSpeed();
-    if (actualSpeed*0.95 >= speed || actualSpeed*1.05 <= speed){
+    if (actualSpeed*0.97 >= speed || actualSpeed*1.03 <= speed){
       m_conveyor.STOP();
       m_shooterintake.STOP();
     }
