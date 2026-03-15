@@ -107,6 +107,7 @@ public final class Constants {
   public static final double FIXED_SHOOT_SPEED = 3200;
   public static final double PEW_PEW_TIME = 4.0;
   public static final double INTAKE_DOWN_TIME = 2.0;
+public static final double INTAKE_RUN_AUTO_TIME = 3.0;
 
 
   

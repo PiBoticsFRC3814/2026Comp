@@ -10,6 +10,7 @@ import frc.robot.commands.FixedShootRPM;
 import frc.robot.commands.FullShoot;
 import frc.robot.commands.DumbShootAuton;
 import frc.robot.commands.IntakeExtend;
+import frc.robot.commands.IntakeRunAuto;
 import frc.robot.commands.ShootSetRPM;
 import frc.robot.commands.ShootStop;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -122,10 +123,9 @@ public class RobotContainer {
 
     configureBindings();// no buttons here they go later
 
-    NamedCommands.registerCommand("IntakeDown",m_intake.extend(Constants.INTAKE_EXTEND_SPEED));
     NamedCommands.registerCommand("DumbShoot", new DumbShootAuton(m_shooter, m_conveyor, m_ShooterIntake));
-    NamedCommands.registerCommand("IntakeRun", m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
     NamedCommands.registerCommand("IntakeDown", new IntakeExtend(m_intake));
+    NamedCommands.registerCommand("IntakeRun", new IntakeRunAuto(m_rollerMotor));
 
     chooserFirst.setDefaultOption("CenterShoot", "Center Bck2Sht");
     chooserFirst.addOption("LeftShoot", "Left Mv2Sht");
