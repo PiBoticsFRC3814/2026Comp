@@ -108,6 +108,8 @@ public final class Constants {
   public static final double INTAKE_DOWN_TIME = 2.0; //auto timee to lower intake
   public static final double STALE_TARGET_DISTANCE_COUNTER = 100;
   public static final double DISTANCE_PERCENT_DIFFERENCE_TOLERANCE = 25;
+  public static final double INTAKE_RUN_AUTO_TIME = 3.0;
+
 
 
   

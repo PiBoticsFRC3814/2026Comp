@@ -312,6 +312,8 @@ public void updateVisonOdometry()
         timeStamp,
         visionStdDevs
       );      
+      System.out.println("AddVisionMesurement");
+
     });
   }
 
@@ -338,6 +340,8 @@ public void updateVisonOdometry()
     }
     targetData = limelight.getData().targetData.getRobotToTarget().toPose2d();
     targetDistance = Math.sqrt(Math.pow(targetData.getMeasureX().in(Meter),2) + Math.pow(targetData.getMeasureY().in(Meter),2));
+    System.out.println("GetTargetDistance");
+
     return targetDistance;
   }
 
