@@ -9,6 +9,7 @@ import frc.robot.commands.DashboardShootRPM;
 import frc.robot.commands.FixedShootRPM;
 import frc.robot.commands.FullShoot;
 import frc.robot.commands.DumbShootAuton;
+import frc.robot.commands.Feeding;
 import frc.robot.commands.IntakeExtend;
 import frc.robot.commands.IntakeRunAuto;
 import frc.robot.commands.ShootSetRPM;
@@ -147,7 +148,7 @@ public class RobotContainer {
     drivebase.setDefaultCommand(driveFieldOrientedDirectAngle);
     
 // Shooter
-    OperatorController.axisGreaterThan(3, 0.5).whileTrue(new FullShoot(m_shooter,m_conveyor,m_ShooterIntake,drivebase));
+    OperatorController.axisGreaterThan(3, 0.5).whileTrue(new Feeding(m_shooter,m_conveyor,m_ShooterIntake));
     OperatorController.button(Button.kB.value).whileTrue(new ShootSetRPM(m_shooter,m_conveyor,m_ShooterIntake));
     //OperatorController.axisLessThan(Axis.kRightTrigger.value, 0.5).whileTrue(new ShootStop(m_shooter));
 
