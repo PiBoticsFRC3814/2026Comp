@@ -16,26 +16,26 @@ public class IntakeRollerSubsystem extends SubsystemBase
 {
   public static final double kWristMomentOfInertia = 0.00032; // kg * m^2
 
-  private final TalonSRX m_rollerMotor = new TalonSRX(40);
+  private final TalonSRX m_IntakeRollers = new TalonSRX(40);
 
   //private final DCMotor m_rollerMotorGearbox = DCMotor.getVex775Pro(1);
 
   public IntakeRollerSubsystem()
   {
     // Reset the Talon SRX to factory defaults and set neutral (idle) mode to Coast.
-    m_rollerMotor.configFactoryDefault();
-    m_rollerMotor.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
-    m_rollerMotor.setInverted(false);
-    m_rollerMotor.enableCurrentLimit(true);
-    m_rollerMotor.configContinuousCurrentLimit(30);
-    m_rollerMotor.configPeakCurrentLimit(30);
+    m_IntakeRollers.configFactoryDefault();
+    m_IntakeRollers.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
+    m_IntakeRollers.setInverted(false);
+    m_IntakeRollers.enableCurrentLimit(true);
+    m_IntakeRollers.configContinuousCurrentLimit(30);
+    m_IntakeRollers.configPeakCurrentLimit(30);
     // Optionally configure current limits or inversion here as needed.
   }
 
   public Command setIntakeRoller(double speed)
   {
     return run(() -> {
-      m_rollerMotor.set(ControlMode.PercentOutput, speed);
+      m_IntakeRollers.set(ControlMode.PercentOutput, speed);
     });
   }
 
@@ -55,7 +55,7 @@ public class IntakeRollerSubsystem extends SubsystemBase
 
   public Voltage getVoltage()
   {
-    return Volts.of(m_rollerMotor.getMotorOutputPercent());
+    return Volts.of(m_IntakeRollers.getMotorOutputPercent());
   }
 
   public boolean outtaking()
@@ -67,18 +67,18 @@ public class IntakeRollerSubsystem extends SubsystemBase
 
   public double getDutycycle()
   {
-    return m_rollerMotor.getMotorOutputPercent();
+    return m_IntakeRollers.getMotorOutputPercent();
   }
 
   public void intake(double speed){
-    m_rollerMotor.set(ControlMode.PercentOutput, speed);
+    m_IntakeRollers.set(ControlMode.PercentOutput, speed);
   }
 
   public void outake(double speed){
-    m_rollerMotor.set(ControlMode.PercentOutput, -speed);
+    m_IntakeRollers.set(ControlMode.PercentOutput, -speed);
   }
 
   public void STOP(){
-    m_rollerMotor.set(ControlMode.PercentOutput, 0);
+    m_IntakeRollers.set(ControlMode.PercentOutput, 0);
   }
 }

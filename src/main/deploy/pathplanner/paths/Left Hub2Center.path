@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 7.483204819277108,
-        "y": 5.969204819277109
+        "x": 8.0,
+        "y": 5.5
       },
       "prevControl": {
-        "x": 6.313939759036145,
-        "y": 7.652072289156626
+        "x": 6.8307349397590365,
+        "y": 7.182867469879517
       },
       "nextControl": null,
       "isLocked": false,
@@ -73,8 +73,8 @@
   "eventMarkers": [
     {
       "name": "IntakeRun",
-      "waypointRelativePos": 1.8,
-      "endWaypointRelativePos": 1.0,
+      "waypointRelativePos": 1.5,
+      "endWaypointRelativePos": 2.0,
       "command": {
         "type": "named",
         "data": {

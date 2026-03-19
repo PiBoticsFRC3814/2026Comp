@@ -103,14 +103,13 @@ public final class Constants {
 
 
   // Shooter need to move the shooter number into this constants file.
-  public static final double SHOOTER_P = 0.0;
   public static final double FIXED_SHOOT_SPEED = 3200;
-  public static final double PEW_PEW_TIME = 4.0;
-  public static final double INTAKE_DOWN_TIME = 2.0;
-
-public static final double INTAKE_RUN_AUTO_TIME = 3.0;
-public static final double DISTANCE_PERCENT_DIFFERENCE_TOLERANCE = 0;
-public static final double FIXED_FEEDING_SPEED = 4000;
+  public static final double PEW_PEW_TIME = 4.0; //auto time to shoot
+  public static final double INTAKE_DOWN_TIME = 2.0; //auto time to lower intake
+  public static final double STALE_TARGET_DISTANCE_COUNTER = 100;
+  public static final double DISTANCE_PERCENT_DIFFERENCE_TOLERANCE = 25;
+  public static final double INTAKE_RUN_AUTO_TIME = 3.0;
+  public static final double FIXED_FEEDING_SPEED = 0;
 
 
 

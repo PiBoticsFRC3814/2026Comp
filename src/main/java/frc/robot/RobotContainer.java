@@ -60,7 +60,7 @@ import frc.robot.commands.DumbShootAuton;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public final IntakeMovement m_intake = new IntakeMovement();
-  public final IntakeRollerSubsystem m_rollerMotor = new IntakeRollerSubsystem();
+  public final IntakeRollerSubsystem m_IntakeRollers = new IntakeRollerSubsystem();
   public final Conveyor m_conveyor = new Conveyor();
   public final ShooterIntakeSubsystem m_ShooterIntake = new ShooterIntakeSubsystem();
   public final ClimberSubsystem m_ClimberSubsystem = new ClimberSubsystem();
@@ -116,7 +116,7 @@ public class RobotContainer {
     //Set the default command to force the stuff to stop. --- these appear to be preventing the button commands from running?
     //m_shooter.setDefaultCommand(m_shooter.STOP());
     m_intake.setDefaultCommand(m_intake.stop());
-    m_rollerMotor.setDefaultCommand(m_rollerMotor.stop());
+    m_IntakeRollers.setDefaultCommand(m_IntakeRollers.stop());
     m_conveyor.setDefaultCommand(m_conveyor.stop());
     m_ShooterIntake.setDefaultCommand(m_ShooterIntake.stop());
     m_shooter.setDefaultCommand(new ShootStop(m_shooter));
@@ -126,7 +126,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("DumbShoot", new DumbShootAuton(m_shooter, m_conveyor, m_ShooterIntake));
     NamedCommands.registerCommand("IntakeDown", new IntakeExtend(m_intake));
-    NamedCommands.registerCommand("IntakeRun", new IntakeRunAuto(m_rollerMotor));
+    NamedCommands.registerCommand("IntakeRun", new IntakeRunAuto(m_IntakeRollers));
 
     chooserFirst.setDefaultOption("CenterShoot", "Center Bck2Sht");
     chooserFirst.addOption("LeftShoot", "Left Mv2Sht");
@@ -166,8 +166,8 @@ public class RobotContainer {
     OperatorController.axisGreaterThan(Axis.kLeftY.value, 0.5).whileTrue(m_intake.retract(Constants.INTAKE_RETRACT_SPEED));
 
 // Intake Rollers
-    OperatorController.axisGreaterThan(2, 0.5).whileTrue(m_rollerMotor.in(Constants.INTAKE_ROLLER_SPEED));
-    OperatorController.button(Button.kLeftBumper.value).whileTrue(m_rollerMotor.out(Constants.INTAKE_ROLLER_OUTTAKE_SPEED));
+    OperatorController.axisGreaterThan(2, 0.5).whileTrue(m_IntakeRollers.in(Constants.INTAKE_ROLLER_SPEED));
+    OperatorController.button(Button.kLeftBumper.value).whileTrue(m_IntakeRollers.out(Constants.INTAKE_ROLLER_OUTTAKE_SPEED));
 
   
 //Climber Subsystem

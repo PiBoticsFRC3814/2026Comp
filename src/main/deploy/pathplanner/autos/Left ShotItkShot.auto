@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "DumbShoot"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Left Hub2Depot"
