@@ -20,12 +20,16 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 
 public class Shooter extends SubsystemBase {
 
-  private double Distance = 0.0;
+  private double distance = 0.0;
+  private double prevDist = 0.0;
+  private int staleDistCounter = 0;
   private double shootSpeed = 0.0;
+  private boolean garbageDist = false;
   private ChassisSpeeds driveInhib = new ChassisSpeeds(0,0,0);
   
   private SparkMax spark = new SparkMax(44, MotorType.kBrushless);
@@ -67,13 +71,22 @@ public class Shooter extends SubsystemBase {
    */
   public void setDesiredVelocity() {
     // limelight distance checks here
-    Distance = SmartDashboard.getNumber("Target Distance", 0.0);  
-    //may want to change how this is currently done right now i am allways getting the distance to target in the periodic of the swerve system even if we dont need it
-    //it might be less intrusive on the code times to instead call the getTargetDistance() here instead of allwyas sicne we may only need it when trying to shoot.
-    //not sure what option is better since it may be better to allways gettarget distances since we want the driverstationto contiuosly update the humans with "in range" information.
-
+    distance = SmartDashboard.getNumber("Target Distance", 0.0);
+    //changed how we are getting distance.  used network tables instead since that will allow us to not need the drive in order to shoot good
+    if (prevDist == 0.0){
+      prevDist = distance; //if there was no previous distance then fill it in with the current distance
+    }
+    if (Math.abs(((distance - prevDist)/prevDist)*100) < Constants.DISTANCE_PERCENT_DIFFERENCE_TOLERANCE){
+      prevDist = distance; // update previous distance difference is resonable
+      staleDistCounter -= 1;
+      if (staleDistCounter < 0){
+        staleDistCounter = 0;
+      }
+    } else if (Math.abs(((distance - prevDist)/prevDist)*100) >= Constants.DISTANCE_PERCENT_DIFFERENCE_TOLERANCE){
+      staleDistCounter += 1; // if difference is not resonable increase stale data counteer and do not update the distance the shooter uses to calculate the RPM
+    }
     //add math stuff for distance to rpm needs.
-    shootSpeed = Distance*1; //math is fun  Distance would be the "X" in the f(x) function that we come up with through testing.
+    shootSpeed = prevDist*1; //math is fun  prevDist would be the "X" in the f(x) function that we come up with through testing.
 
     motorController.setSetpoint(shootSpeed, ControlType.kVelocity); //make moter go the speed wee calculated it to go
   }

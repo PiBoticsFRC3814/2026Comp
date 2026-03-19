@@ -7,13 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "CenterBck2Sht"
+            "pathName": "Right Mv2Sht"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Center Intake Depot"
+            "pathName": "Right Hub2Depot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Depot2Hub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DumbShoot"
           }
         }
       ]

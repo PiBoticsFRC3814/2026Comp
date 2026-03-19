@@ -131,6 +131,13 @@ public class RobotContainer {
     chooserFirst.setDefaultOption("CenterShoot", "Center Bck2Sht");
     chooserFirst.addOption("LeftShoot", "Left Mv2Sht");
     chooserFirst.addOption("RightShoot","Right Mv2Sht");
+    chooserFirst.addOption("CenterShootIntakeDepot", "Center ShotItkShot");
+    chooserFirst.addOption("RightShootIntakeDepot", "Right ShotItkShot");
+    chooserFirst.addOption("LeftShootIntakeDepot", "Left ShotItkShot");
+    chooserFirst.addOption("CenterShootIntakeCenterLft", "Center CntrPckpL");
+    chooserFirst.addOption("CenterShootIntakeCenterRght", "Center CntrPckpR");
+    chooserFirst.addOption("RightShootIntakeCenter", "Right CntrPckp");
+    chooserFirst.addOption("LeftShootIntakeCenter", "Left CntrPckp");
 
   }
  

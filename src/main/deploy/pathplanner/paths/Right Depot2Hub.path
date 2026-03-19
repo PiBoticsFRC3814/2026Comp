@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.527,
-        "y": 4.024072289156626
+        "x": 0.828,
+        "y": 5.904
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.254180722891566,
-        "y": 4.035
+        "x": 1.7352289156626508,
+        "y": 5.018493975903613
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.3362530120481932,
-        "y": 4.024072289156626
+        "x": 2.565734939759036,
+        "y": 3.947578313253013
       },
       "prevControl": {
-        "x": 2.7624337349397594,
-        "y": 4.035
+        "x": 1.713373493975904,
+        "y": 5.029421686746988
       },
       "nextControl": null,
       "isLocked": false,
@@ -35,29 +35,17 @@
       "minWaypointRelativePos": 0,
       "maxWaypointRelativePos": 1.0,
       "constraints": {
-        "maxVelocity": 1.5,
-        "maxAcceleration": 0.5,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
+        "maxVelocity": 1.0,
+        "maxAcceleration": 1.0,
+        "maxAngularVelocity": 180.0,
+        "maxAngularAcceleration": 0.1,
         "nominalVoltage": 12.0,
         "unlimited": false
       }
     }
   ],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "IntakeDown",
-      "waypointRelativePos": 0.1,
-      "endWaypointRelativePos": 0.7492805755395691,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "IntakeDown"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -68,13 +56,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 1.0912162252625668
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 176.8011436137674
   },
   "useDefaultConstraints": true
 }
