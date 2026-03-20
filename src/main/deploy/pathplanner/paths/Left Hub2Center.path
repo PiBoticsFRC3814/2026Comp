@@ -59,8 +59,8 @@
   "eventMarkers": [
     {
       "name": "IntakeRun",
-      "waypointRelativePos": 1.8,
-      "endWaypointRelativePos": 1.0,
+      "waypointRelativePos": 1.9839572192513388,
+      "endWaypointRelativePos": 0.0,
       "command": {
         "type": "named",
         "data": {

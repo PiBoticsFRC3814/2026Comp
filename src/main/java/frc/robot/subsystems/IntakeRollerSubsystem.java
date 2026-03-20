@@ -27,8 +27,8 @@ public class IntakeRollerSubsystem extends SubsystemBase
     m_IntakeRollers.setNeutralMode(com.ctre.phoenix.motorcontrol.NeutralMode.Coast);
     m_IntakeRollers.setInverted(false);
     m_IntakeRollers.enableCurrentLimit(true);
-    m_IntakeRollers.configContinuousCurrentLimit(30);
-    m_IntakeRollers.configPeakCurrentLimit(30);
+    m_IntakeRollers.configContinuousCurrentLimit(40);
+    m_IntakeRollers.configPeakCurrentLimit(40);
     // Optionally configure current limits or inversion here as needed.
   }
 

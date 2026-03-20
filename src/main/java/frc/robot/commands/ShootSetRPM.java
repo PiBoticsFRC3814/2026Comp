@@ -45,7 +45,7 @@ public ShootSetRPM(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem sh
     System.out.println(speed);
     m_shooter.shootSpeed(speed);
     actualSpeed = m_shooter.getShootSpeed();
-    if (actualSpeed*0.95 >= speed || actualSpeed*1.05 <= speed){
+    if (actualSpeed*0.85 >= speed || actualSpeed*1.15 <= speed){
       m_conveyor.STOP();
       m_shooterintake.STOP();
     }

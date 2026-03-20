@@ -53,7 +53,7 @@ public DumbShootAuton(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem
     m_shooter.shootSpeed(speed);
     m_shooter.driveInhibit();
     actualSpeed = m_shooter.getShootSpeed();
-    if (actualSpeed*0.97 >= speed || actualSpeed*1.03 <= speed){
+    if (actualSpeed*0.92 >= speed || actualSpeed*1.08 <= speed){
       m_conveyor.STOP();
       m_shooterintake.STOP();
     }
