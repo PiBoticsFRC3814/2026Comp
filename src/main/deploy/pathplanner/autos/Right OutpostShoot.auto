@@ -19,13 +19,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Hub2Center"
+            "pathName": "Right Hub2Outpost"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Center2Hub"
+            "pathName": "Right Outpost2Hub"
           }
         },
         {

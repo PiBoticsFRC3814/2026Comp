@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Mv2Sht"
+            "pathName": "Left Mv2Sht"
           }
         },
         {
@@ -19,13 +19,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Hub2Center"
+            "pathName": "Left Hub2Outpost"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Center2Hub"
+            "pathName": "Left Outpost2Hub"
           }
         },
         {
@@ -38,6 +44,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Right",
+  "folder": "Left",
   "choreoAuto": false
 }

@@ -47,7 +47,7 @@ public class AutoShoot extends Command {
   public void execute() {
     m_shooter.setDesiredVelocity();
     desiredSpeed = m_shooter.getDesiredVelocity();
-    if (shooterSpeed <= desiredSpeed-(desiredSpeed*0.1) || shooterSpeed >= desiredSpeed+(desiredSpeed*0.1)){
+    if (shooterSpeed <= desiredSpeed-(desiredSpeed*0.95) || shooterSpeed >= desiredSpeed+(desiredSpeed*1.05)){
       m_shooterIntake.stop();
       m_conveyor.stop();
     }else{

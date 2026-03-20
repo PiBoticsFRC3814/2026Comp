@@ -11,12 +11,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "DumbShoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Left Hub2Depot"
@@ -38,6 +32,6 @@
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Left",
   "choreoAuto": false
 }
