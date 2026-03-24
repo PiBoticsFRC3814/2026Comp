@@ -49,17 +49,17 @@ public class Shooter extends SubsystemBase {
           .inverted(false)
           .voltageCompensation(12.0)
           ;
-    config.closedLoop//.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                     .p(4.5e-4)
-                     .i(0.0001)
-                     .d(1.5e-4)
-                     .iZone(0.1)
-                     .outputRange(0, 1)
-                     .feedForward.kS(1.0)
-                                 .kV(0.0021)
-                                 .kA(0)//velocity control does not use this acceleration term according to REV docs.  MAXMotion Velocity control does.  probably can just use normal velocity control since theis is not a complex mechanism
-                                 ;
-    config.encoder.velocityConversionFactor(1); //this will allow us to set the speed of the flywheel directly instead of the motor rpm (right now gear is 1:1 so really no difference)
+    // config.closedLoop//.feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+    //                  .p(4.5e-4)
+    //                  .i(0.0001)
+    //                  .d(1.5e-4)
+    //                  .iZone(0.1)
+    //                  .outputRange(0, 1)
+    //                  .feedForward.kS(1.0)
+    //                              .kV(0.0021)
+    //                              .kA(0)//velocity control does not use this acceleration term according to REV docs.  MAXMotion Velocity control does.  probably can just use normal velocity control since theis is not a complex mechanism
+    //                              ;
+    // config.encoder.velocityConversionFactor(1); //this will allow us to set the speed of the flywheel directly instead of the motor rpm (right now gear is 1:1 so really no difference)
     
     spark.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
@@ -99,8 +99,8 @@ public class Shooter extends SubsystemBase {
     drive.drive(driveInhib);
   }
 
-  public void shootSpeed(double speed){
-    motorController.setSetpoint(speed, ControlType.kVelocity);
+  public void shootVolts(double volts){
+    motorController.setSetpoint(volts, ControlType.kVoltage);
   }
 
   public double getShootSpeed(){
@@ -117,11 +117,5 @@ public class Shooter extends SubsystemBase {
   public void STOP(){
     spark.set(0.0);
   }
-
-
-public void setDefaultCommand(Object stop) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setDefaultCommand'");
-}
 
 }

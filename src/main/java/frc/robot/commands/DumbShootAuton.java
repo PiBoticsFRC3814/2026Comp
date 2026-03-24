@@ -18,8 +18,7 @@ public class DumbShootAuton extends Command {
   Conveyor m_conveyor;
   ShooterIntakeSubsystem m_shooterintake;
 
-  public double speed;
-  public double actualSpeed;
+  public double volts;
   public double conveyorspeed = Constants.CONVEYOR_SPEED;
   public double intakespeed = Constants.SHOOTER_INTAKE_SPEED;
   private Timer timeguy = new Timer();
@@ -36,8 +35,7 @@ public DumbShootAuton(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-      speed = Constants.FIXED_SHOOT_SPEED;
-      actualSpeed = 0.0; 
+      volts = Constants.FIXED_SHOOT_VOLTAGE;
       timeguy.reset();
       timeguy.start();
       
@@ -48,19 +46,21 @@ public DumbShootAuton(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    speed = Constants.FIXED_SHOOT_SPEED;
-    System.out.println(speed);
-    m_shooter.shootSpeed(speed);
-    m_shooter.driveInhibit();
-    actualSpeed = m_shooter.getShootSpeed();
-    if (actualSpeed*0.92 >= speed || actualSpeed*1.08 <= speed){
-      m_conveyor.STOP();
-      m_shooterintake.STOP();
-    }
-    else{
-      m_conveyor.intake(conveyorspeed);
-      m_shooterintake.intake(intakespeed);
-    }
+    volts = Constants.FIXED_SHOOT_VOLTAGE;
+    System.out.println(volts);
+    m_shooter.shootVolts(volts);
+    m_conveyor.intake(conveyorspeed);
+    m_shooterintake.intake(intakespeed);
+    //m_shooter.driveInhibit();
+    // actualSpeed = m_shooter.getShootSpeed();
+    // if (actualSpeed*0.92 >= speed || actualSpeed*1.08 <= speed){
+    //   m_conveyor.STOP();
+    //   m_shooterintake.STOP();
+    // }
+    // else{
+    //   m_conveyor.intake(conveyorspeed);
+    //   m_shooterintake.intake(intakespeed);
+    // }
   }
 
   // Called once the command ends or is interrupted.

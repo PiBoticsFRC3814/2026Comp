@@ -5,9 +5,6 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.DashboardShootRPM;
-import frc.robot.commands.FixedShootRPM;
-import frc.robot.commands.FullShoot;
 import frc.robot.commands.DumbShootAuton;
 import frc.robot.commands.Feeding;
 import frc.robot.commands.IntakeExtend;

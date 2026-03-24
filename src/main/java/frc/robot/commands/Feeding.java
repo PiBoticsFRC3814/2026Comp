@@ -17,8 +17,7 @@ public class Feeding extends Command {
   Conveyor m_conveyor;
   ShooterIntakeSubsystem m_shooterintake;
 
-  public double speed = Constants.FIXED_FEEDING_SPEED;
-  public double actualSpeedFeeding;
+  public double volts = Constants.FIXED_SHOOT_VOLTAGE;
   public double conveyorspeed = Constants.CONVEYOR_SPEED;
   public double intakespeed = Constants.SHOOTER_INTAKE_SPEED;
 
@@ -34,7 +33,6 @@ public Feeding(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shoote
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-        actualSpeedFeeding = 0.0; 
 
 
   }
@@ -42,17 +40,20 @@ public Feeding(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shoote
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println(speed);
-    m_shooter.shootSpeed(speed);
-    actualSpeedFeeding = m_shooter.getShootSpeed();
-    if (actualSpeedFeeding*0.95 >= speed || actualSpeedFeeding*1.05 <= speed){
-      m_conveyor.STOP();
-      m_shooterintake.STOP();
-    }
-    else{
-      m_conveyor.intake(conveyorspeed);
-      m_shooterintake.intake(intakespeed);
-    }
+    System.out.println(volts);
+    m_shooter.shootVolts(volts);
+    m_conveyor.intake(conveyorspeed);
+    m_shooterintake.intake(intakespeed);
+
+    // actualSpeedFeeding = m_shooter.getShootSpeed();
+    // if (actualSpeedFeeding*0.95 >= speed || actualSpeedFeeding*1.05 <= speed){
+    //   m_conveyor.STOP();
+    //   m_shooterintake.STOP();
+    // }
+    // else{
+    //   m_conveyor.intake(conveyorspeed);
+    //   m_shooterintake.intake(intakespeed);
+    // }
   }
 
   // Called once the command ends or is interrupted.

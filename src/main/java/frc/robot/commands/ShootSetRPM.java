@@ -17,7 +17,7 @@ public class ShootSetRPM extends Command {
   Conveyor m_conveyor;
   ShooterIntakeSubsystem m_shooterintake;
 
-  public double speed = Constants.FIXED_SHOOT_SPEED;
+  public double volts = Constants.FIXED_SHOOT_VOLTAGE;
   public double actualSpeed;
   public double conveyorspeed = Constants.CONVEYOR_SPEED;
   public double intakespeed = Constants.SHOOTER_INTAKE_SPEED;
@@ -34,7 +34,7 @@ public ShootSetRPM(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem sh
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-        actualSpeed = 0.0; 
+        //actualSpeed = 0.0; 
 
 
   }
@@ -42,17 +42,19 @@ public ShootSetRPM(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem sh
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println(speed);
-    m_shooter.shootSpeed(speed);
-    actualSpeed = m_shooter.getShootSpeed();
-    if (actualSpeed*0.85 >= speed || actualSpeed*1.15 <= speed){
-      m_conveyor.STOP();
-      m_shooterintake.STOP();
-    }
-    else{
-      m_conveyor.intake(conveyorspeed);
-      m_shooterintake.intake(intakespeed);
-    }
+    System.out.println(volts);
+    m_shooter.shootVolts(volts);
+    m_conveyor.intake(conveyorspeed);
+    m_shooterintake.intake(intakespeed);
+    //actualSpeed = m_shooter.getShootSpeed();
+    // if (actualSpeed*0.85 >= speed || actualSpeed*1.15 <= speed){
+    //   m_conveyor.STOP();
+    //   m_shooterintake.STOP();
+    // }
+    // else{
+    //   m_conveyor.intake(conveyorspeed);
+    //   m_shooterintake.intake(intakespeed);
+    // }
   }
 
   // Called once the command ends or is interrupted.
