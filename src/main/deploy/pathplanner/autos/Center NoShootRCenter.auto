@@ -7,25 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Right Mv2Sht"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DumbShoot"
+            "pathName": "Center NoShootHub2CenterR"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Right Hub2Center"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Right Center2Hub"
+            "pathName": "Center NoShootCenter2HubR"
           }
         },
         {
@@ -38,6 +26,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Right",
+  "folder": "No Shoot",
   "choreoAuto": false
 }

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.336,
-        "y": 4.024
+        "x": 7.483,
+        "y": 1.948
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7842979050698133,
-        "y": 0.65833851465734
+        "x": 7.024036144578312,
+        "y": 0.5597831325301192
       },
       "isLocked": false,
       "linkedName": null
@@ -20,24 +20,40 @@
         "y": 0.6474096385542167
       },
       "prevControl": {
-        "x": 3.243253012048192,
-        "y": 0.6036987951807224
+        "x": 5.954030131496737,
+        "y": 0.6474096385542167
       },
       "nextControl": {
-        "x": 5.933528030436959,
-        "y": 0.6904818602900381
+        "x": 3.407168674698795,
+        "y": 0.6474096385542168
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.363,
-        "y": 1.827602409638554
+        "x": 3.3634578313253014,
+        "y": 0.6474096385542167
       },
       "prevControl": {
-        "x": 6.805686746987951,
-        "y": 1.2047228915662638
+        "x": 3.57673470747106,
+        "y": 0.51697584653119
+      },
+      "nextControl": {
+        "x": 3.032894578313253,
+        "y": 0.8495722891566277
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.904493975903614,
+        "y": 2.3193493975903605
+      },
+      "prevControl": {
+        "x": 3.133975903614458,
+        "y": 1.204722891566264
       },
       "nextControl": null,
       "isLocked": false,
@@ -52,19 +68,7 @@
   ],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "IntakeRun",
-      "waypointRelativePos": 1.8411764705882179,
-      "endWaypointRelativePos": 2.0,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "IntakeRun"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.5,
     "maxAcceleration": 1.0,
@@ -75,13 +79,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 35.362461887069074
+    "rotation": 45.18189075249718
   },
   "reversed": false,
-  "folder": "Center CenterwShoot",
+  "folder": "Center CenterNoShoot",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 37.10652954915066
   },
   "useDefaultConstraints": true
 }

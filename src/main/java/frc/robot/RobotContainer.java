@@ -128,16 +128,20 @@ public class RobotContainer {
     chooserFirst.setDefaultOption("CenterShoot", "Center Bck2Sht");
     chooserFirst.addOption("LeftShoot", "Left Mv2Sht");
     chooserFirst.addOption("RightShoot","Right Mv2Sht");
-    chooserFirst.addOption("CenterShootIntakeDepot", "Center ShotItkShot");
-    chooserFirst.addOption("RightShootIntakeDepot", "Right ShotItkShot");
-    chooserFirst.addOption("LeftShootIntakeDepot", "Left ShotItkShot");
-    chooserFirst.addOption("CenterShootIntakeCenterLft", "Center CntrPckpL");
-    chooserFirst.addOption("CenterShootIntakeCenterRght", "Center CntrPckpR");
-    chooserFirst.addOption("RightShootIntakeCenter", "Right CntrPckp");
-    chooserFirst.addOption("LeftShootIntakeCenter", "Left CntrPckp");
-    chooserFirst.addOption("CenterShootOutpostShoot", "Center OutpostShoot");
-    chooserFirst.addOption("LeftShootOutpostShoot", "Left OutpostShoot");
-    chooserFirst.addOption("RightShootOutpostShoot", "Right OutpostShoot");
+    //chooserFirst.addOption("CenterDepot", "Center ShotItkShot");
+    //chooserFirst.addOption("RightDepot", "Right ShotItkShot");
+    //chooserFirst.addOption("LeftDepot", "Left ShotItkShot");
+    chooserFirst.addOption("CenterLft-BShoot", "Center CntrPckpL");
+    chooserFirst.addOption("CenterRght-BShoot", "Center CntrPckpR");
+    chooserFirst.addOption("RightCenter-BShoot", "Right CntrPckp");
+    chooserFirst.addOption("LeftCenter-BShoot", "Left CntrPckp");
+    chooserFirst.addOption("CenterOutpost", "Center OutpostShoot");
+    chooserFirst.addOption("LeftOutpost", "Left OutpostShoot");
+    chooserFirst.addOption("RightOutpost", "Right OutpostShoot");
+    chooserFirst.addOption("CenterLft-NoBShoot", "Center NoShootLCenter");
+    chooserFirst.addOption("CenterRght-NoBShoot", "Center NoShootRCenter");
+    chooserFirst.addOption("LeftCenter-NoBShoot", "Left NoShootCenter");
+    chooserFirst.addOption("RightCenter-NoBShoot", "Right NoShootCenter");
 
   }
  

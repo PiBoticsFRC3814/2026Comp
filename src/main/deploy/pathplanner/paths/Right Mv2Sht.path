@@ -29,21 +29,7 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0,
-      "maxWaypointRelativePos": 1.0,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 1.0,
-        "maxAngularVelocity": 180.0,
-        "maxAngularAcceleration": 0.1,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [
     {
       "fieldPosition": {
@@ -56,24 +42,12 @@
       "name": "Point Towards Zone"
     }
   ],
-  "eventMarkers": [
-    {
-      "name": "IntakeDown",
-      "waypointRelativePos": 0.0,
-      "endWaypointRelativePos": 0.5,
-      "command": {
-        "type": "named",
-        "data": {
-          "name": "IntakeDown"
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
+    "maxVelocity": 1.5,
+    "maxAcceleration": 1.0,
+    "maxAngularVelocity": 180.0,
+    "maxAngularAcceleration": 0.1,
     "nominalVoltage": 12.0,
     "unlimited": false
   },
@@ -82,7 +56,7 @@
     "rotation": 37.257136320580216
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Base Movement",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

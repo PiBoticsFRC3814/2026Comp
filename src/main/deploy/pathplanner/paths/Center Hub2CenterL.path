@@ -55,7 +55,7 @@
   "eventMarkers": [
     {
       "name": "IntakeRun",
-      "waypointRelativePos": 0.0,
+      "waypointRelativePos": 1.83109243697478,
       "endWaypointRelativePos": 2.0,
       "command": {
         "type": "named",
@@ -78,7 +78,7 @@
     "rotation": -29.47588900324574
   },
   "reversed": false,
-  "folder": "Center Center",
+  "folder": "Center CenterwShoot",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

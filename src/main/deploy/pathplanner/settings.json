@@ -3,13 +3,14 @@
   "robotLength": 0.864,
   "holonomicMode": true,
   "pathFolders": [
-    "Center Center",
+    "Base Movement",
+    "Center CenterNoShoot",
+    "Center CenterwShoot",
     "Center Depot",
     "Center Outpost",
     "Left Center",
     "Left Depot",
     "Left Outpost",
-    "Base-OnlyMove+Shoot",
     "Right Center",
     "Right Depot",
     "Right Outpost"
@@ -17,6 +18,7 @@
   "autoFolders": [
     "Center",
     "Left",
+    "No Shoot",
     "Right"
   ],
   "defaultMaxVel": 1.5,
