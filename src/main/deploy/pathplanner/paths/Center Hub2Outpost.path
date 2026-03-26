@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.790975111172146,
-        "y": 4.120216150471169
+        "x": 2.3143975903614455,
+        "y": 3.3246987951807228
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.6926960368286244,
+        "x": 0.987,
         "y": 0.6602938401696861
       },
       "prevControl": {
-        "x": 0.9778245733027726,
-        "y": 0.9946233668169713
+        "x": 2.6640373493975904,
+        "y": 0.6036987951807224
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "Center Outpost",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -0.5570538479452544
   },
   "useDefaultConstraints": true
 }
