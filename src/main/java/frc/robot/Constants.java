@@ -103,7 +103,7 @@ public final class Constants {
 
 
   // Shooter need to move the shooter number into this constants file.
-  public static final double FIXED_SHOOT_VOLTAGE = 12;
+  public static final double FIXED_SHOOT_VOLTAGE = 6;
   public static final double PEW_PEW_TIME = 4.0; //auto time to shoot
   public static final double INTAKE_DOWN_TIME = 2.0; //auto time to lower intake
   public static final double STALE_TARGET_DISTANCE_COUNTER = 100;
