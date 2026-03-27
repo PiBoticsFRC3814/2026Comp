@@ -8,6 +8,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.DumbShootAuton;
 import frc.robot.commands.Feeding;
 import frc.robot.commands.IntakeExtend;
+import frc.robot.commands.IntakeRetract;
 import frc.robot.commands.IntakeRunAuto;
 import frc.robot.commands.ShootSetRPM;
 import frc.robot.commands.ShootStop;
@@ -124,6 +125,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("DumbShoot", new DumbShootAuton(m_shooter, m_conveyor, m_ShooterIntake));
     NamedCommands.registerCommand("IntakeDown", new IntakeExtend(m_intake));
     NamedCommands.registerCommand("IntakeRun", new IntakeRunAuto(m_IntakeRollers));
+    NamedCommands.registerCommand("IntakeUp", new IntakeRetract(m_intake));
 
     chooserFirst.setDefaultOption("CenterShoot", "Center Bck2Sht");
     chooserFirst.addOption("LeftShoot", "Left Mv2Sht");
