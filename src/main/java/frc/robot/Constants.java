@@ -109,6 +109,7 @@ public final class Constants {
   public static final double STALE_TARGET_DISTANCE_COUNTER = 100;
   public static final double DISTANCE_PERCENT_DIFFERENCE_TOLERANCE = 25;
   public static final double INTAKE_RUN_AUTO_TIME = 400;
+  public static final double INTAKE_UP_TIME = 0; //auto time to raise intake while shooting
 
 
 
