@@ -49,8 +49,11 @@ public DumbShootAuton(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem
     volts = Constants.FIXED_SHOOT_VOLTAGE;
     System.out.println(volts);
     m_shooter.shootVolts(volts);
-    m_conveyor.intake(conveyorspeed);
-    m_shooterintake.intake(intakespeed);
+    if(timeguy.get()>0.5){
+      m_conveyor.intake(conveyorspeed);
+      m_shooterintake.intake(intakespeed);
+    }
+
     //m_shooter.driveInhibit();
     // actualSpeed = m_shooter.getShootSpeed();
     // if (actualSpeed*0.92 >= speed || actualSpeed*1.08 <= speed){

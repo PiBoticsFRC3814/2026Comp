@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -21,6 +22,7 @@ public class ShootSetRPM extends Command {
   public double actualSpeed;
   public double conveyorspeed = Constants.CONVEYOR_SPEED;
   public double intakespeed = Constants.SHOOTER_INTAKE_SPEED;
+  private Timer delayshoot = new Timer();
 
   /** Creates a new IntakeRoller. */
 public ShootSetRPM(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem shooterintake) {
@@ -34,6 +36,8 @@ public ShootSetRPM(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem sh
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    delayshoot.reset();
+    delayshoot.start();
         //actualSpeed = 0.0; 
 
 
@@ -44,8 +48,10 @@ public ShootSetRPM(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem sh
   public void execute() {
     System.out.println(volts);
     m_shooter.shootVolts(volts);
-    m_conveyor.intake(conveyorspeed);
-    m_shooterintake.intake(intakespeed);
+    if(delayshoot.get() > 0.5){
+      m_conveyor.intake(conveyorspeed);
+      m_shooterintake.intake(intakespeed);
+    }
     //actualSpeed = m_shooter.getShootSpeed();
     // if (actualSpeed*0.85 >= speed || actualSpeed*1.15 <= speed){
     //   m_conveyor.STOP();
@@ -63,6 +69,8 @@ public ShootSetRPM(Shooter shooter, Conveyor conveyor, ShooterIntakeSubsystem sh
     m_conveyor.STOP();
     m_shooterintake.STOP();
     m_shooter.STOP();
+    delayshoot.stop();
+    delayshoot.reset();
   }
 
   // Returns true when the command should end.
