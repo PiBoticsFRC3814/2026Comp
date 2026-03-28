@@ -27,7 +27,7 @@ public class IntakeRollerSubsystem extends SubsystemBase
   {
     SparkMaxConfig config = new SparkMaxConfig();
     config
-        .inverted(false)
+        .inverted(true)
         .smartCurrentLimit(100)
         .idleMode(IdleMode.kCoast);
     m_IntakeRollers.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -41,11 +41,11 @@ public class IntakeRollerSubsystem extends SubsystemBase
   }
 
   public void intake(double speed){
-    m_IntakeRollers.set(speed);
+    m_IntakeRollers.set(-speed);
   }
 
   public void outake(double speed){
-    m_IntakeRollers.set(-speed);
+    m_IntakeRollers.set(speed);
   }
 
   public void STOP(){
