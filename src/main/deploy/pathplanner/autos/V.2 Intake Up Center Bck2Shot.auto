@@ -1,0 +1,44 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "CenterBck2Sht"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "DumbShoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "IntakeRetract"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DumbShoot"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

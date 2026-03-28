@@ -128,22 +128,24 @@ public class RobotContainer {
     NamedCommands.registerCommand("IntakeUp", new IntakeRetract(m_intake));
 
     chooserFirst.setDefaultOption("CenterShoot", "Center Bck2Sht");
-    chooserFirst.addOption("LeftShoot", "Left Mv2Sht");
-    chooserFirst.addOption("RightShoot","Right Mv2Sht");
-    //chooserFirst.addOption("CenterDepot", "Center ShotItkShot");
-    //chooserFirst.addOption("RightDepot", "Right ShotItkShot");
-    //chooserFirst.addOption("LeftDepot", "Left ShotItkShot");
     chooserFirst.addOption("CenterLft-BShoot", "Center CntrPckpL");
     chooserFirst.addOption("CenterRght-BShoot", "Center CntrPckpR");
-    chooserFirst.addOption("RightCenter-BShoot", "Right CntrPckp");
-    chooserFirst.addOption("LeftCenter-BShoot", "Left CntrPckp");
-    chooserFirst.addOption("CenterOutpost", "Center OutpostShoot");
-    chooserFirst.addOption("LeftOutpost", "Left OutpostShoot");
-    chooserFirst.addOption("RightOutpost", "Right OutpostShoot");
     chooserFirst.addOption("CenterLft-NoBShoot", "Center NoShootLCenter");
     chooserFirst.addOption("CenterRght-NoBShoot", "Center NoShootRCenter");
+    chooserFirst.addOption("CenterOutpost", "Center OutpostShoot");
+    chooserFirst.addOption("LeftShoot", "Left Mv2Sht");
+    chooserFirst.addOption("LeftCenter-BShoot", "Left CntrPckp");
     chooserFirst.addOption("LeftCenter-NoBShoot", "Left NoShootCenter");
+    chooserFirst.addOption("LeftOutpost", "Left OutpostShoot");
+    chooserFirst.addOption("RightShoot","Right Mv2Sht");
+    chooserFirst.addOption("RightCenter-BShoot", "Right CntrPckp");
     chooserFirst.addOption("RightCenter-NoBShoot", "Right NoShootCenter");
+    chooserFirst.addOption("RightOutpost", "Right OutpostShoot");
+
+    chooserFirst.addOption("V.1 Intake Up", "V.1 Intake Up Center Bck2Shot");
+    chooserFirst.addOption("V.2 Intake Up", "V.2 Intake Up Center Bck2Shot");
+    chooserFirst.addOption("V.3 Intake Up", "V.3 Intake Up Center Bck2Shot");
+  
 
   }
  
